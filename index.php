@@ -1,12 +1,12 @@
 <?php
 session_start();
 // Process URL from browser
-require_once "./core/App.php";
+require_once "./app/Function/App.php";
 
 // How controllers call Views & Models
-require_once "./core/Controller.php";
+require_once "./app/Function/controller.php";
 
 // Connect Database
-require_once "./core/DB.php";
+require_once "./app/Function/DB.php";
 $myApp = new App();
 ?>
