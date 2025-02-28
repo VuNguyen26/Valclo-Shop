@@ -77,7 +77,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide">
                 <img
-                  src="https://static.nike.com/a/images/f_auto/dpr_2.0,cs_srgb/w_1344,c_limit/eaa7c01a-d1fc-4fae-80f9-0622bf8c74bb/nike-just-do-it.jpg"alt=""
+                  src="https://i.pinimg.com/736x/47/b5/2f/47b52fcaef898aca6c54c7af46e0d0b8.jpg"alt=""
                 />
                 <div class="content" >
                   <h1 style="color: white;">
@@ -86,7 +86,7 @@
                     ANY POSE
                   </h1>
                   <p style="color: white;">
-                  Nike Yoga Soul Festival Collection                 
+                  Nike Yoga Soul Festival Collection
                  </p>
 
                   <a href="?url=Home/Products/" style="color: white;">Buy Now</a>
@@ -95,7 +95,7 @@
 
               <div class="swiper-slide">
                 <img
-                  src="./Views/images/Presentation2.png"
+                  src="https://i.pinimg.com/736x/a5/74/b2/a574b24e98ad5a17e4a2651a282de198.jpg"
                   alt="hero image"
                 />
                 <div class="content">
@@ -114,7 +114,7 @@
 
               <div class="swiper-slide">
                 <img
-                  src="./Views/images/Presentation1.png"
+                  src="https://i.pinimg.com/736x/e6/b9/c1/e6b9c1decfae8e63c78edf62d1328f3f.jpg"
                   alt="hero image"
                 />
                 <div class="content">
