@@ -15,7 +15,7 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="./Views/Login/login.css" />
+    <link rel="stylesheet" type="text/css" href="./Views/register/register.css" />
     <link href="./Views/Navbar/navbar.css" rel="stylesheet" type="text/css" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
