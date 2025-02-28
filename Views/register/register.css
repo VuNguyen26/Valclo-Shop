@@ -1,0 +1,42 @@
+.btn-block2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-facebook {
+    background-color: #F7931E; /* Màu cam */
+    color: white;
+    border: none;
+  }
+  
+  .btn-facebook:hover {
+    background-color: #e6821c;
+  }
+  
+  .btn-google {
+    background-color: white;
+    color: black;
+    border: 1px solid #ddd;
+  }
+  
+  .btn-google:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .btn-block2 img.icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: white;
+    padding: 4px;
+  }
+  
