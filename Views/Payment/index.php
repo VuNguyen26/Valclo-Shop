@@ -14,6 +14,12 @@
       href="./Views/images/avatar.png"
     />
 
+    <!-- link icon -->
+    <script src="https://kit.fontawesome.com/320d0ac08e.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="./Views/Payment/style.css" rel="stylesheet">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -25,6 +31,13 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,400;0,500;0,600;0,700;0,800;1,200;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+    <script src="https://use.fontawesome.com/721412f694.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"></script>
     <link href="./Views/Navbar/navbar.css" rel="stylesheet">
   </head>
   <body>
@@ -96,12 +109,104 @@
               ?>
             </div>
           </div>
+          <div class="col-12 col-md-6 col-xl-4 white nonepad body_2">
+              <h3>Phương thức thanh toán</h3>
+              <div class="row d-flex justify-content-center nonemg">
+                <div class="col-12 cart_node">
+                  <div class="row">
+                    <div class="col-2"><input type="radio" name="cart_node" id="credit"></div>
+                    <div class="col-5"><label for="credit"><h5>Credit Card</h5></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="credit"><img src="./Views/images/visa.png" alt="Visa picture" ></label></div>
+                  </div>
+                </div>
+                <div class="col-12 cart_node">
+                  <div class="row">
+                    <div class="col-2"><input type="radio" name="cart_node" id="momo"></div>
+                    <div class="col-5"><label for="momo"><h5>MoMo</h5></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="momo"><img src="./Views/images/MoMo Logo.png" alt="MoMo picture" ></label></div>
+                  </div>
+                </div>
+                <div class="col-12 cart_node">
+                  <div class="row">
+                    <div class="col-2"><input type="radio" name="cart_node" id="paypal"></div>
+                    <div class="col-5"><label for="paypal"><h5>Paypal</h5></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="paypal"><img src="./Views/images/paypal.png" alt="paypal picture" ></label></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row nonemg flex-wrap total">
+                <h4>Tổng kết hóa đơn</h4>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <h6>Tổng phụ (<?php echo $count;?> sản phẩm)</h6><span><?php echo $total ?></span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <h6>Phí ưu đãi thành viên</h6><span>23,000(đ)</span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <h6>Giảm giá sản phẩm</h6><span>5,000(đ)</span>
+                  </div>
+                </div>
+                
+                <div class="col-12">
+                  <div class="d-flex justify-content-between line-top">
+                    <h6>Tổng cộng: </h6><span></span>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex flex-wrap justify-content-end">
+                    <?php 
+                          echo "<button id=\"myBtn\" type=\"button\" class=\"btn btn-primary\">Hủy đơn</button>";
+                    ?>
+                    <button type="button" class="btn btn-primary">Thanh toán</button>
+                  </div>
+                </div>
+              </div>
+
+          </div>
         </div>
     </div>
 
-    
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Credit Card <i class="fab fa-cc-visa"></i></h2>
+          <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-12"><div class="row">
+                  <div class="col-4">Số card:  </div>
+                  <div class="col-8"><input type="number" name="number" placeholder="Credit card number">
+              </div></div></div>
+              <div class="col-12"><div class="row">
+                  <div class="col-4">Hiệu lực thẻ: </div>
+                  <div class="col-8"><input type="text" name="date" placeholder="mm/yyyy">
+              </div></div></div>
+               <div class="col-12"><div class="row">
+                  <div class="col-4">CVV: </div>
+                  <div class="col-8"><input type="number" name="cvv">
+              </div></div></div>
+              <button type="button" class="btn btn-primary">Hoàn tất</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Body-->
+
+    <!--Footer-->
+    <!--div class="footer-holder"></div>
+    <script src="./Views/footer/footerScript.js"></script-->
     
     <?php require_once("./Views/footer/index.php");?>
     <!--Footer-->
-    </body>
+  <?php
+        echo "<script src=\"./Views/Payment/myScript.js\"></script>";
+  ?>
+  </body>
 </html>

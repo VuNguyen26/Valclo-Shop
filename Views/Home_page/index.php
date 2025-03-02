@@ -77,7 +77,7 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide">
                 <img
-                  src="https://i.pinimg.com/736x/47/b5/2f/47b52fcaef898aca6c54c7af46e0d0b8.jpg"alt=""
+                  src="./Views/images/avt1.png"alt=""
                 />
                 <div class="content" >
                   <h1 style="color: white;">
@@ -95,7 +95,7 @@
 
               <div class="swiper-slide">
                 <img
-                  src="https://i.pinimg.com/736x/a5/74/b2/a574b24e98ad5a17e4a2651a282de198.jpg"
+                  src="./Views/images/avt4.png"
                   alt="hero image"
                 />
                 <div class="content">
@@ -105,7 +105,7 @@
                     <span>20% off</span>
                     tại cửa hàng
                   </h1>
-                  <p>
+                  <p style="color: white;">
                     Cung cấp các gói chứa đầy đủ một bộ sưu tập phù hợp với từng sở thích, tính cách
                   </p>
                   <a href="?url=Home/Products/">Mua ngay</a>
@@ -114,7 +114,7 @@
 
               <div class="swiper-slide">
                 <img
-                  src="https://i.pinimg.com/736x/e6/b9/c1/e6b9c1decfae8e63c78edf62d1328f3f.jpg"
+                  src="./Views/images/avt3.png"
                   alt="hero image"
                 />
                 <div class="content">
@@ -122,7 +122,7 @@
                     Đăng ký ngay
                     
                   </h1>
-                  <p>
+                  <p style="color: white;">
                     Nhanh tay đăng ký tài khoản để nhận được nhiều ưu đãi hấp dẫn cũng như những trải nghiệm thú vị nhé!
                   </p>
                   <a href="?url=Home/Products/">Mua ngay</a>
@@ -174,9 +174,9 @@
                   for ($x = count($data["news"]) - 1; ($x >= count($data["news"])-3 && $x >= 0); $x--){
                     $row = $data["news"][$x];
                     echo "
-                    <div class=\"card\">	
+                    <div class=\"card\">
                       <div class=\"card-body\">
-                        <div class=\"row\">						
+                        <div class=\"row\">
                           <div class=\"bg-image bg-white col-md-12\">
                             <img src=\""  . $row["imgurl"] . "\" class=\"img-fluid rounded\">
                           </div>
