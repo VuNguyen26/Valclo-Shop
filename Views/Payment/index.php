@@ -116,21 +116,21 @@
                   <div class="row">
                     <div class="col-2"><input type="radio" name="cart_node" id="credit"></div>
                     <div class="col-5"><label for="credit"><h5>Credit Card</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="credit"><img src="./Views/images/visa.png" alt="Visa picture" ></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="credit"><img src="https://icolor.vn/wp-content/uploads/2024/08/logo-visa.png" alt="Visa picture" ></label></div>
                   </div>
                 </div>
                 <div class="col-12 cart_node">
                   <div class="row">
                     <div class="col-2"><input type="radio" name="cart_node" id="momo"></div>
                     <div class="col-5"><label for="momo"><h5>MoMo</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="momo"><img src="./Views/images/MoMo Logo.png" alt="MoMo picture" ></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="momo"><img src="https://developers.momo.vn/v3/vi/assets/images/square-8c08a00f550e40a2efafea4a005b1232.png" alt="MoMo picture" ></label></div>
                   </div>
                 </div>
                 <div class="col-12 cart_node">
                   <div class="row">
                     <div class="col-2"><input type="radio" name="cart_node" id="paypal"></div>
                     <div class="col-5"><label for="paypal"><h5>Paypal</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="paypal"><img src="./Views/images/paypal.png" alt="paypal picture" ></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="paypal"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Paypal_2014_logo.png" alt="paypal picture" ></label></div>
                   </div>
                 </div>
               </div>
