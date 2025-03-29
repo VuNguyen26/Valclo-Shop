@@ -103,8 +103,8 @@
 								mức giá và chắc chắn không hề đắt với những người đã đi làm.
 							.</p>
 						</div>
-						<div class="author"><img class="rounded-circle" src="./Views/images/huytehuy.jpeg">
-							<h5 class="name">Nguyen Minh Vu</h5>
+						<div class="author"><img class="rounded-circle" src="./Views/images/xd.png">
+							<h5 class="name">XUAN DUY</h5>
 						</div>
 					</div>
 					<div class="col-md-6 col-lg-4 item">
@@ -116,8 +116,8 @@
 							</p>
 							<p>Chúc các bạn thành công hơn nữa..</p>
 						</div>
-						<div class="author"><img class="rounded-circle" src="./Views/images/razirtran.jpeg">
-							<h5 class="name">Vu Minh Nguyen</h5>
+						<div class="author"><img class="rounded-circle" src="./Views/images/mv.png">
+							<h5 class="name">VU MINH NGUYEN</h5>
 						</div>
 					</div>
 					<div class="col-md-6 col-lg-4 item">
@@ -129,8 +129,8 @@
 								gọi đẹp và chỉn chu, mình rất thích. 
 							</p>
 						</div>
-						<div class="author"><img class="rounded-circle" src="./Views/images/thethanh.png">
-							<h5 class="name">Minh Vu Nguyen</h5>
+						<div class="author"><img class="rounded-circle" src="./Views/images/dh.png">
+							<h5 class="name">DUC HUY</h5>
 						</div>
 					</div>
 				</div>

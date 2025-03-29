@@ -1,0 +1,39 @@
+
+.thumb-info .thumb-info-title {
+    background:#858796;
+    bottom:10%;
+    color:#fff;
+    font-size:18px;
+    font-weight: 700;
+    left: 0;
+    letter-spacing: -1px;
+    padding: 9px 11px 9px;
+    position: absolute;
+    text-transform: uppercase;
+    z-index: 1;
+    
+    }
+    
+    .thumb-info .thumb-info-inner {
+    display:block;
+    
+    }
+    
+    .thumb-info .thumb-info-type {
+    background-color: #0088cc;
+    border-radius: 2px;
+    display: inline-block;
+    float:left;
+    font-size:12px;
+    font-weight:400;
+    letter-spacing:0;
+    margin: 8px -2px -15px -2px;
+    padding: 2px 9px;
+    text-transform:none;
+    
+    }
+
+    .thumb-info {
+        position: relative;
+        
+        }
