@@ -242,13 +242,241 @@ INSERT INTO `sub_img_url`(`sub_img_url`.`ID`, `sub_img_url`.`PID`, `sub_img_url`
 (39, 10, "https://product.hstatic.net/1000061481/product/_sp_add_web_3-02-02-01-01-01-01-01-01-01-01-01-01-01-01-01-01-01-01-01_9be438b22de0478a8e6044a21858e474_1024x1024.jpg"),
 (40, 10, "https://product.hstatic.net/1000061481/product/d99021b7be2c_15c91129cd9c4da7a8cc46c81c490ac8_1024x1024.jpeg");
 
-INSERT INTO `news`(`news`.`ID`, `news`.`CID`, `news`.`KEY`, `news`.`TIME`, `news`.`TITLE`, `news`.`CONTENT`, `news`.`IMG_URL`, `news`.`SHORT_CONTENT`) VALUES
-(1, 1, "Localbrand", "2025/03/18", "Phá tan sự nhàm chán bằng loạt kiểu phối đồ Streetwear Style", "'Street Style chính là một cụm từ khá quen thuộc. Nhưng bạn có thực sự hiểu rõ được ý nghĩa là thật sự của Street Style là gì? Và xu hướng của thời trang này tại Việt Nam chưa? Hôm nay, Chipi sẽ chia sẻ giúp bạn hiểu rõ hơn về phong cách thời trang này, cùng tham khảo nhé!\n\n\nStreet Style hay còn gọi là phong cách thời trang đường phố, cũng giống như tên gọi của nó. Đây chính là phong cách thời trang không phải phát triển từ những bộ sưu tập của nhà thiết kế mà từ đường phố.\n\nHiện nay bạn có thể dễ dàng thấy được Street Style ở bất cứ đâu trong giới trẻ trên đường phố. Chắc chắn phong cách thời trang này sẽ được giới trẻ ưa chuộng trong năm nay. Không giống như những phong cách thời trang khác, Street Style giống một cốc sinh tố hỗn hợp của rất nhiều phong cách khác nhau.\n\nKhó có thể chỉ ra được đặc điểm cụ thể của một Street Style. Bởi lẽ chúng được kết hợp từ khá nhiều phong cách khác nhau, nó dựa trên những gu thẩm mỹ của mỗi người. Vô cùng biến hoá và năng động với nhiều thiết kế trang phục khác nhau. Cùng với đó là phụ kiện đi kèm khá đa dạng và phong phú. \n\nChính bởi sự ngẫu hứng và năng động này mà Street Style đã trở thành một nguồn cảm hứng bất tận dành cho giới trẻ hiện nay. Đem tới sự tự do thoải mái trong việc chọn lựa những bộ trang phục thể hiện cá tính của mình.", "./Views/images/news_4.png", "Gợi ý những set đồ street style cực chất từ các local brand giúp các bạn thay vì mua riêng…"),
-(2, 1, "Localbrand", "2025/03/18", "BST SS21 Nonnative brand phân lớp theo mùa cao điểm", "BST SS21 từ Nonnative brand sử dụng những gam màu cơ bản cùng thiết kế đơn giản dễ dàng mix & match theo phong cách quân đội và các mặt hàng chủ lực thông thường. Cụ thể về bộ sưu tập sẽ được bật mí qua bài viết sau đây. \n\n\n <h6>Phương pháp thiết kế đặc trưng của Nonnative brand thể hiện trong từng BST</h6> \n Mang đến sự tiếp cận thông minh đối với thiết kế hàng may mặc hướng đến sự đơn giản tinh tế thay vì thời trang dạo phố lấy biểu tượng làm trung tâm.\n\n<h6>Nonnative brand đơn giản nhưng độc đáo</h6>\nGiám đốc sáng tạo Takayuki Fujii đã không giám sát Nonnative brand kể từ khi thành lập, nhưng dưới tầm nhìn của ông, thương hiệu đã phát triển thành một thế lực đáng nể trong thời trang Nhật Bản; Mùa xuân / mùa hè năm 2021, “South” là mùa thứ 39 của thương hiệu, chắt lọc những nét đặc trưng của hãng thành một dòng sản phẩm đơn giản \n\n <h6>Nguồn cảm hứng trong thiết kế từ Nonnative brand</h6>\nVới BST trước từ Nonnative brand “Winter & Spring”, “South” được tự do sử dụng phong cách mùa hè và mùa thu, lấy cảm hứng từ New Zealand. Nguồn cảm hứng New Zealand cũng xuất hiện nhờ đồ họa lấy cảm hứng từ hãng thu âm cổ điển, những chiếc áo phông và áo len chui đầu thoải mái.\n\nMàu đất và tông màu xanh nước biển lấy cảm hứng từ bầu trời đêm trong vắt tạo nên sự đa dạng cho nhiều loại áo khoác dã chiến, áo khoác dạ, áo khoác dạ và áo len của quân đội hay họa tiết đậm có nguồn gốc từ Liberty London.\n\nCác loại vải kỹ thuật tiên tiến, bao gồm GORE-TEX INFINIUM, Pliantex và polyester tăng độ bóng dễ nhận biết. Một số loại giày bao gồm từ giày thể thao vải chống thấm nước đến giày bốt da của Ý, tất cả đều lý tưởng để xếp chồng những đường cắt ống quần Dweller mới hoặc hoàn thiện outfit với quần short và tất rộng.", "./Views/images/news_3.jpg", "BST SS21 từ Nonnative brand sử dụng những gam màu cơ bản cùng thiết kế đơn giản dễ dàng mix…"),
-(3, 1, "Retro", "2025/03/17", "Giày Ananas chiến binh thầm lặng", "Giày Ananas là một trong những local brand về giày đang được giới trẻ quan tâm trong thời gian gần đây.Chúng ta cùng đi tìm hiểu về xuất xứ của thương hiệu giày nổi tiếng này, xem nó có phải là thương hiệu chuẩn Local Brand Việt Nam hay không?\n\n\n<h6>Cái tên Ananas</h6>\nAnanas là một thương hiệu có đăng kí tại Việt Nam, và đồng thời cũng có nhà máy sản xuất trực tiếp trong nước. Mặc dù là một thương hiệu đã tồn tại từ 2012 nhưng Ananas chỉ mới được biết đến gần đây bằng chính những nỗ lực cố gắng vươn lên không ngừng nghỉ của mình khi liên tục cho ra mắt những sản phẩm bắt nhịp xu hướng và sáng tạo hơn..\n\nKhông chỉ có vậy, thương hiệu này còn được các bạn trẻ lựa chọn mua sắm vì các sản phẩm đều sở hữu mức giá mềm, phù hợp với mọi tầng lớp cũng như các hoạt động.\n\nMặc dù là một thương hiệu mới, nhưng tính cho đến thời điểm hiện tại, Ananas  Việt Nam đã sở hữu rất nhiều store tại TP. HCM. Thương hiệu giày thời trang này vẫn đang tiếp tục mở rộng và phát triển chuỗi cửa hàng trên toàn quốc, để đông đảo người tiêu dùng có thể biết đến sản phẩm của thương hiệu này.\n\n<h6>Giày Sneaker Ananas</h6>\nMột trong những dòng sản phẩm nổi bật của Ananas phải kể đến dòng Sneaker đang hot hit trên thị trường hiện nay. Những đôi giày Sneaker dây buộc khá linh hoạt, thuận tiện cho người sử dụng. Ngoài ra, đế giày được thiết kế không dày như những sản phẩm của thương hiệu khác, khiến cho bạn cảm thấy gọn nhẹ hơn. Lớp lót giày cũng được thiết kế êm ái, đem lại cho bạn cảm giác thoải mái khi sử dụng sản phẩm.\n\nKhông chỉ có vậy, những đôi giày Sneaker được thiết kế đa dạng về mẫu mã cũng như màu sắc mà còn sở hữu mức giá khá hấp dẫn. Vì vậy, bạn sẽ không phải chi quá nhiều tiền cho niềm đam mê giày sneaker của mình, khi sắm cho mình một đôi hiệu Ananas đâu nhé!","./Views/images/news_5.jpg", "Giày Ananas là một trong những local brand về giày đang được giới trẻ quan tâm trong thời gian gần…"),
-(4, 1, "Retro", "2025/03/17", "Giày Ananas chiến binh thầm lặng", "Giày Ananas là một trong những local brand về giày đang được giới trẻ quan tâm trong thời gian gần đây.Chúng ta cùng đi tìm hiểu về xuất xứ của thương hiệu giày nổi tiếng này, xem nó có phải là thương hiệu chuẩn Local Brand Việt Nam hay không?\n\n\n<h6>Cái tên Ananas</h6>\nAnanas là một thương hiệu có đăng kí tại Việt Nam, và đồng thời cũng có nhà máy sản xuất trực tiếp trong nước. Mặc dù là một thương hiệu đã tồn tại từ 2012 nhưng Ananas chỉ mới được biết đến gần đây bằng chính những nỗ lực cố gắng vươn lên không ngừng nghỉ của mình khi liên tục cho ra mắt những sản phẩm bắt nhịp xu hướng và sáng tạo hơn..\n\nKhông chỉ có vậy, thương hiệu này còn được các bạn trẻ lựa chọn mua sắm vì các sản phẩm đều sở hữu mức giá mềm, phù hợp với mọi tầng lớp cũng như các hoạt động.\n\nMặc dù là một thương hiệu mới, nhưng tính cho đến thời điểm hiện tại, Ananas  Việt Nam đã sở hữu rất nhiều store tại TP. HCM. Thương hiệu giày thời trang này vẫn đang tiếp tục mở rộng và phát triển chuỗi cửa hàng trên toàn quốc, để đông đảo người tiêu dùng có thể biết đến sản phẩm của thương hiệu này.\n\n<h6>Giày Sneaker Ananas</h6>\nMột trong những dòng sản phẩm nổi bật của Ananas phải kể đến dòng Sneaker đang hot hit trên thị trường hiện nay. Những đôi giày Sneaker dây buộc khá linh hoạt, thuận tiện cho người sử dụng. Ngoài ra, đế giày được thiết kế không dày như những sản phẩm của thương hiệu khác, khiến cho bạn cảm thấy gọn nhẹ hơn. Lớp lót giày cũng được thiết kế êm ái, đem lại cho bạn cảm giác thoải mái khi sử dụng sản phẩm.\n\nKhông chỉ có vậy, những đôi giày Sneaker được thiết kế đa dạng về mẫu mã cũng như màu sắc mà còn sở hữu mức giá khá hấp dẫn. Vì vậy, bạn sẽ không phải chi quá nhiều tiền cho niềm đam mê giày sneaker của mình, khi sắm cho mình một đôi hiệu Ananas đâu nhé!","./Views/images/news_5.jpg", "Giày Ananas là một trong những local brand về giày đang được giới trẻ quan tâm trong thời gian gần…"),
-(5, 1, "Coolmate", "2025/03/16", "Review của BP-Guide về trải nghiệm mua sắm tại Coolmate", 'Trên thị trường Việt Nam đã tồn tại rất nhiều website thời trang online uy tín dành cho nữ giới, tuy nhiên mảng thời trang nam dường như vẫn còn đang bỏ ngỏ. Nắm bắt được nhu cầu mua sắm thời trang online của phái mạnh, Coolmate đã ra đời để cung cấp cho cánh mày râu những sản phẩm chất lượng với một phong cách mua sắm tiện lợi và an tâm nhất. Mời bạn cùng Bp-guide theo dõi câu chuyện kinh doanh thú vị của doanh nghiệp này qua bài phỏng vấn dưới đây nhé! \n\n\n <h5 class="text-warning">"Cool" + "Mate" = người bạn Coolmate trẻ trung năng động</h5> \nThị trường thương mại điện tử Việt Nam không có quá nhiều lựa chọn chuyên sâu cho nam giới, điều đó đồng nghĩa với việc nam giới Việt Nam vẫn đang có những nhu cầu mong muốn được đáp ứng. Hiểu được tâm lý đó, thương hiệu Coolmate ra đời với mục đích đem đến cho khách hàng thêm một lựa chọn tuyệt vời để việc mua sắm những món đồ mặc thật tiện lợi và an tâm. Coolmate mong muốn mang lại cho khách hàng sự tự tin và thoải mái với những sản phẩm chất lượng và trải nghiệm mua sắm hài lòng.\n\n <div class=\"w-75 mx-auto mt-3 mb-5\"><img src="https://ds393qgzrxwzn.cloudfront.net/resize/m720x480/cat1/img/images/0/uL9IkDIY9V.jpg" class=\"rounded img-fluid\"> </div><h5 class="text-warning">Thương hiệu ra đời nhờ sự thấu hiểu tâm lý khách hàng</h5>\nBao giờ cũng vậy, những bước đầu tiên của hành trình kinh doanh luôn chất đầy sự khó khăn, vất vả. Tuy nhiên, bằng sự nỗ lực học hỏi và không ngừng tiến về phía trước cùng tinh thần đoàn kết, đồng lòng của đội ngũ nhân sự, Coolmate đã cố gắng hết sức để mang đến cho người tiêu dùng những sản phẩm tốt nhất cũng như tiếp tục kiên trì đưa doanh nghiệp vượt qua khoảng thời gian nhiều thử thách. Sự nghiêm túc và tận tâm với công việc của mình đã khiến Coolmate đạt được thành quả như ngày hôm nay với sự yêu mến, tin tưởng và nhiều phản hồi tích cực của khách hàng. Vậy nên chẳng có lý do gì mà chúng ta lại không nhiệt tình đón nhận những sản phẩm chất lượng của Coolmate đúng không nào?<div class=\"w-75 mx-auto mt-3 mb-5\"><img src="	https://mcdn.coolmate.me/image/February2021/DSC09632.jpg" class=\"rounded img-fluid\"> </div><h5 class="text-warning">Chất liệu vải độc đáo và quy trình sản xuất tiêu chuẩn của Coolmate</h5>\nQuy trình sản xuất của Coolmate sẽ đi từ sợi. Mặc dù biết rằng quần sịp chất liệu cotton sẽ khiến người mặc thoải mái, dễ chịu nhưng khi có thông tin về chất liệu bamboo, modal mát hơn, thấm hút mồ hôi tốt hơn... thì Coolmate sẽ đi tìm nhà cung cấp về sợi, về vải để đặt hàng loại vải đáp ứng được những tính năng mà khách hàng mong muốn, mặc như không mặc, mặc vào sẽ thoáng mát, không bị những vết hằn... Nói cách khác, Coolmate luôn lắng nghe mong muốn của khách hàng để từ đó tìm nguồn sợi và vải phù hợp. Sau đó, chính các thành viên của Coolmate sẽ là người mặc thử để trải nghiệm sản phẩm, đóng góp ý kiến để hoàn thiện sản phẩm mẫu trước khi đưa vào sản xuất đại trà. Chính vì vậy, hầu như mọi sản phẩm của Coolmate đều có sự hoàn thiện về chất lượng trước khi đến tay khách hàng.\n\nKhông chỉ tập trung vào việc phát triển kinh doanh, thương hiệu Coolmate còn mong muốn đóng góp cho xã hội bằng những hành động thiện nguyện vô cùng thiết thực, thể hiện cái tâm và tinh thần trách nhiệm của đội ngũ nhân sự đối với cộng đồng - đây quả thực là điều vô cùng đáng hoan nghênh và trân trọng.',"./Views/images/news_8.jpg", "Coolmate - Website mua sắm online của cánh mày râu thời hiện đại"),
-(6, 1, "Sneaker", "2025/03/16", "Top 03 màu giày sneaker phối đồ cực đỉnh cho nam", " Trong những đôi giày thường xuyên xuất hiện trong các outfit của các chàng trai thì không thể nào không nhắc đến sneaker - đôi giày với sự thoải mái tuyệt đối cùng với sự dễ dàng trong phong cách phối đồ. Chính vì vậy mà trong bài viết này, Coolmate sẽ hướng dẫn các bạn top 05 màu giày sneaker cực đỉnh để phối đồ cho nam nhé. Chiến thôi nào! \n\n\n <h6>1. Màu đen cá tính </h6>\nMột gam màu giày sneaker được lựa chọn rất nhiều vì sự phổ biến cũng như không có dấu hiệu lỗi thời, màu đen luôn là sự lựa chọn hàng đầu của nam giới đối với bất kỳ outfit nào. Một chiếc quần jeans xanh kết hợp với áo thun trắng sẽ rất thích hợp với giày sneaker đen. Nếu bạn chưa biết thì một trong những lợi thế lớn nhất của màu giày sneaker đen đó là làm “nổi bần bật” những gam màu khác đấy. \n\nNgoài ra, bạn nên tận dụng sắc đen của sneaker để chọn những đôi giày cho mục đích tập luyện thể thao, đặc biệt là đối với môi trường có nhiều nước hoặc bùn đất vì đôi giày sẽ không bị lấm lem quá mức cũng như biến đổi màu sắc. Những trang phục đi kèm hợp lý sẽ là áo hoodie, áo khoác da, quần short và quần kaki. Bên cạnh đó, khéo léo phối hợp thêm những phụ kiện như đồng hồ, dây chuyền hay mũ lưỡi trai sẽ giúp tăng phần “ngầu lòi”.\n\n <h6>2. Màu trắng thuần khiết</h6>\nKhông cần phải bàn về màu trắng khi đây không chỉ là một phối màu giày sneaker rất được ưa chuộng mà còn là một màu sắc biểu tượng của ngành thời trang. Nếu lựa chọn những đôi giày sneaker có màu trắng, hãy lưu ý rằng outfit của bạn phải có một màu sắc nổi bật hoặc trái màu để tạo nên sự kết hợp hoàn hảo nhất chứ đừng chọn những chiếc áo hoặc quần màu trắng luôn nhé, nó sẽ khiến cho tổng thể bị chìm đấy. \n\nNgoài ra, màu giày sneaker này sẽ phù hợp với những phong cách công sở hoặc đi bộ nhẹ nhàng hơn là những lúc cần vận động nhiều vì màu trắng sẽ rất dễ bám màu và rất khó để tẩy rửa. Ngoài ra, tình hình thời tiết cũng góp một vai trò rất lớn đến quyết định sở hữu một đôi giày sneaker màu trắng, do đó hãy lưu ý vấn đề này để không chọn sai bạn nhé. \n\n<h6>3. Màu đỏ chất chơi </h6>\nNghe đến màu giày sneaker này là bạn đã cảm giác \'rực lửa\' rồi phải không nào? Đúng như vậy, một đôi sneaker màu đỏ sẽ giúp bạn trở nên cực kỳ nổi bật ở bất kỳ nơi nào bạn đến, tuy nhiên, làm thế nào để kết hợp một cách hài hoà bộ trang phục của bạn với màu sắc này? Rất đơn giản, hãy ghi nhớ nguyên tắc này nhé: \n\nVì màu đỏ rất thu hút sự chú ý, do đó mà hãy khéo léo diện những trang phục màu đen hoặc trắng để tôn lên sự hiện diện của đôi giày sneaker vì đây sẽ là điểm nhấn chính của bạn\n\nThường thì bạn sẽ thấy màu đỏ hay đi kèm màu xanh lá trong những dịp Giáng sinh, thế nhưng sự kết hợp này ở ngoài đời sẽ khiến người đối diện bạn cảm thấy rối mắt, vì vậy hãy hạn chế hoặc không nên diện những trang phục màu xanh lá để đi kèm với màu giày sneaker đỏ\n\nTốt nhất không nên sử dụng gam màu này trong môi trường công sở hoặc những nơi yêu cầu sự nghiêm túc vì màu giày sneaker này hoàn toàn không phù hợp\n\n<h5>Tổng kết</h5>\nTrên đây là top 05 màu giày sneaker để phối đồ cực đỉnh cho nam và những tips chọn giày sneaker tùy theo nhu cầu của các chàng trai. Hãy tham khảo kỹ tủ đồ của mình để chọn được một đôi giày phù hợp với bản thân nhất.","./Views/images/news_6.jpg", "Giày sneaker vốn đã không còn quá xa lạ với những tín đồ yêu mến thời trang. Thế nhưng bạn đã biết đến những màu giày sneaker phối màu cực đỉnh cho nam chưa?");
+INSERT INTO `news`(`ID`, `CID`, `KEY`, `TIME`, `TITLE`, `CONTENT`, `IMG_URL`, `SHORT_CONTENT`) VALUES
+
+(1, 1, "FootballShirt", "2025/03/18", "Áo đấu Real Madrid sân nhà 2024/25 – Biểu tượng của sự tinh tế và đẳng cấp",
+'<h1>Áo Đấu Real Madrid Sân Nhà 2024/25 – Biểu Tượng Của Sự Tinh Tế Và Đẳng Cấp Hoàng Gia</h1>
+
+<p><strong>Real Madrid</strong> – đội bóng vĩ đại nhất châu Âu – không chỉ nổi tiếng vì số danh hiệu kỷ lục mà còn là biểu tượng cho phong cách thi đấu đỉnh cao và thời trang sân cỏ sang trọng. Mỗi mùa giải, mẫu áo đấu sân nhà luôn là tâm điểm chú ý của giới mộ điệu và fan hâm mộ. Mùa giải 2024/25, thương hiệu Adidas đã mang đến một thiết kế mới mang đậm tinh thần hoàng gia, nhưng vẫn giữ được nét truyền thống lịch sử đầy tự hào.</p>
+
+<p><img src="https://assets.adidas.com/images/w_600,f_auto,q_auto/4d2aba30dea24adb8300bceb8f0650f7_9366/Ao_DJau_San_Nha_Authentic_Real_Madrid_24-25_trang_IX8095_DM1.jpg" alt="Áo đấu Real Madrid sân nhà 2024/25" style="max-width:100%;border-radius:12px; margin: 20px 0;"></p>
+
+<h2>Thiết kế thanh lịch – Đậm chất hoàng gia</h2>
+<p>Mẫu áo sân nhà Real Madrid 2024/25 vẫn giữ màu trắng chủ đạo – biểu tượng bất diệt của “Los Blancos”. Nhưng điều đặc biệt năm nay là sự xuất hiện của các chi tiết <strong style="color:gold;">viền vàng kim</strong> chạy dọc cổ áo và tay áo, mang lại cảm giác vương giả và quyền uy. Thiết kế lấy cảm hứng từ những chi tiết kiến trúc của cung điện hoàng gia Tây Ban Nha – biểu trưng cho quyền lực và sự thống trị.</p>
+
+<p>Logo CLB và Adidas được in nổi phản quang sắc nét, tạo điểm nhấn mạnh mẽ trên nền trắng. Phía sau gáy áo còn được in dòng chữ “<em>Hala Madrid y Nada Más</em>” như một tuyên ngôn thiêng liêng dành cho các Madridistas.</p>
+
+<h2>Trang bị công nghệ AEROREADY hiện đại</h2>
+<p>Để phù hợp với cường độ thi đấu khắc nghiệt, Adidas đã tích hợp công nghệ <strong>AEROREADY</strong> vào chất liệu vải. Công nghệ này giúp thấm hút mồ hôi vượt trội, giữ cho cơ thể luôn khô ráo và thoáng mát. Các lỗ thoáng khí được phân bố chiến lược phía sau lưng và hai bên sườn giúp luồng khí lưu thông liên tục, cải thiện hiệu suất vận động.</p>
+
+<p>Cầu thủ trẻ <strong>Jude Bellingham</strong> chia sẻ: “Tôi cảm thấy như không mặc gì – chiếc áo nhẹ, thoáng, ôm vừa vặn và không gây cản trở trong các pha xử lý tốc độ cao.”</p>
+
+<h2>Chất liệu thân thiện – Thiết kế cho mọi hoàn cảnh</h2>
+<p>Chiếc áo được làm từ sợi polyester tái chế, thể hiện cam kết của Real Madrid và Adidas trong việc bảo vệ môi trường. Bề mặt mịn, không nhăn, đàn hồi tốt và dễ giặt, rất lý tưởng không chỉ để thi đấu mà còn để mặc hàng ngày. Bạn hoàn toàn có thể phối áo cùng quần jeans trắng, quần short thể thao, giày sneaker để tạo thành một outfit street style đầy chất bóng đá.</p>
+
+<p><img src="https://file.hstatic.net/200000293662/file/realhome01.jpg" alt="Chi tiết áo Real 2024/25" style="max-width:100%;border-radius:12px; margin: 20px 0;"></p>
+
+<h2>Valclo-Shop – Nơi hội tụ đam mê bóng đá</h2>
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> hiện đang phân phối mẫu áo đấu Real Madrid sân nhà 2024/25 chính hãng với đầy đủ size từ S đến XXL, dành cho cả nam và nữ. Sản phẩm đi kèm <strong>túi đựng cao cấp</strong>, <strong>tem kiểm định chính hãng</strong>, và đặc biệt có hỗ trợ in số & tên cầu thủ yêu thích miễn phí.</p>
+
+<p><img src="https://cdn1585.cdn4s4.io.vn/media/icon/landing/se0gt.svg" alt="icon quà tặng" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 2px; margin-bottom: 2px;"><strong>Ưu đãi đặc biệt:</strong> Giảm 10% cho đơn hàng đầu tiên – Tặng móc khoá Real Madrid cho 100 khách hàng đầu tiên.</p>
+<p><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php?url=Home/Contact_us/"><strong><img src="https://theme.hstatic.net/1000096703/1000836887/14/envelopes.png?v=384" alt="icon liên hệ" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">Liên hệ ngay</strong></a> để được tư vấn và giữ size trước khi cháy hàng!</p>',
+"./Views/images/real.png",
+"Áo đấu Real Madrid sân nhà 2024/25 – Tinh tế, đẳng cấp, hoàng gia"),
+
+
+(2, 1, "Tips", "2025/03/20", "Top 5 mẫu áo đá banh hot nhất dành cho fan cuồng mùa hè này",
+'<h1>Top 5 Mẫu Áo Đá Banh Hot Nhất Dành Cho Fan Cuồng Mùa Hè 2025</h1>
+
+<p>Mùa hè không chỉ là thời điểm bùng nổ các giải đấu phong trào mà còn là lúc giới trẻ thể hiện phong cách cá nhân qua những bộ đồ thể thao mang đậm dấu ấn cá tính. Với xu hướng “sporty fashion” đang lên ngôi, việc chọn một chiếc <strong>áo đá banh không chỉ để chơi thể thao mà còn để phối đồ hàng ngày</strong> trở thành mối quan tâm của rất nhiều bạn trẻ.</p>
+
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> xin giới thiệu đến bạn danh sách <strong>Top 5 mẫu áo đá banh hot nhất mùa hè 2025</strong> – vừa thời trang, vừa chất lượng thi đấu đỉnh cao.</p>
+
+<h2>1. Áo Inter Milan sân khách 2024/25 – Sự thanh lịch từ nước Ý</h2>
+<p>Thiết kế phối màu <strong>trắng ngà và xanh biển đậm</strong> mang hơi thở cổ điển nhưng vẫn rất hiện đại. Cổ áo tròn tối giản cùng chất vải mịn, thoáng khí phù hợp cả thi đấu lẫn đi dạo. Đường viền xanh làm nổi bật phần vai và tay áo, tạo sự mạnh mẽ nhưng không kém phần thanh thoát.</p>
+<p><img src="https://footdealer.co/wp-content/uploads/2023/07/Maillot-Match-Inter-Milan-Domicile-2023-2024-1.jpg" alt="Áo Inter Milan 2024/25" style="width:60%;display:block;margin:10px auto;border-radius:12px;"></p>
+
+<h2>2. Áo PSG sân nhà – Phong cách Paris đầy tự tin</h2>
+<p>Không thể bỏ qua chiếc áo xanh navy kinh điển của Paris Saint-Germain. Đường sọc <strong>đỏ-trắng chạy dọc giữa thân áo</strong> tượng trưng cho trái tim mạnh mẽ, bền bỉ và cá tính của người Paris. Đây là mẫu áo cực hot được Neymar và Mbappé mặc thi đấu, nay bạn cũng có thể sở hữu tại <strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong>.</p>
+<p><img src="https://media.foot-store.pt/catalog/product/cache/image/1800x/9df78eab33525d08d6e5fb8d27136e95/t/_/t_l_chargement_45_3.jpg" alt="Áo PSG sân nhà" style="width:60%;display:block;margin:10px auto;border-radius:12px;"></p>
+
+<h2>3. Áo MU sân khách 2024/25 – Cổ điển và huyền thoại</h2>
+<p>Màu kem phối đỏ rượu vang mang đến cảm giác hoài cổ, gợi nhớ đến thời kỳ hoàng kim của Manchester United. Thiết kế nhẹ nhàng nhưng đầy khí chất, thích hợp cho cả fan MU lâu năm và người yêu thích phong cách retro thể thao.</p>
+<p><img src="https://media.vov.vn/sites/default/files/styles/large/public/2024-07/ao-dau-mu-2024-25.jpg" alt="Áo MU sân khách" style="width:60%;display:block;margin:10px auto;border-radius:12px;"></p>
+
+<h2>4. Áo Argentina World Cup bản giới hạn – Di sản từ Messi</h2>
+<p>Đây là mẫu áo đặc biệt kỷ niệm hành trình vô địch World Cup 2022, được tái bản số lượng giới hạn trong năm 2025. Màu xanh trắng truyền thống kết hợp cùng <strong>chi tiết vinh danh Messi</strong> ở mặt sau cổ áo làm nên một món quà không thể thiếu với mọi fan của bóng đá Argentina.</p>
+<p><img src="https://cdnmedia.baotintuc.vn/Upload/OND64xLJqhpDJlQ2Gd1dpw/files/2024/03/ao-16324.jpg" alt="Áo Argentina World Cup" style="width:60%;display:block;margin:10px auto;border-radius:12px;"></p>
+
+<h2>5. Áo tập luyện Nike Pro – Tối giản, hiệu năng cao</h2>
+<p>Dành cho những người thích mặc đơn giản nhưng chất lượng. Dòng Nike Pro sử dụng chất liệu co giãn 4 chiều, thoáng khí cực cao và thấm hút mồ hôi nhanh chóng. Áo có kiểu dáng bodyfit, dễ phối với short hoặc quần thể thao. Rất thích hợp cho đá phủi hoặc tập gym.</p>
+<p><img src="https://thegioigiaythethao.vn/images/attachment/5793Ao%20the%20thao%20Nam%20NIKE%20Pro%20Warm%20Compression%20LS%20Top%20Mens%20Athletic%20838045%20010%20(2).jpg" alt="Áo tập Nike Pro" style="width:60%;display:block;margin:10px auto;border-radius:12px;"></p>
+
+<h2>Tư vấn chọn mẫu phù hợp với phong cách cá nhân</h2>
+<p>Nếu bạn yêu sự cổ điển, hãy chọn áo MU hoặc Argentina. Nếu yêu thích sự hiện đại, khỏe khoắn – PSG hoặc Inter là lựa chọn sáng giá. Còn nếu bạn cần sự thoải mái toàn diện để tập luyện, không gì phù hợp hơn <strong>Nike Pro</strong>.</p>
+
+<h2>Mua ngay tại Valclo-Shop – Chính hãng, đủ size, nhiều ưu đãi</h2>
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> là đơn vị phân phối chính hãng các mẫu áo trên, đảm bảo chất lượng vải, độ bền màu và có tem kiểm định. Sản phẩm có sẵn size từ S đến XXL, dành cho cả nam và nữ.</p>
+
+<p><img src="https://cdn1585.cdn4s4.io.vn/media/icon/landing/se0gt.svg" alt="icon quà tặng" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 2px; margin-bottom: 2px;"><strong>Ưu đãi:</strong> Giảm 10% cho đơn đầu tiên – Freeship toàn quốc – Tặng kèm túi đựng thể thao với mỗi đơn hàng.</p>
+
+<p><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php?url=Home/Contact_us/"><strong><img src="https://theme.hstatic.net/1000096703/1000836887/14/envelopes.png?v=384" alt="icon liên hệ" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">Liên hệ ngay</strong></a> để giữ size trước khi cháy hàng nhé!</p>',
+"./Views/images/5ao2.png",
+"5 mẫu áo đá banh cực hot cho mùa hè 2025"),
+
+
+(3, 1, "Guide", "2025/03/21", "Cách chọn size áo đấu phù hợp cho nam và nữ: Hướng dẫn chi tiết",
+'<h1>Cách Chọn Size Áo Đấu Phù Hợp Cho Nam Và Nữ: Hướng Dẫn Chi Tiết</h1>
+
+<p>Việc chọn đúng size áo đá banh không chỉ giúp bạn thi đấu thoải mái mà còn đảm bảo phong cách thời trang và sự tự tin trên sân. Một chiếc áo quá chật sẽ gây khó chịu, còn quá rộng thì làm mất đi form dáng thể thao. Đặc biệt, với áo chính hãng đến từ các thương hiệu như <strong>Adidas</strong> hay <strong>Nike</strong>, kích thước thường theo chuẩn châu Âu – lớn hơn size thông thường của người Việt.</p>
+
+<p><img src="https://mcdn.coolmate.me/image/August2024/size-ao-da-bong-4265_590.jpg" alt="Bảng size áo đá banh" style="max-width:100%;border-radius:12px;margin:20px 0;"></p>
+
+<h2>1. Gợi ý chọn size theo chiều cao và cân nặng</h2>
+<p><strong>Nam giới:</strong></p>
+<ul>
+<li>Chiều cao từ 1m60 – 1m70, nặng 55–65kg: <strong>Size M</strong></li>
+<li>Chiều cao từ 1m70 – 1m80, nặng 65–75kg: <strong>Size L</strong></li>
+<li>Trên 1m80 hoặc từ 75kg trở lên: <strong>Size XL</strong></li>
+</ul>
+
+<p><strong>Nữ giới:</strong></p>
+<ul>
+<li>Dưới 50kg, chiều cao từ 1m50 – 1m60: <strong>Size S</strong></li>
+<li>Từ 50–60kg: <strong>Size M</strong></li>
+<li>Trên 60kg hoặc thích mặc rộng: <strong>Size L</strong></li>
+</ul>
+
+<p><em>Lưu ý:</em> Với các bạn thích phong cách oversize (mặc rộng), hãy chọn lớn hơn 1 size so với thông thường. Nếu dùng để thi đấu chuyên nghiệp, nên chọn vừa vặn để tối ưu cử động.</p>
+
+<h2>2. Phân biệt size của Adidas, Nike và Puma</h2>
+<p>Adidas thường có form hơi rộng ở phần vai, thích hợp với người thể hình hoặc vai rộng. Nike có form ôm hơn, hiện đại hơn – phù hợp với người gầy. Còn Puma thường có chiều dài thân áo ngắn hơn, thích hợp cho các bạn thấp.</p>
+
+<h2>3. Trải nghiệm tại Valclo-Shop: Chọn đúng size dễ như chơi bóng</h2>
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> hỗ trợ khách hàng chọn size cực kỳ tiện lợi. Bạn chỉ cần inbox chiều cao, cân nặng – shop sẽ gửi size gợi ý kèm hình thật. Ngoài ra:</p>
+<p>
+✔️ Có sẵn bảng size chi tiết theo từng mẫu áo<br>
+✔️ Được <strong>đổi size miễn phí</strong> nếu mặc không vừa<br>
+✔️ Tư vấn tận tình qua Messenger hoặc Zalo
+</p>
+
+<p>Vì mỗi cơ thể có cấu trúc khác nhau, cách tốt nhất là thử áo trực tiếp hoặc <strong>đặt hàng online với chính sách đổi trả rõ ràng</strong>. Valclo-Shop cam kết bạn sẽ chọn được chiếc áo phù hợp nhất với vóc dáng và phong cách của mình.</p>
+
+<p><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php?url=Home/Contact_us/"><strong><img src="https://theme.hstatic.net/1000096703/1000836887/14/envelopes.png?v=384" alt="icon liên hệ" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">Liên hệ ngay</strong></a> để được tư vấn chọn size miễn phí từ đội ngũ hỗ trợ của chúng tôi.</p>',
+"./Views/images/size.png",
+"Chọn size áo đá banh chính xác – không lo mặc sai"),
+
+
+(4, 1, "Product", "2025/03/22", "Găng tay thủ môn: Cách chọn theo độ tuổi và vị trí thi đấu",
+'<h1>Găng Tay Thủ Môn: Cách Chọn Theo Độ Tuổi Và Vị Trí Thi Đấu</h1>
+
+<p>Trong bóng đá, thủ môn được xem là người gác đền – chốt chặn cuối cùng của đội hình. Và để hoàn thành tốt vai trò này, một yếu tố không thể thiếu chính là <strong>găng tay thủ môn</strong>. Đây không đơn thuần là phụ kiện, mà là trang bị bảo vệ, hỗ trợ và nâng cao khả năng phản xạ cũng như bắt bóng.</p>
+
+<p><img src="https://aobongda.net/pic/News/chon-gang-tay-thu-mon_HasThumb.jpg" alt="Găng tay thủ môn" style="max-width:100%;border-radius:12px;margin:20px 0;"></p>
+
+<h2>Tại sao chọn đúng găng tay lại quan trọng?</h2>
+<p>Một đôi găng không vừa tay hoặc không phù hợp với mặt sân, điều kiện thi đấu có thể khiến thủ môn mất tự tin, bắt bóng không chắc và dễ chấn thương. Đặc biệt, các loại găng chất lượng thấp thường dễ bong keo, trơn trượt hoặc rách sau vài trận đấu. Do đó, <strong>chọn đúng găng tay theo độ tuổi, phong cách thi đấu và mục đích sử dụng</strong> là rất cần thiết.</p>
+
+<h2>Gợi ý chọn găng tay theo từng đối tượng</h2>
+
+<ul>
+<li><strong> Trẻ em, người mới tập chơi:</strong> Ưu tiên loại găng tay nhẹ, mềm, độ dính vừa phải, dễ tháo và không quá bó. <br> Gợi ý: <em>Adidas Predator Junior</em>, <em>Nike Match Jr</em>.</li>
+
+<li><strong> Thủ môn phong trào, đá phủi:</strong> Nên chọn loại có <strong>lòng găng làm từ latex</strong>, có đệm lót ở mu bàn tay và cổ tay co giãn tốt. Độ bám cần đủ để bắt bóng chắc mà vẫn linh hoạt.<br> Gợi ý: <em>Puma Ultra Grip 1 Hybrid</em>, <em>Adidas Predator Training</em>.</li>
+
+<li><strong> Thủ môn chuyên nghiệp:</strong> Chọn các dòng cao cấp, có công nghệ chống sốc, bảo vệ ngón tay (finger save), độ bám siêu dính và thiết kế ôm tay. Những dòng này phù hợp với cường độ luyện tập và thi đấu cao.<br> Gợi ý: <em>Nike Vapor Grip 3</em>, <em>Puma Future Grip 1 Hybrid</em>.</li>
+</ul>
+
+<h2>Chất liệu và thiết kế cần lưu ý</h2>
+<p><strong>Lòng găng:</strong> Nên là latex hoặc foam cao cấp để tăng độ bám bóng, nhất là trong điều kiện trời mưa hoặc sân cỏ nhân tạo trơn.</p>
+<p><strong>Mu bàn tay:</strong> Ưu tiên găng có đệm dày và chống va đập khi đấm bóng. Một số dòng có thêm gù cao su hỗ trợ đá phạt góc.</p>
+<p><strong>Thiết kế ngón tay:</strong> Có loại flat (ngón thẳng), roll finger (ôm ngón), negative cut (ôm sát) – mỗi kiểu có ưu và nhược riêng, nên thử trước khi mua.</p>
+
+<h2>Combo chuyên dụng từ Valclo-Shop</h2>
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> hiện cung cấp đầy đủ các mẫu găng tay từ cơ bản đến cao cấp, phục vụ nhu cầu từ học sinh, sinh viên cho đến thủ môn chuyên nghiệp. Đặc biệt:</p>
+
+<p>
+✔️ Combo găng tay + khăn lau + túi đựng cao cấp<br>
+✔️ Chính sách đổi size nếu không vừa<br>
+✔️ Tư vấn chọn găng theo vị trí và mặt sân (sân cỏ nhân tạo, tự nhiên...)
+</p>
+
+<p>>> Găng tay có đủ size cho trẻ em từ 8 tuổi đến người lớn tay to. Hàng chính hãng, nhập khẩu trực tiếp từ Nike, Adidas, Puma.</p>
+
+<p><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php?url=Home/Contact_us/"><strong><img src="https://theme.hstatic.net/1000096703/1000836887/14/envelopes.png?v=384" alt="icon liên hệ" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">Liên hệ ngay</strong></a> để nhận tư vấn chọn găng miễn phí và ưu đãi riêng dành cho các đội bóng học sinh – sinh viên!</p>',
+"./Views/images/gt1.png",
+"Hướng dẫn chọn găng tay thủ môn đúng chuẩn"),
+
+
+(5, 1, "Football", "2025/03/23", "Tin chuyển nhượng mùa hè 2025: Những cái tên gây bất ngờ",
+'<h1>Tin Chuyển Nhượng Mùa Hè 2025: Những Cái Tên Gây Bất Ngờ</h1>
+
+<p>Thị trường chuyển nhượng mùa hè 2025 đang bước vào giai đoạn sôi động nhất với hàng loạt tin đồn, xác nhận và cả những thương vụ gây sốc. Từ những bom tấn đã nổ đến các thương thảo âm thầm, thế giới bóng đá đang dõi theo từng bước đi của các ông lớn châu Âu.</p>
+
+<p><img src="https://media.bongda.com.vn/editor-upload/2025-2-24/tran_vu_minh_khoi/liv_23.jpg" alt="Chuyển nhượng bóng đá hè 2025" style="max-width:100%;border-radius:12px;margin:20px 0;"></p>
+
+<h2>1. Kylian Mbappé – Không còn là trung tâm tại Real?</h2>
+<p>Sau khi gia nhập Real Madrid vào năm 2024 với mức phí khổng lồ, Mbappé hiện đang được đồn đoán sẽ ra đi chỉ sau một mùa giải. Dưới triều đại HLV mới – người ưu tiên lối chơi tập thể và pressing toàn diện – Mbappé không còn phù hợp với hệ thống. Một số nguồn tin từ Tây Ban Nha cho rằng Paris SG sẵn sàng mở cửa đón anh trở lại, hoặc Man City sẽ nhập cuộc nếu có cơ hội.</p>
+
+<h2>2. Haaland và lời mời 120 triệu euro từ Bayern Munich</h2>
+<p><strong>Erling Haaland</strong>, cây săn bàn người Na Uy của Man City, đang lọt vào tầm ngắm của Bayern Munich. Đội bóng nước Đức sẵn sàng chi ra hơn 120 triệu euro để đưa tiền đạo này trở về Bundesliga. Đây được xem là một thương vụ “đổi màu áo gây sốc” nếu thành công, bởi trước đó Haaland từng khoác áo Dortmund – đại kình địch của Bayern.</p>
+
+<h2>3. Ronaldo chuẩn bị khép lại sự nghiệp tại Sporting Lisbon?</h2>
+<p>Trong những chia sẻ gần đây, Cristiano Ronaldo đã không giấu giếm mong muốn được <strong>trở về Bồ Đào Nha và khoác áo Sporting Lisbon</strong> – nơi anh bắt đầu sự nghiệp chuyên nghiệp. Nếu thương vụ thành hiện thực, đây sẽ là màn khép lại sự nghiệp đầy cảm xúc cho một trong những huyền thoại lớn nhất lịch sử bóng đá hiện đại.</p>
+
+<h2>4. Arsenal ký hợp đồng với Felipe Oliveira – “Neymar mới”</h2>
+<p>Một trong những thương vụ đã được xác nhận là Arsenal chiêu mộ thành công ngôi sao trẻ người Brazil – <strong>Felipe Oliveira</strong>. Mới 19 tuổi nhưng cầu thủ chạy cánh này đã gây ấn tượng mạnh tại giải U20 Nam Mỹ và được ví như “Neymar mới” nhờ kỹ thuật điêu luyện và khả năng đột phá. HLV Arteta kỳ vọng Felipe sẽ là nhân tố bùng nổ ở mùa giải mới.</p>
+
+<h2>Những thương vụ đáng chú ý khác</h2>
+<ul>
+<li><strong>João Félix</strong> được Barca liên hệ gia hạn hợp đồng sau màn trình diễn ấn tượng đầu năm 2025.</li>
+<li><strong>Harry Kane</strong> có thể trở lại Premier League sau một mùa bóng không mấy thành công tại Bayern.</li>
+<li><strong>Victor Osimhen</strong> được PSG và Chelsea theo sát sau khi Napoli bật đèn xanh.</li>
+</ul>
+
+<h2>Valclo-Shop – Đồng hành cùng người yêu bóng đá</h2>
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> không chỉ là nơi cung cấp áo đấu chính hãng mà còn là nơi bạn có thể cập nhật các tin tức bóng đá nóng hổi hàng tuần.</p>
+
+<p>Từ những tin chuyển nhượng mới nhất, các phân tích chiến thuật, cho đến bộ sưu tập <strong>áo đấu phiên bản mới nhất</strong> của các CLB nổi tiếng như Real Madrid, MU, PSG, Barcelona... tất cả đều có tại Valclo-Shop.</p>
+
+<p><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php?url=Home/Contact_us/"><strong><img src="https://theme.hstatic.net/1000096703/1000836887/14/envelopes.png?v=384" alt="icon liên hệ" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">Liên hệ ngay</strong></a> để được tư vấn chọn áo đấu theo cầu thủ yêu thích hoặc cập nhật BST mới nhất mùa 2025/26!</p>',
+"./Views/images/cn.png",
+"Chuyển nhượng hè 2025 – Nhiều bất ngờ cực sốc"),
+
+
+(6, 1, "Comparison", "2025/03/25", "Nike vs Adidas: So găng hai ông lớn áo đấu năm 2025",
+'<h1>Nike vs Adidas: So Găng Hai Ông Lớn Áo Đấu Năm 2025</h1>
+
+<p>Trong thế giới thời trang thể thao và bóng đá, <strong>Nike</strong> và <strong>Adidas</strong> không chỉ là hai thương hiệu dẫn đầu, mà còn là biểu tượng văn hóa đại diện cho hai trường phái thiết kế và công nghệ đối lập. Mỗi hãng đều có lượng fan trung thành và triết lý riêng trong từng đường kim mũi chỉ.</p>
+
+<p><img src="https://file.hstatic.net/200000581855/article/wp2324680_0613191ae33c4895b1cb09ecf672ba90.jpg" alt="Nike vs Adidas 2025" style="max-width:100%;border-radius:12px;margin:20px 0;"></p>
+
+<h2>1. Công nghệ vải – Cuộc đua về độ thoáng khí và hiệu suất thi đấu</h2>
+<p><strong>Adidas</strong> trong năm 2025 tiếp tục sử dụng công nghệ <strong>HEAT.RDY</strong> – loại vải siêu nhẹ, thoáng khí, giúp cầu thủ thi đấu dưới thời tiết nóng nực mà vẫn cảm thấy mát mẻ. Đây là công nghệ xuất hiện trên các mẫu áo của Real Madrid, Arsenal, và Argentina.</p>
+
+<p>Trong khi đó, <strong>Nike</strong> không chịu kém cạnh khi đưa vào công nghệ <strong>Dri-FIT ADV</strong> – sự kết hợp giữa sợi vải microfiber và công nghệ chống mồ hôi giúp <strong>hấp thụ - tản nhiệt - làm khô siêu nhanh</strong>. Manchester United, Barcelona, và PSG đều tin dùng công nghệ này trong áo đấu mới nhất của họ.</p>
+
+<h2>2. Phong cách thiết kế – Tối giản vs táo bạo</h2>
+<p><strong>Adidas</strong> thiên về thiết kế <strong>tối giản, thanh lịch và tinh tế</strong>, nhấn mạnh vào tính truyền thống và bản sắc CLB. Những chiếc áo của Real Madrid sân nhà 2024/25 là ví dụ điển hình: trắng tinh khiết, viền vàng ánh kim nhẹ nhàng – sang trọng nhưng không khoa trương.</p>
+
+<p><strong>Nike</strong> lại thường xuyên tạo ra các thiết kế <strong>phá cách, năng động và trẻ trung</strong>. Từ gam màu tím – đỏ rượu của áo MU sân khách, đến đường kẻ chéo mạnh mẽ trên áo PSG sân nhà, Nike luôn đẩy giới hạn thẩm mỹ thể thao sang hướng mới.</p>
+
+<h2>3. Cảm giác mặc – Form ôm body vs co giãn thoải mái</h2>
+<p><strong>Áo Adidas</strong> thường có form <strong>body fit</strong>, ôm nhẹ vào thân, nhấn vai và eo – thích hợp cho người chơi thể thao hoặc có vóc dáng cân đối.</p>
+
+<p><strong>Áo Nike</strong> thường có form <strong>co giãn linh hoạt</strong> và rộng hơn ở phần bụng – dễ mặc với nhiều dáng người, đặc biệt phù hợp cả cho nam và nữ sử dụng hằng ngày.</p>
+
+<h2>4. Giá thành và trải nghiệm thực tế tại Valclo-Shop</h2>
+<p>Thông thường, <strong>giá áo đấu chính hãng của Adidas và Nike không chênh lệch quá nhiều</strong> (khoảng 900.000đ – 1.250.000đ/chiếc), tùy theo mẫu và mùa giải. Tuy nhiên, cảm nhận mặc thực tế mới là yếu tố quyết định!</p>
+
+<p>Tại <strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong>, bạn có thể:</p>
+<p>
+✔️ Thử trực tiếp cả áo Adidas và Nike để chọn form áo phù hợp<br>
+✔️ Nhận tư vấn chọn theo phong cách (lịch lãm – cá tính – basic – sporty)<br>
+✔️ Đổi trả size miễn phí nếu đặt online không vừa
+</p>
+
+<h2>Nên chọn Adidas hay Nike? – Tùy vào “gu” cá nhân của bạn!</h2>
+<p>>> Nếu bạn thích vẻ ngoài thanh lịch, nhẹ nhàng – hãy chọn Adidas.</p>
+<p>>> Nếu bạn là người năng động, thích nổi bật giữa sân – Nike là lựa chọn lý tưởng.</p>
+
+<p><strong><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php">Valclo-Shop</a></strong> hiện đang trưng bày nhiều mẫu áo đấu hot nhất mùa giải 2024/25 của cả hai thương hiệu. Mua hàng tại đây, bạn được đảm bảo về chất lượng, xuất xứ và quyền lợi đổi/trả rõ ràng.</p>
+
+<p><a href="http://localhost/Valclo_shop/Valclo-Shop/index.php?url=Home/Contact_us/"><strong><img src="https://theme.hstatic.net/1000096703/1000836887/14/envelopes.png?v=384" alt="icon liên hệ" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 6px;">Liên hệ ngay</strong></a> để được tư vấn chọn mẫu áo phù hợp nhất với cá tính và vóc dáng của bạn!</p>',
+"./Views/images/addvsnike.png",
+"Nike và Adidas – đâu là áo đấu phù hợp với bạn?");
+
+
 
 
 INSERT INTO `comment_news`(`comment_news`.`ID`, `comment_news`.`NID`, `comment_news`.`CID`, `comment_news`.`CONTENT`, `comment_news`.`TIME`) VALUES

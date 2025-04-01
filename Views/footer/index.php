@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-lg-4 col-md-12 col-12">
             <h1><i class="fab fa-shopify"></i><a href="?url=Home/Home_page/">VCS</a></h1>
-            <p>Copyright 2022&copy Valcloshop</p>
+            <p>Copyright 2025&copy Valcloshop</p>
             <p>Alright Reserved</p>
             <div class="d-flex social">
               <p><i class="fab fa-facebook"></i></p>

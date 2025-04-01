@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./Views/Navbar/navbar.css">
 <div id="navbar" class="sticky-top">
     <nav>
       <h1><i class="fab fa-shopify"></i><a href="?url=Home/Home_page/">VCS</a></h1>
