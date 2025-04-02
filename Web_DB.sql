@@ -336,7 +336,7 @@ INSERT INTO `news`(`ID`, `CID`, `KEY`, `TIME`, `TITLE`, `CONTENT`, `IMG_URL`, `S
 <li>Từ 50–60kg: <strong>Size M</strong></li>
 <li>Trên 60kg hoặc thích mặc rộng: <strong>Size L</strong></li>
 </ul>
-
+  
 <p><em>Lưu ý:</em> Với các bạn thích phong cách oversize (mặc rộng), hãy chọn lớn hơn 1 size so với thông thường. Nếu dùng để thi đấu chuyên nghiệp, nên chọn vừa vặn để tối ưu cử động.</p>
 
 <h2>2. Phân biệt size của Adidas, Nike và Puma</h2>

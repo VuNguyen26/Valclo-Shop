@@ -625,16 +625,36 @@ class Home extends Controller{
             else echo "null";
         }
         function create_account($user, $array){
-            if(mysqli_fetch_array($this->model($user)->check_account_ban($array[3]))["id"] == NULL){
-                if(mysqli_fetch_array($this->model($user)->check_account_inside($array[3], $array[4]))["id"] == NULL){
-                    if($this->model($user)->create_account($array[2], $array[3], $array[4], $array[5], $array[6])){
-                        echo "ok";
-                    }
-                    else echo "null3";
-                }
-                else echo "null2";
+            // $array[2] = fname, $array[3] = cmnd, $array[4] = email, $array[5] = username, $array[6] = password
+        
+            // Kiểm tra xem người dùng có bị cấm không
+            $ban_check = $this->model($user)->check_account_ban($array[3]);
+            if(mysqli_num_rows($ban_check) > 0){
+                echo "null1"; // Bị cấm
+                return;
             }
-            else echo "null1";
-        }
+        
+            // Kiểm tra tài khoản đã tồn tại chưa
+            $exist_check = $this->model($user)->check_account_inside($array[3], $array[4]);
+            if(mysqli_num_rows($exist_check) > 0){
+                echo "null2"; // Tài khoản tồn tại
+                return;
+            }
+        
+            // Tạo tài khoản
+            $success = $this->model($user)->create_account(
+                $array[2], // fname
+                $array[3], // cmnd
+                $array[4], // email
+                $array[5], // username
+                $array[6]  // password
+            );
+        
+            if($success){
+                echo "ok";
+            } else {
+                echo "null3"; // Lỗi khi tạo tài khoản
+            }
+        }                
     }
 ?>

@@ -1,58 +1,74 @@
-
-function add_notice(alert, string){
-    return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
-}
-
-document.getElementsByClassName("mybtn")[0].onclick = function(){
-    var input = document.getElementsByClassName("my-login-validation")[0].getElementsByTagName("input");
-    var check = 0;
-    for (let index = 0; index < input.length; index++) {
-        if(input[index].value == ""){
-            document.getElementsByClassName("invalid-feedback")[index].style.display = "block";
-            check = 1;
+function add_notice(alert, string) {
+    return '<div class="alert ' + alert + ' mt-2" role="alert"><strong>' + string + '</strong></div>';
+  }
+  
+  document.addEventListener("DOMContentLoaded", function () {
+    const button = document.querySelector(".mybtn");
+    if (!button) return;
+  
+    button.addEventListener("click", function () {
+      const form = document.querySelector(".my-login-validation");
+      const inputs = form.querySelectorAll("input");
+      const invalids = form.querySelectorAll(".invalid-feedback");
+      let check = false;
+  
+      inputs.forEach((input, index) => {
+        if (input.value.trim() === "") {
+          invalids[index].style.display = "block";
+          check = true;
+        } else {
+          invalids[index].style.display = "none";
         }
-        else{
-            document.getElementsByClassName("invalid-feedback")[index].style.display = "none";
-            console.log(input[index].value);
+      });
+  
+      if (check) return;
+  
+      if (inputs[4].value !== inputs[5].value) {
+        invalids[6].style.display = "block";
+        return;
+      } else {
+        invalids[6].style.display = "none";
+      }
+  
+      const url =
+        `?url=Home/create_account/` +
+        encodeURIComponent(inputs[0].value) + "/" +
+        encodeURIComponent(inputs[1].value) + "/" +
+        encodeURIComponent(inputs[2].value) + "/" +
+        encodeURIComponent(inputs[3].value) + "/" +
+        encodeURIComponent(inputs[4].value) + "/";
+  
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState === 4) {
+          console.log("Status:", this.status);
+          console.log("Response:", this.responseText);
+  
+          const notice = document.getElementById("notice");
+          if (this.status !== 200) {
+            notice.innerHTML = add_notice("alert-danger", "Lỗi kết nối đến server!");
+            return;
+          }
+  
+          if (this.responseText === "null1") {
+            notice.innerHTML = add_notice("alert-danger", "Bạn là thành viên bị cấm");
+          } else if (this.responseText === "null2") {
+            notice.innerHTML = add_notice("alert-danger", "Tài khoản của bạn đã tồn tại");
+          } else if (this.responseText === "null3") {
+            notice.innerHTML = add_notice("alert-danger", "Tạo tài khoản thất bại");
+          } else if (this.responseText === "ok") {
+            notice.innerHTML = add_notice("alert-success", "Tạo tài khoản thành công");
+            setTimeout(() => {
+              window.location.href = "?url=/Home/Login/";
+            }, 2000);
+          } else {
+            notice.innerHTML = add_notice("alert-danger", "Phản hồi không xác định từ server!");
+          }
         }
-    }
-    if(check == 1) return;
-    if(input[4].value != input[5].value){
-        check = 1;
-        document.getElementsByClassName("invalid-feedback")[6].style.display = "block";
-    }
-    else{
-        document.getElementsByClassName("invalid-feedback")[6].style.display = "none";
-            console.log(input[4].value + input[5].value);
-    }
-    if(check == 1) return;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function(){
-        if(this.readyState == 4 && this.status == 200){
-            if(this.responseText == "null1"){
-                document.getElementById("notice").innerHTML = add_notice("fail", "Bạn là thành viên bị cấm" );
-                document.getElementsByClassName("alert")[0].style.display = "block";
-                setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-            }
-            else if(this.responseText == "null2"){
-                document.getElementById("notice").innerHTML = add_notice("fail", "Tài khoản của bạn đã tồn tại" );
-                document.getElementsByClassName("alert")[0].style.display = "block";
-                setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-            }
-            else if(this.responseText == "null3"){
-                document.getElementById("notice").innerHTML = add_notice("fail", "Tạo tài khoản thất bại" );
-                document.getElementsByClassName("alert")[0].style.display = "block";
-                setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-            }
-            else if(this.responseText == "ok"){
-                document.getElementById("notice").innerHTML = add_notice("success", "Tạo tài khoản thành công" );
-                document.getElementsByClassName("alert")[0].style.display = "block";
-                setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-                setTimeout(function(){window.location.href = "?url=/Home/Login/"});
-            }
-        }
-    };
-    xmlhttp.open("GET", "?url=Home/create_account/" + input[0].value + "/" + input[1].value + "/" + input[2].value + "/" + input[3].value + "/" + input[4].value + "/", true);
-    xmlhttp.send();
-
-};
+      };
+  
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();
+    });
+  });
+  
