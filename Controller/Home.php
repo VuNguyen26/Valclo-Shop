@@ -21,7 +21,7 @@ class Home extends Controller{
                 "user" => $user,
                 "news" => $news_list,
                 "collection" => $cus->get_swiper_slide_collection(), //$data["collection"] = $cus->get_swiper_slide_collection() 
-                "featured" => $cus->get_products("", "")
+                "featured" => $cus->get_products("", "", 1)
             ]);
         }
         function About_us($user){
@@ -189,7 +189,7 @@ class Home extends Controller{
                 array_push($product_in_combo, (["id" => $cb["id"], "name" => $cb["cbname"], "price" => $cb["cost"], "product" => $cus->get_product_in_combo($cb["id"])]));
             }
             $this->view("Cost_table", [
-                "product" => $cus->get_products("", ""),
+                "product" => $cus->get_products("", "", 1),
                 "combo" => $product_in_combo,
                 "cycle" => $cus->get_cycle(),
                 "user" => $user

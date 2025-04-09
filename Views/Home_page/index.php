@@ -209,7 +209,7 @@
           <div class="swiper-container slider-2">
             <div class="swiper-wrapper noneheight">
               <?php
-                    if(empty($data["featured"])) echo "featured empty";
+                    if(empty($data["product"]["list"])) echo "featured empty";
                     else{
                       if($data["user"] != "manager"){
                         echo "<span hidden>" . $data["user"] . "</span>";
