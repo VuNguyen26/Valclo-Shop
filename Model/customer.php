@@ -41,6 +41,8 @@ class customer extends DB {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`PRICE` $sort_2 ";
         } else die('404 Not Found');
         return [
+            'sort_1' => $sort_1,
+            'sort_2' => $sort_2,
             'total_page' => $total_page,
             'active_page' => $page,
             'list' => mysqli_query($this->connect, $query.$query_paginate)
