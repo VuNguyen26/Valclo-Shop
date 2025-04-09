@@ -21,7 +21,7 @@ class Home extends Controller{
                 "user" => $user,
                 "news" => $news_list,
                 "collection" => $cus->get_swiper_slide_collection(), //$data["collection"] = $cus->get_swiper_slide_collection() 
-                "featured" => $cus->get_products("", "", 1)
+                "featured" => $cus->get_products("featured", "", 1)["list"]
             ]);
         }
         function About_us($user){

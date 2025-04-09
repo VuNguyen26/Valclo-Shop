@@ -18,8 +18,8 @@ class customer extends DB {
         
 
         # sort
-        if(!(in_array($sort_1,['pname','price']))) $sort_1 = null;
-        if(!(in_array($sort_2,['ASC','DESC']))) $sort_1 = null;
+        if(!in_array($sort_1,['featured','pname','price'])) $sort_1 = null;
+        if(!in_array($sort_2,['ASC','DESC'])) $sort_2 = null;
 
         # pagination
         // lấy tổng sản phẩm
@@ -35,11 +35,14 @@ class customer extends DB {
 
         if ($sort_1 == "" && $sort_2 == "") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ";
+        } else if ($sort_1 == "featured") {
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` WHERE `product`.`TOP_PRODUCT` ORDER BY `product`.`TOP_PRODUCT` ASC ";
         } else if ($sort_1 == "pname") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`NAME` $sort_2 ";
         } else if ($sort_1 == "price") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`PRICE` $sort_2 ";
         } else die('404 Not Found');
+
         return [
             'sort_1' => $sort_1,
             'sort_2' => $sort_2,
