@@ -1,5 +1,17 @@
 <?php
 session_start();
+
+/**
+ * Dùng để trả về các thông số của $_SERVER
+ * @return array
+ */
+function test_server() {
+    echo'<pre>';
+    print_r($_SERVER) ;
+    echo'</pre>';
+    exit;
+}
+
 /**
  * Dùng để trả về các thông số của $array
  * @param $array Mảng cần hiển thị

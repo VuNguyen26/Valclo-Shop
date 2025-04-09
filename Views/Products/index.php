@@ -69,6 +69,7 @@
               (isset($_GET['sort-by']) && $_GET['sort-by'] === 'price') ? $select_price = 'selected' : $select_price = '';
               (isset($_GET['order-by']) && $_GET['order-by'] === 'ASC') ? $select_asc = 'selected' : $select_asc = '';
               (isset($_GET['order-by']) && $_GET['order-by'] === 'DESC') ? $select_desc = 'selected' : $select_desc = '';
+              $page = $data['product']['active_page'];
               echo <<<HTML
               <div class="form-sort">
               <form action="/" method="GET">
@@ -87,6 +88,7 @@
                     <option {$select_desc} value="DESC">DESC</option>
                   </select>
                 </div>
+                <input type="hidden" name="page" value="{$page}">
                 <button class="sort-btn" type="submit">Apply</button>
             </form>
             </div>
@@ -189,10 +191,10 @@
         <div class="list-product">
           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
               <?php
-                  if(empty($data["product"])) echo "empty product";
+                  if(empty($data["product"]["list"])) echo "empty product";
                   else{
                     $count = 0;
-                    foreach($data["product"] as $row){
+                    foreach($data["product"]["list"] as $row){
                       echo "<div class=\"col filterDiv " . $row["cate"] . "\"><div class=\"card\"><a href=\"?url=Home/Item/" . $row["id"] . "/\"><img src=\"" . $row["img"] .
                       "\"class=\"card-img-top\" alt=\"card-grid-image\" /></a>
                       <div class=\"card-body\"><h5 class=\"card-title\">" . $row["name"] .
@@ -236,13 +238,16 @@
 
           </div>
         </div>
-        <!-- PAGINATION
-        <ul class="pagination">
-          <span>1</span>
-          <span>2</span>
-          <span class="icon">››</span>
-          <span class="last">Last »</span>
-        </ul> -->
+        <?php if($data['product']['total_page'] > 1) : ?>
+          <div class="my-3 d-flex align-items-center justify-content-center gap-2">
+          <?php for ($i=1; $i <= $data['product']['total_page']; $i++) : ?>
+            <a href="<?= substr($_SERVER['REQUEST_URI'],0,-1) . $i ?>" class="btn btn-outline-warning <?= $i == $data['product']['active_page'] ? 'active' : '' ?>">
+              <?= $i ?>
+            </a>
+          <?php endfor ?>
+          </div>
+        <?php endif ?>
+        
       </div>
       <div id="notice"></div>
       <!--div class="footer-holder"></div>

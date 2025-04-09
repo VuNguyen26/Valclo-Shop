@@ -10,21 +10,41 @@ class customer extends DB {
         return mysqli_query($this->connect, $query);
     }
 
-    public function get_products($sort_1, $sort_2) {
+    public function get_products($sort_1, $sort_2, $page) {
+        # variable
+        $query = ""; // câu truy vấn tổng
+        $query_paginate = ""; // câu truy vấn phân trang LIMIT, OFFSET
+        $limit_record = 12; // giới hạn số sản phẩm trên 1 trang
+        
+
+        # sort
         if(!(in_array($sort_1,['pname','price']))) $sort_1 = null;
         if(!(in_array($sort_2,['ASC','DESC']))) $sort_1 = null;
-        $query = "";
 
+        # pagination
+        // lấy tổng sản phẩm
+        $total_record = mysqli_fetch_assoc(mysqli_query($this->connect, 'SELECT COUNT(*) AS total FROM `product`'))['total'];
+        // tính tổng trang
+        $total_page = ceil($total_record/$limit_record);
+
+        // validate
+        if($page > $total_page || !is_numeric($page) || $page < 1) die('400 Bad Request'); // báo lỗi
+
+        // tạo truy vấn paginate
+        $query_paginate = " LIMIT ".( ($page - 1) * $limit_record ) . ", ".$limit_record;
 
         if ($sort_1 == "" && $sort_2 == "") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product`;";
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ";
         } else if ($sort_1 == "pname") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`NAME` $sort_2;";
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`NAME` $sort_2 ";
         } else if ($sort_1 == "price") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`PRICE` $sort_2;";
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`PRICE` $sort_2 ";
         } else die('404 Not Found');
-        // test($query);
-        return mysqli_query($this->connect, $query);
+        return [
+            'total_page' => $total_page,
+            'active_page' => $page,
+            'list' => mysqli_query($this->connect, $query.$query_paginate)
+        ];
     }
 
     public function get_combo() {

@@ -31,7 +31,7 @@ class Home extends Controller{
             $cus = $this->model($user);
             $this->view("Products", [
                 "cate" => $cus->get_product_cates(),
-                "product" => $cus->get_products(isset($_GET['sort-by']) ? $_GET['sort-by'] : null , isset($_GET['order-by']) ? $_GET['order-by'] : null),
+                "product" => $cus->get_products(isset($_GET['sort-by']) ? $_GET['sort-by'] : null , isset($_GET['order-by']) ? $_GET['order-by'] : null , isset($_GET['page']) ? $_GET['page'] : 1),
                 "user" => $user
             ]);
         }
