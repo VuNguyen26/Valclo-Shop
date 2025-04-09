@@ -10,10 +10,11 @@ class customer extends DB {
         return mysqli_query($this->connect, $query);
     }
 
-    public function get_products($param) {
+    public function get_products($sort_1, $sort_2) {
+        if(!(in_array($sort_1,['pname','price']))) $sort_1 = null;
+        if(!(in_array($sort_2,['ASC','DESC']))) $sort_1 = null;
         $query = "";
-        isset($param[2]) ? $sort_1 = $param[2] : $sort_1 = '';
-        isset($param[3]) ? $sort_2 = $param[3] : $sort_2 = '';
+
 
         if ($sort_1 == "" && $sort_2 == "") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product`;";
@@ -22,6 +23,7 @@ class customer extends DB {
         } else if ($sort_1 == "price") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`PRICE` $sort_2;";
         } else die('404 Not Found');
+        // test($query);
         return mysqli_query($this->connect, $query);
     }
 

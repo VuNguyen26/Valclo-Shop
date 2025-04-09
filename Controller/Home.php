@@ -31,10 +31,11 @@ class Home extends Controller{
             $cus = $this->model($user);
             $this->view("Products", [
                 "cate" => $cus->get_product_cates(),
-                "product" => $cus->get_products($sort_1, $sort_2),
+                "product" => $cus->get_products(isset($_GET['sort-by']) ? $_GET['sort-by'] : null , isset($_GET['order-by']) ? $_GET['order-by'] : null),
                 "user" => $user
             ]);
         }
+        
         function Item($user, $pid){
             $cus = $this->model($user);
             $comment = $cus->get_item_comment($pid[2], "");
@@ -450,13 +451,6 @@ class Home extends Controller{
                 echo "OK";
             } else {
                 echo "Nope";
-            }
-        }
-        function sort_product($user){
-            if(isset($_POST["sort-by"]) && isset($_POST["order-by"])){
-                $sort_1 = $_POST["sort-by"];
-                $sort_2 = $_POST["order-by"];
-                $this->Products($user, $sort_1, $sort_2);
             }
         }
         function sort_comment($user, $array){

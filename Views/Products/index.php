@@ -65,25 +65,32 @@
         
           <?php
             if($data["user"] == "customer" || $data["user"] == "member"){
-              echo "<div class=\"form-sort\">
-              <form action=\"?url=Home/sort_product\" method=\"POST\">
-                <div class=\"item\">
-                  <label for=\"sort-by\">Sort By</label>
-                  <select name=\"sort-by\" id=\"sort-by\">
-                    <option value=\"pname\">Name</option>
-                    <option value=\"price\">Price</option>
+              (isset($_GET['sort-by']) && $_GET['sort-by'] === 'pname') ? $select_pname = 'selected' : $select_pname = '';
+              (isset($_GET['sort-by']) && $_GET['sort-by'] === 'price') ? $select_price = 'selected' : $select_price = '';
+              (isset($_GET['order-by']) && $_GET['order-by'] === 'ASC') ? $select_asc = 'selected' : $select_asc = '';
+              (isset($_GET['order-by']) && $_GET['order-by'] === 'DESC') ? $select_desc = 'selected' : $select_desc = '';
+              echo <<<HTML
+              <div class="form-sort">
+              <form action="/" method="GET">
+                <input type="hidden" name="url" value="Home/Products">
+                <div class="item">
+                  <label for="sort-by">Sort By</label>
+                  <select name="sort-by" id="sort-by">
+                    <option {$select_pname} value="pname">Name</option>
+                    <option {$select_price} value="price">Price</option>
                   </select>
                 </div>
-                <div class=\"item\">
-                  <label for=\"order-by\">Order</label>
-                  <select name=\"order-by\" id=\"order-by\">
-                    <option value=\"ASC\">ASC</option>
-                    <option value=\"DESC\">DESC</option>
+                <div class="item">
+                  <label for="order-by">Order</label>
+                  <select name="order-by" id="order-by">
+                    <option {$select_asc} value="ASC">ASC</option>
+                    <option {$select_desc} value="DESC">DESC</option>
                   </select>
                 </div>
-                <button class=\"sort-btn\" type=\"submit\">Apply</button>
+                <button class="sort-btn" type="submit">Apply</button>
             </form>
-            </div>";
+            </div>
+            HTML;
             } else if($data["user"] == "manager") {
               echo "<div class=\"form-sort\">
                     <button type=\"button\" id=\"add-itemBtn\"><i class=\"fas fa-plus\"></i> Thêm sản phẩm</button></div>
