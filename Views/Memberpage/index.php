@@ -157,28 +157,47 @@
                                 $h4 = "";
                                 if((int)$row["cartid"]["state"] == 0) $h4 = "Chưa thanh toán";
                                 else $h4 = $row["cartid"]["time"];
+                            
                                 echo "<div class=\"row justify-content-between node\">
-                                <div class=\"col-12 border_bot\"><div class=\"d-flex justify-content-between\"><h4>Mã hóa đơn: #" . $row["cartid"]["id"] . "</h4><h5>" . $h4 . "</h5></div></div>";
+                                <div class=\"col-12 border_bot\">
+                                    <div class=\"d-flex justify-content-between\">
+                                        <h4>Mã hóa đơn: #" . $row["cartid"]["id"] . "</h4>
+                                        <h5>" . $h4 . "</h5>
+                                    </div>
+                                </div>";
+                            
                                 foreach($row["product"] as $product){
-                                    $total += (int)$product["price"]*(int)$product["num"];
-
+                                    $total += (int)$product["price"] * (int)$product["num"];
                                     echo "<div class=\"col-12 col-md-6\">
                                         <div class=\"row\">
-                                            <div class=\"col-5 d-flex justify-content-center\"><img src=\"" . $product["img"] . "\" alt=\"item\"></div>
+                                            <div class=\"col-5 d-flex justify-content-center\">
+                                                <img src=\"" . $product["img"] . "\" alt=\"item\">
+                                            </div>
                                             <div class=\"col-7\">
                                                 <div class=\"row\">
                                                     <div class=\"col-12\"><h5>" . $product["name"] . "</h5></div>
                                                     <div class=\"col-12\">Số lượng: " . $product["num"] . "</div>
                                                     <div class=\"col-12\">Size: " . $product["size"] . "</div>
-                                                    <div class=\"col-12 price\">Tổng tiền: " . $product["num"] * $product["price"]. "</div>
+                                                    <div class=\"col-12 price\">Tổng tiền: " . number_format($product["num"] * $product["price"], 0, ',', '.') . "đ</div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>";
                                 }
-                                echo "<div class=\"col-12 price\">Tổng cộng: " . $total ."</div>
-                                </div>";
-                            }
+                            
+                                echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
+                            
+                                // 👉 Chỉ hiện nút "Xem chi tiết" nếu đã thanh toán
+                                if ((int)$row["cartid"]["state"] == 1) {
+                                    echo "<div class=\"col-12 text-end mt-2\">
+                                        <a href='?url=Home/order_detail/" . $row["cartid"]["id"] . "' class='btn btn-sm btn-outline-primary'>
+                                            Xem chi tiết
+                                        </a>
+                                    </div>";
+                                }
+                            
+                                echo "</div>"; // kết thúc node
+                            }                            
                         }
                         if(!empty($data["order_combo"])){
                             echo "<div class=\"row \"><div class=\"row nonemg text-center center_my\">";

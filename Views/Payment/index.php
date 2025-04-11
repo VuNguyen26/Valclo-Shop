@@ -43,7 +43,6 @@
   <body>
     <!--Nav-->
     <?php require_once("./Views/Navbar/index.php"); ?>
-    <script src="./Views/Navbar/navbarScript.js" type="text/javascript"></script>
     <!--Nav-->
 
     <!--Body-->
@@ -114,9 +113,9 @@
               <div class="row d-flex justify-content-center nonemg">
                 <div class="col-12 cart_node">
                   <div class="row">
-                    <div class="col-2"><input type="radio" name="cart_node" id="credit"></div>
-                    <div class="col-5"><label for="credit"><h5>Credit Card</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="credit"><img src="./Views/images/visa.png" alt="Visa picture" ></label></div>
+                    <div class="col-2"><input type="radio" name="cart_node" id="cod"></div>
+                    <div class="col-5"><label for="cod"><h5>Thanh toán tiền mặt</h5></label></div>
+                    <div class="col-5 d-flex justify-content-end"><label for="cod"><img src="https://png.pngtree.com/png-clipart/20210530/original/pngtree-green-banner-cod-cash-on-delivery-flat-hand-grab-money-and-png-image_6351009.jpg" alt="COD picture" ></label></div>
                   </div>
                 </div>
                 <div class="col-12 cart_node">
@@ -163,7 +162,7 @@
                     <?php 
                           echo "<button id=\"myBtn\" type=\"button\" class=\"btn btn-primary\">Hủy đơn</button>";
                     ?>
-                    <button type="button" class="btn btn-primary">Thanh toán</button>
+                    <button id="payButton" type="button" class="btn btn-primary">Thanh toán</button>
                   </div>
                 </div>
               </div>
@@ -208,5 +207,31 @@
   <?php
         echo "<script src=\"./Views/Payment/myScript.js\"></script>";
   ?>
+<script>
+  document.getElementById("payButton").addEventListener("click", function () {
+    const momo = document.getElementById("momo").checked;
+    const paypal = document.getElementById("paypal").checked;
+    const cod = document.getElementById("cod").checked;
+
+    var string = list_oid.join("/"); // danh sách id sản phẩm trong giỏ hàng
+
+    if (momo) {
+      window.location.href = "./Views/Payment/momo_payment.php?oids=" + string;
+    } else if (paypal) {
+      window.location.href = "?url=Payment/paypal_button&oids=" + string;
+    } else if (cod) {
+      window.location.href = "?url=Payment/cod_payment&oids=" + string;
+    } else {
+      alert("❌ Vui lòng chọn phương thức thanh toán");
+    }
+  });
+
+  // Nếu bạn vẫn còn modal cũ (không dùng nữa), có thể xoá đoạn này:
+  // document.querySelector(".close").onclick = function () {
+  //   document.getElementById("myModal").style.display = "none";
+  // };
+</script>
+
+
   </body>
 </html>

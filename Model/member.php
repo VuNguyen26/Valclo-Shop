@@ -71,21 +71,19 @@ class member extends customer{
             return  mysqli_query($this->connect, $query);
         }
     }
-    public function update_cart($id){
-        $query =    "UPDATE `product`
-                    SET `product`.`NUMBER` = `product`.`NUMBER` - (SELECT `ABC`.`num` FROM
-                        (SELECT `product_in_cart`.`QUANTITY` AS `num`, `product_in_cart`.`PID` AS `pid` FROM  `product_in_cart`, `product`, `cart`
-                        WHERE `product_in_cart`.`PID` = `product`.`ID` AND `product_in_cart`.`OID` = `cart`.`ID` AND `cart`.`ID` = " . $id . ") AS `ABC` WHERE `ABC`.`pid` = `product`.`ID`)
-                    WHERE `product`.`ID` IN  (SELECT `ABC`.`pid` FROM
-                        (SELECT `product_in_cart`.`QUANTITY` AS `num`, `product_in_cart`.`PID` AS `pid` FROM  `product_in_cart`, `product`, `cart`
-                        WHERE `product_in_cart`.`PID` = `product`.`ID` AND `product_in_cart`.`OID` = `cart`.`ID` AND `cart`.`ID` = " . $id . ") AS `ABC`);";
-        
+    public function update_cart($oid) {
+        // Trừ tồn kho
+        $query = "UPDATE product p
+                  JOIN product_in_cart pic ON p.ID = pic.PID
+                  SET p.NUMBER = p.NUMBER - pic.QUANTITY
+                  WHERE pic.OID = $oid";
         mysqli_query($this->connect, $query);
-        $query =    "UPDATE `cart`
-                    SET `cart`.`STATE` = 1
-                    WHERE `cart`.`ID` = " . $id;
+    
+        // Cập nhật trạng thái cart
+        $query = "UPDATE cart SET STATE = 1 WHERE ID = $oid";
         return mysqli_query($this->connect, $query);
-    } 
+    }
+     
     public function get_cart($id){
         $query =    "SELECT     `cart`.`ID` AS `id`,   
                                 `cart`.`TIME` AS `time`, 
@@ -212,5 +210,24 @@ class member extends customer{
         $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);
     }
+    public function get_order_by_id($order_id) {
+        $query = "SELECT * FROM cart WHERE ID = " . $order_id;
+        $result = mysqli_query($this->connect, $query);
+        return mysqli_fetch_assoc($result); // Trả về 1 dòng
+    }
+    
+    public function cancel_order($order_id) {
+        $query = "UPDATE cart SET STATE = 4 WHERE ID = " . $order_id;
+        return mysqli_query($this->connect, $query);
+    }    
+    public function get_cart_by_id($id){
+        $query = "SELECT `STATE` as `state`, `TIME` as `time`
+                  FROM `cart` WHERE `ID` = " . (int)$id;
+        return mysqli_query($this->connect, $query);
+    }    
+    public function update_payment_method($oid, $method) {
+        $query = "UPDATE cart SET METHOD = '$method' WHERE ID = $oid";
+        return mysqli_query($this->connect, $query);
+    }    
 }
 ?>

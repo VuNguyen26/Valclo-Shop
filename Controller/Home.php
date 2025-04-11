@@ -280,15 +280,60 @@ class Home extends Controller{
             if($this->model($user)->delete_order_combo_id($array[2])) echo "ok";
             else echo "null";
         }
-        function update_cart_combo($user, $array){
+        function update_cart_combo($user, $params = []) {
             $action = $this->model($user);
-            for($i = 0; $i < (int)$array[2]; $i++){
-                if(!($action->update_cart($array[2 + $i + 1]))) echo "null";
+        
+            if (count($params) < 2) {
+                echo "null"; return;
             }
-            $this->model($user)->update_order_combo($_SESSION["id"]);
+        
+            $count = (int)$params[0];
+            $oids = array_slice($params, 1, $count);
+            $method = $params[$count + 1] ?? 'cod';
+        
+            foreach ($oids as $oid) {
+                if (!$action->update_cart($oid)) {
+                    echo "null"; return;
+                }
+        
+                // ✅ Cập nhật phương thức thanh toán cho từng giỏ
+                $action->update_payment_method($oid, $method);
+            }
+        
+            $action->update_order_combo($_SESSION["id"]);
             $_SESSION["id_cart"] = null;
-            echo "?url=/Home/member_page/";
+        
+            echo "?url=Home/Home_page";
+            error_log("OID: " . implode(",", $oids));
+error_log("Method: " . $method);
+        }        
+        
+        function order_detail($user, $params) {
+            if ($user === "member") {
+                $mem = $this->model($user);
+                $oid = $params[2]; // Lấy mã hóa đơn từ URL
+                
+                $order_items = $mem->get_product_in_cart_mem($oid);
+$order_meta = mysqli_fetch_array($mem->get_cart_by_id($oid), MYSQLI_ASSOC);
+
+$order_info = [
+    "id" => $oid,
+    "items" => $order_items,
+    "state" => $order_meta["state"] ?? 0,
+    "time" => $order_meta["time"] ?? "Không rõ",
+    "method" => $order_meta["method"] ?? "Không có"
+];
+
+    
+                $this->view("OrderDetail", [
+                    "order" => $order_info,
+                    "user" => $mem->get_user($_SESSION["id"])
+                ]);
+            } else {
+                $this->Login($user, "order_detail");
+            }
         }
+    
         function member_page($user){
             if($user == "member"){
                 $mem = $this->model($user);
@@ -649,6 +694,38 @@ class Home extends Controller{
             } else {
                 echo "null3"; // Lỗi khi tạo tài khoản
             }
-        }                
+        }
+        function cancel($user) {
+            if (!isset($_SESSION['id']) || $user !== "member") {
+                die("Bạn chưa đăng nhập.");
+            }
+        
+            if (!isset($_POST['order_id'])) {
+                die("Thiếu mã đơn hàng.");
+            }
+        
+            $order_id = (int)$_POST['order_id'];
+            $model = $this->model($user);
+        
+            // Lấy đơn hàng theo ID
+            $order = $model->get_order_by_id($order_id);
+            if (!$order || $order['uid'] != $_SESSION['id']) {
+                die("Đơn hàng không tồn tại hoặc bạn không có quyền hủy.");
+            }
+        
+            // Chỉ cho phép hủy nếu đang chờ xác nhận
+            if ((int)$order['state'] !== 0) {
+                die("Chỉ đơn hàng đang chờ xác nhận mới được hủy.");
+            }
+        
+            // Cập nhật trạng thái sang 'đã hủy'
+            if ($model->cancel_order($order_id)) {
+                header("Location: ?url=OrderDetail/index&id=$order_id");
+                exit();
+            } else {
+                die("Hủy đơn hàng thất bại.");
+            }
+        }
+        
     }
 ?>
