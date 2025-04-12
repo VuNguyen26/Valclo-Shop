@@ -163,15 +163,6 @@ class manager extends customer{
                     FROM `account`";
         return mysqli_query($this->connect, $query);
     }
-    public function add_new_combo($name, $price){
-        $query = "INSERT INTO `combo` (`combo`.`NAME`, `combo`.`COST`) VALUE (\"" . $name . "\", " . (int)$price . ");";
-        mysqli_query($this->connect, $query);
-        return mysqli_insert_id($this->connect);
-    }
-    public function update_new_combo($id, $name, $price){
-        $query = "UPDATE `combo` SET `combo`.`NAME` =\"" . $name . "\", `combo`.`COST`=" . (int)$price. " WHERE `combo`.`ID`=" .$id;
-        return mysqli_query($this->connect, $query);
-    }
     public function add_product_in_combo($cbid, $shirt, $pant, $ass){
 
         $query = "INSERT INTO `product_in_combo` (`product_in_combo`.`CBID`, `product_in_combo`.`PID`) VALUE (" . (int)$cbid . ", " . (int)$shirt . ");";

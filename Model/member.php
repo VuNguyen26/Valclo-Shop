@@ -129,20 +129,6 @@ class member extends customer{
                     VALUES(" . $uid . ", " . $cbid . ", \"" . $time . "\", " . $cycle . ", \"" . $size . "\");";
         return mysqli_query($this->connect, $query);
     }
-    public function get_order_combo($id){
-        $query =    "SELECT `order_combo`.`ID` AS `id`, 
-                            `order_combo`.`TIME` AS `time`, 
-                            `order_combo`.`CBID` AS `cbid`, 
-                            `order_combo`.`CYCLE` AS `cycle`, 
-                            `order_combo`.`SIZE` AS `size`, 
-                            `combo`.`NAME` AS `name`, 
-                            `combo`.`COST` AS `price`
-                    FROM `order_combo`, `combo`
-                    WHERE   `order_combo`.`STATE` = 0
-                            AND `order_combo`.`CBID` = `combo`.`ID`
-                            AND `order_combo`.`UID` = " . $id;
-        return mysqli_query($this->connect, $query);
-    }
     public function update_order_combo($id){
         $query =    "UPDATE `order_combo`
                     SET `order_combo`.`STATE` = 1
@@ -151,20 +137,6 @@ class member extends customer{
     }
     public function delete_order_combo($id){
         $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`STATE` = 0 AND `order_combo`.`UID` = " . $id;
-        return mysqli_query($this->connect, $query);
-    }
-    public function get_order_combo_mem($id){
-        $query =    "SELECT `order_combo`.`ID` AS `id`, 
-                            `order_combo`.`TIME` AS `time`, 
-                            `order_combo`.`CBID` AS `cbid`, 
-                            `order_combo`.`CYCLE` AS `cycle`, 
-                            `order_combo`.`SIZE` AS `size`, 
-                            `combo`.`NAME` AS `name`, 
-                            `combo`.`COST` AS `price`
-                    FROM `order_combo`, `combo`
-                    WHERE   `order_combo`.`STATE` = 1
-                            AND `order_combo`.`CBID` = `combo`.`ID`
-                            AND `order_combo`.`UID` = " . $id;
         return mysqli_query($this->connect, $query);
     }
     function delete_order_combo_cbid($id, $cbid){
@@ -182,14 +154,6 @@ class member extends customer{
                         AND `product_in_cart`.`OID` = `cart`.`ID`
                         AND `cart`.`UID` = `account`.`ID`
                         AND `cart`.`STATE` = 1
-                        AND `account`.`ID` = " . $id;
-        return mysqli_query($this->connect, $query);
-    }
-    public function get_sum_order_Combo($id){
-        $query =    "SELECT SUM(`combo`.`COST`)  as `sum`
-                    FROM `combo`, `order_combo`, `account`
-                    WHERE `order_combo`.`CBID` = `combo`.`ID`
-                        AND `order_combo`.`UID` = `account`.`ID`
                         AND `account`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);
     }

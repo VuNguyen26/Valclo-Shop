@@ -52,11 +52,6 @@ class customer extends DB {
         ];
     }
 
-    public function get_combo() {
-        $query = "SELECT `combo`.`NAME` AS `cbname`, `combo`.`COST` AS `cost`, `combo`.`ID` AS `id` FROM `combo`";
-        return mysqli_query($this->connect, $query);
-    }
-
     public function get_product_in_combo($id) {
         $query = "SELECT `product`.`NAME` AS `name` FROM `product_in_combo`, `product` WHERE `product_in_combo`.`PID` = `product`.`ID` AND `product_in_combo`.`CBID` = $id";
         return mysqli_query($this->connect, $query);
@@ -146,11 +141,6 @@ class customer extends DB {
 
     public function get_sum_cart($id) {
         $query = "SELECT SUM(`product_in_cart`.`QUANTITY` * `product`.`PRICE`) FROM `product`, `product_in_cart`, `cart`, `account` WHERE `product_in_cart`.`PID` = `product`.`ID` AND `product_in_cart`.`OID` = `cart`.`ID` AND `cart`.`UID` = `account`.`ID` AND `cart`.`STATE` = 1 AND `account`.`ID` = $id;";
-        return mysqli_query($this->connect, $query);
-    }
-
-    public function get_sum_order_Combo($id) {
-        $query = "SELECT SUM(`combo`.`COST`) FROM `combo`, `order_combo`, `account` WHERE `order_combo`.`CBID` = `combo`.`ID` AND `order_combo`.`UID` = `account`.`ID` AND `account`.`ID` = $id;";
         return mysqli_query($this->connect, $query);
     }
 

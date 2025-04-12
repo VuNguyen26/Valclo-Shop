@@ -181,32 +181,12 @@ class Home extends Controller{
             $this->News($user);
         }
 
-        function Cost_table($user){
-            $cus = $this->model($user);
-            $combo = $cus->get_combo();
-            $product_in_combo = array();
-            foreach($combo as $cb){
-                array_push($product_in_combo, (["id" => $cb["id"], "name" => $cb["cbname"], "price" => $cb["cost"], "product" => $cus->get_product_in_combo($cb["id"])]));
-            }
-            $this->view("Cost_table", [
-                "product" => $cus->get_products("", "", 1),
-                "combo" => $product_in_combo,
-                "cycle" => $cus->get_cycle(),
-                "user" => $user
-            ]);
-        }
         function Cart($user){
             if($user == "member"){
                 $mem = $this->model($user);
-                $combo =  $mem->get_order_combo($_SESSION["id"]);
-                $product_in_combo = array();
-                foreach($combo as $cb){
-                    array_push($product_in_combo, (["id" => $cb["id"], "name" => $cb["name"], "price" => $cb["price"], "size" => $cb["size"], "cycle" => mysqli_fetch_array($mem->get_cycle_id($cb["cycle"]))["cycle"], "product" => $mem->get_product_in_combo($cb["cbid"])]));
-                }
                 $this->view("Cart", [
                     "product_in_cart" => $mem->get_product_in_cart($_SESSION["id"]),
                     "user" => mysqli_fetch_array($mem->get_user($_SESSION["id"])),
-                    "order_combo" => $product_in_combo
                 ]);
             }
             else{
@@ -220,14 +200,8 @@ class Home extends Controller{
         function Payment($user){
             if($user == "member"){
                 $mem = $this->model($user);
-                $combo =  $mem->get_order_combo($_SESSION["id"]);
-                $product_in_combo = array();
-                foreach($combo as $cb){
-                    array_push($product_in_combo, (["name" => $cb["name"], "price" => $cb["price"], "size" => $cb["size"], "cycle" => mysqli_fetch_array($mem->get_cycle_id($cb["cycle"]))["cycle"], "product" => $mem->get_product_in_combo($cb["cbid"])]));
-                }
                 $this->view("Payment", [
                     "product_in_cart" => $mem-> get_product_in_cart($_SESSION["id"]),
-                    "order_combo" => $product_in_combo
                 ]);
             }
             else{
@@ -276,38 +250,7 @@ class Home extends Controller{
             }
             echo "?url=/Home/Payment/";
         }
-        function delete_order_combo_id($user, $array){
-            if($this->model($user)->delete_order_combo_id($array[2])) echo "ok";
-            else echo "null";
-        }
-        function update_cart_combo($user, $params = []) {
-            $action = $this->model($user);
-        
-            if (count($params) < 2) {
-                echo "null"; return;
-            }
-        
-            $count = (int)$params[0];
-            $oids = array_slice($params, 1, $count);
-            $method = $params[$count + 1] ?? 'cod';
-        
-            foreach ($oids as $oid) {
-                if (!$action->update_cart($oid)) {
-                    echo "null"; return;
-                }
-        
-                // ✅ Cập nhật phương thức thanh toán cho từng giỏ
-                $action->update_payment_method($oid, $method);
-            }
-        
-            $action->update_order_combo($_SESSION["id"]);
-            $_SESSION["id_cart"] = null;
-        
-            echo "?url=Home/Home_page";
-            error_log("OID: " . implode(",", $oids));
-error_log("Method: " . $method);
-        }        
-        
+
         function order_detail($user, $params) {
             if ($user === "member") {
                 $mem = $this->model($user);
@@ -342,15 +285,9 @@ $order_info = [
                 foreach($cartid as $id){
                     array_push($product_in_cart,(["cartid" => $id, "product" =>  $mem->get_product_in_cart_mem((int)$id["id"])]));
                 }
-                $combo =  $mem->get_order_combo_mem($_SESSION["id"]);
-                $product_in_combo = array();
-                foreach($combo as $cb){
-                    array_push($product_in_combo, (["time" => $cb["time"], "name" => $cb["name"], "price" => $cb["price"], "size" => $cb["size"], "cycle" => mysqli_fetch_array($mem->get_cycle_id($cb["cycle"]))["cycle"], "product" => $mem->get_product_in_combo($cb["cbid"])]));
-                }
                 $this->view("Memberpage", [
                     "user" => $mem->get_user($_SESSION["id"]),
                     "product_in_cart" => $product_in_cart,
-                    "order_combo" => $product_in_combo,
                     "state" => $user
                 ]);
             }
@@ -469,19 +406,6 @@ $order_info = [
                 echo "Nope";
             }
         }
-        function create_order_combo($user, $array){
-            $this->model($user)->delete_order_combo_cbid($_SESSION["id"], $array[3]);
-            if($this->model($user)->create_order_combo($_SESSION["id"], $array[2], $array[3], $array[4], $array[5])) echo "?url=Home/Payment/";
-            else echo "null";
-        }
-        function update_order_combo($user){
-            if($this->model($user)->update_order_combo($_SESSION["id"])) echo "?url=Home/member_page/";
-            else echo "null";
-        }
-        function delete_order_combo($user){
-            if($this->model($user)->delete_order_combo($_SESSION["id"])) echo "?url=/Home/Cost_table/";
-            else echo "null";
-        }
         function sendmessage($user, $array){
             $to = explode("-", $array[2])[1];
             $subject = explode("-", $array[3])[1];
@@ -565,18 +489,22 @@ $order_info = [
               }
         }
         function logout($user){
-            if($user == "member"){
-                $cart = mysqli_fetch_array($this->model($user)->get_sum_cart($_SESSION["id"]))["sum"];
-                $combo = mysqli_fetch_array($this->model($user)->get_sum_order_Combo($_SESSION["id"]))["sum"];
-                $total = 0;
-                if($cart != NULL) $total += (int)$cart;
-                if($combo != NULL) $total += (int)$combo;
-                $this->model($user)->update_Rank($_SESSION["id"], $total);
-                $this->model($user)->clear_cart();
+            if ($user == "member") {
+                $cart_result = $this->model($user)->get_sum_cart($_SESSION["id"]);
+                if ($cart_result) {
+                    $cart = mysqli_fetch_array($cart_result)["sum"];
+                    $total = 0;
+                    if ($cart != NULL) $total += (int)$cart;
+                    $this->model($user)->update_Rank($_SESSION["id"], $total);
+                    $this->model($user)->clear_cart();
+                } else {
+                    error_log("Failed to fetch cart sum for user " . $_SESSION["id"]);
+                }
             }
             session_unset(); 
-           $this->Home_page("customer");
+            $this->Home_page("customer");
         }
+        
         function change_passwork($user, $array){
             $to = mysqli_fetch_array($this->model($user)->change_passwork($array[2]))["mail"];
             echo $to;
@@ -590,33 +518,6 @@ $order_info = [
                 else{ echo "null";}
             }
             else{ echo "null";}
-        }
-        function add_new_combo($user){
-            if(isset($_POST["cname"]) && isset($_POST["price"]) && isset($_POST["c-shirt"]) && isset($_POST["c-pants"]) && isset($_POST["c-ass"])){
-                $result = $this->model($user)->add_new_combo($_POST["cname"], $_POST["price"]);
-                $this->model($user)->add_product_in_combo($result, $_POST["c-shirt"], $_POST["c-pants"], $_POST["c-ass"]);
-            }
-            $this->Cost_table($user);
-        }
-        function update_new_combo($user){
-            if(isset($_POST["cid"]) && isset($_POST["cname"]) && isset($_POST["price"]) && isset($_POST["c-shirt"]) && isset($_POST["c-pants"]) && isset($_POST["c-ass"])){
-                $result = $this->model($user)->update_new_combo($_POST["cid"], $_POST["cname"], $_POST["price"]);
-                $this->model($user)->update_product_in_combo($_POST["cid"], $_POST["c-shirt"], $_POST["c-pants"], $_POST["c-ass"]);
-            }
-            $this->Cost_table($user);
-        }
-        function add_cycle($user){
-            if(isset($_POST["cycle-time"])){
-                $this->model($user)->add_cycle($_POST["cycle-time"]);
-            }
-            $this->Cost_table($user);
-        }
-        function delete_combo($user, $array){
-            if($this->model($user)->delete_combo((int)$array[2])){
-                echo "OK";
-            } else {
-                echo "Nope";
-            }
         }
         function get_user($user, $array){
             $data = $this->model($user)->get_user((int)$array[2]);

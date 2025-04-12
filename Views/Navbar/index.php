@@ -13,7 +13,6 @@
         <li><a href="?url=Home/Home_page/">Trang chủ</a></li>
         <li><a href="?url=Home/About_us/">Về chúng tôi</a></li>
         <li><a href="?url=Home/Products/">Sản phẩm</a></li>
-        <li><a href="?url=Home/Cost_table/">Bảng giá</a></li>
         <li><a href="?url=Home/News/">Tin tức</a></li>
         <li><a href="?url=Home/Contact_us/">Liên hệ</a></li>
       </ul>

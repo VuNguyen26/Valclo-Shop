@@ -102,7 +102,7 @@ function render_state($state) {
 
     <div class="text-center mt-4">
       <a href="?url=Home/member_page" class="btn btn-secondary">
-        ⬅️ Quay về lịch sử giao dịch
+        Quay về lịch sử giao dịch
       </a>
     </div>
   </div>
