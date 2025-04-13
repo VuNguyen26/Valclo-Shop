@@ -2,19 +2,17 @@
 require_once "./Model/customer.php";
 class member extends customer{
     public function get_product_in_cart($id){
-        $query =    "SELECT `product_in_cart`.`ID` AS `id`,
+        $query =    "SELECT `cart`.`ID` AS `id`,
                             `product`.`NAME` AS `name`, 
                             `product`.`PRICE` AS `price`,
                             `product`.`IMG_URL` AS `img`,
-                            `product_in_cart`.`QUANTITY` AS `num`,
-                            `product_in_cart`.`SIZE` AS `size`,
-                            `product_in_cart`.`OID` AS `oid`
-                    FROM `cart`, `product_in_cart`, `product`, `account`
-                    WHERE `cart`.`ID` = `product_in_cart`.`OID`
-                        AND `cart`.`STATE` = 0
-                        AND `product`.`ID` = `product_in_cart`.`PID`
+                            `cart`.`QUANTITY` AS `num`,
+                            `cart`.`SIZE` AS `size`
+                    FROM `cart`, `product`, `account`
+                    WHERE `product`.`ID` = `cart`.`PID`
                         AND `cart`.`UID` = " . $id . "
                         AND `account`.`ID` = " . $id . ";";
+                        // test_array($query);
         return mysqli_query($this->connect, $query);
     }
     public function get_product_in_cart_mem($id){
@@ -22,11 +20,10 @@ class member extends customer{
                             `product`.`NAME` AS `name`, 
                             `product`.`PRICE` AS `price`,
                             `product`.`IMG_URL` AS `img`,
-                            `product_in_cart`.`QUANTITY` AS `num`,
-                            `product_in_cart`.`SIZE` AS `size`
-                    FROM `cart`, `product_in_cart`, `product`, `account`
-                    WHERE `cart`.`ID` = `product_in_cart`.`OID`
-                        AND `product`.`ID` = `product_in_cart`.`PID`
+                            `cart`.`QUANTITY` AS `num`,
+                            `cart`.`SIZE` AS `size`
+                    FROM `cart`, `product`, `account`
+                    WHERE `product`.`ID` = `cart`.`PID`
                         AND `cart`.`UID` = `account`.`ID`
                         AND `cart`.`ID` = " . $id . ";";
         return mysqli_query($this->connect, $query);
@@ -57,7 +54,7 @@ class member extends customer{
         return mysqli_query($this->connect, $query);
     }
     public function delete_product_incart($id){
-        $query =    "DELETE FROM `product_in_cart` WHERE `product_in_cart`.`ID` = " . $id .";";
+        $query =    "DELETE FROM `cart` WHERE `cart`.`ID` = " . $id .";";
         return mysqli_query($this->connect, $query);
     }
     public function update_product_in_cart($id, $quantity, $size){
@@ -65,9 +62,9 @@ class member extends customer{
             $this->delete_product_incart($id);
         }
         else{
-            $query =    "UPDATE `product_in_cart`
-                        SET `product_in_cart`.`QUANTITY` = " . $quantity . ", `product_in_cart`.`SIZE` = \"" . $size ."\"
-                        WHERE `product_in_cart`.`ID` = " . $id;
+            $query =    "UPDATE `cart`
+                        SET `cart`.`QUANTITY` = " . $quantity . ", `cart`.`SIZE` = \"" . $size ."\"
+                        WHERE `cart`.`ID` = " . $id;
             return  mysqli_query($this->connect, $query);
         }
     }
@@ -76,7 +73,7 @@ class member extends customer{
         $query = "UPDATE product p
                   JOIN product_in_cart pic ON p.ID = pic.PID
                   SET p.NUMBER = p.NUMBER - pic.QUANTITY
-                  WHERE pic.OID = $oid";
+                  WHERE pic.UID = $oid";
         mysqli_query($this->connect, $query);
     
         // Cập nhật trạng thái cart
@@ -108,13 +105,20 @@ class member extends customer{
         $query =    "SELECT MAX(`cart`.`ID`) AS `id` FROM `cart`" ;
         return mysqli_query($this->connect, $query);
     }
-    public function create_cart($id, $time){
-        $query =    "INSERT INTO `cart` (`cart`.`UID`, `cart`.`TIME`)
-                    VALUES(" . $id . ", \"" . $time . "\");";
+    public function create_cart($id, $id_product, $quantity){
+        // kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
+        $check_exist_product = mysqli_fetch_assoc(
+            mysqli_query($this->connect,"SELECT `ID` FROM `cart` WHERE `UID` = ".$id." AND PID = ".$id_product)
+        )['ID'];
+        // nếu đã tồn tại, tức là trả về ID cart -> update số lượng
+        if($check_exist_product) $query = "UPDATE `cart` SET `QUANTITY` = `QUANTITY` + ".$quantity." WHERE `ID` = ".$check_exist_product;
+        // ngược lại, tạo record mới
+        else  $query = "INSERT INTO `cart` (`cart`.`UID`, `cart`.`PID`, `cart`.`QUANTITY`) VALUES(" . $id . "," . $id_product . "," . $quantity . ")";
+        // thực thi query
         return mysqli_query($this->connect, $query);
     }
     public function create_product_incart($pid, $oid, $quantity){
-        $query =    "INSERT INTO `product_in_cart`(`product_in_cart`.`PID`, `product_in_cart`.`OID`, `product_in_cart`.`QUANTITY`)
+        $query =    "INSERT INTO `cart`(`cart`.`PID`, `cart`.`OID`, `cart`.`QUANTITY`)
                     VALUES (" . $pid . ", " . $oid . ", " . $quantity . ");";
         return mysqli_query($this->connect, $query);
     }
@@ -148,10 +152,10 @@ class member extends customer{
         return mysqli_query($this->connect, $query);
     }
     public function get_sum_cart($id){
-        $query =    "SELECT SUM(`product_in_cart`.`QUANTITY`*`product`.`PRICE`)  as `sum`
-                    FROM `product`, `product_in_cart`, `cart`, `account`
-                    WHERE   `product_in_cart`.`PID` = `product`.`ID`
-                        AND `product_in_cart`.`OID` = `cart`.`ID`
+        $query =    "SELECT SUM(`cart`.`QUANTITY`*`product`.`PRICE`)  as `sum`
+                    FROM `product`, `cart`, `account`
+                    WHERE   `cart`.`PID` = `product`.`ID`
+                        AND `cart`.`OID` = `cart`.`ID`
                         AND `cart`.`UID` = `account`.`ID`
                         AND `cart`.`STATE` = 1
                         AND `account`.`ID` = " . $id;
@@ -165,8 +169,8 @@ class member extends customer{
     }
     public function clear_cart(){
         $query =    "DELETE FROM `cart` 
-                    WHERE `cart`.`ID` NOT IN (  SELECT `cart`.`ID` FROM `product_in_cart`, `cart`
-                                                WHERE `product_in_cart`.`OID` = `cart`.`ID`
+                    WHERE `cart`.`ID` NOT IN (  SELECT `cart`.`ID` FROM `cart`
+                                                WHERE `cart`.`OID` = `cart`.`ID`
                                                 GROUP BY `cart`.`ID`)";
         return mysqli_query($this->connect, $query);
     }

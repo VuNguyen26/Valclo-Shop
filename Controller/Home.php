@@ -339,8 +339,8 @@ $order_info = [
             else echo "null";
         }
         public function create_cart($user, $array) {
-            $productId = $array[0];  // ID sản phẩm
-            $quantity = $array[1];    // Số lượng sản phẩm
+            $productId = $array['product_id'];  // ID sản phẩm
+            $quantity = $array['quantity'];    // Số lượng sản phẩm
             
             // Kiểm tra nếu có dữ liệu hợp lệ
             if (empty($productId) || empty($quantity) || $quantity <= 0) {
