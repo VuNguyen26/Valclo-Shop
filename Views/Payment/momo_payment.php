@@ -52,7 +52,6 @@ $result = curl_exec($ch);
 curl_close($ch);
 
 $jsonResult = json_decode($result, true);
-file_put_contents("log_momo.txt", print_r($jsonResult, true));
 
 // Chuyển hướng đến trang thanh toán MoMo
 if (isset($jsonResult['payUrl'])) {

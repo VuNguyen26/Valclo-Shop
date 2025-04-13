@@ -2,9 +2,6 @@
 // Nhận dữ liệu JSON từ MoMo
 $data = json_decode(file_get_contents("php://input"), true);
 
-// Ghi log lại để kiểm tra nếu cần debug
-file_put_contents("log_momo.txt", print_r($data, true), FILE_APPEND);
-
 // Kiểm tra nếu thanh toán thành công
 if (isset($data['resultCode']) && $data['resultCode'] == 0) {
     // ✅ Thanh toán thành công
