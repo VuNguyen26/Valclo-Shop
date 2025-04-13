@@ -36,6 +36,9 @@ class App {
             array_push($this->params, $arr); // Pass the URL parameters
         }
 
+        // lấy thông tin POST
+        if (isset($_POST)) array_push($this->params, $_POST); // Pass the URL parameters
+
         // Call the controller's method with the parameters
         call_user_func_array([$this->controller, $this->action], $this->params);
     }
