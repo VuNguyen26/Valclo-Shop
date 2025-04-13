@@ -86,7 +86,7 @@
                         $count += 1;
                         $total += (int)$row["price"]*$row["num"];
                         echo "<div class=\"col-12\">
-                        <div class=\"row node nonemg\"><span hidden>" . $row["oid"] . "</span>
+                        <div class=\"row node nonemg\">
                             <div class=\"col-4 d-flex flex-wrap align-content-center justify-content-center\">
                                 <img src=\"" . $row["img"] . "\" alt=\"item\">
                             </div>
