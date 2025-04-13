@@ -79,33 +79,62 @@ for (let index = 0; index < document.getElementsByClassName("addToCart").length;
   document.getElementsByClassName("addToCart")[index].getElementsByTagName("span")[0].remove();
 }
 
+function add_Product(element) {
+  var productId = element.value; // Lấy ID sản phẩm
+  var quantityElement = element.parentNode.parentNode.getElementsByClassName("qty-buy")[0]; // Lấy phần tử số lượng sản phẩm
+  var quantity = quantityElement ? parseInt(quantityElement.value) : 0; // Lấy giá trị số lượng, nếu không có thì gán = 0
 
-
-function add_Product(element){
-  if(user == "customer"){
-    window.location.href = "?url=Home/Login/Products/";
+  // Kiểm tra xem người dùng đã đăng nhập chưa
+  if (user == "customer") {
+    window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
+    return;
   }
-  else{
-    var day_str = new Date();
-    var xmlhttp = new XMLHttpRequest();
-	  xmlhttp.onreadystatechange = function(){
-      if (this.readyState == 4 && this.status == 200){
-        if(this.responseText == "1"){
-          document.getElementById("notice").innerHTML = add_notice("success", "Thêm thành công");
-          document.getElementsByClassName("alert")[0].style.display = "block";
-          setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
+
+  // Kiểm tra thông tin sản phẩm và số lượng
+  if (!productId || isNaN(quantity) || quantity <= 0) {
+    console.log("Thông tin sản phẩm không hợp lệ");
+    document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin sản phẩm hoặc số lượng không hợp lệ");
+    document.getElementsByClassName("alert")[0].style.display = "block";
+    setTimeout(function() {
+      document.getElementsByClassName("alert")[0].style.opacity = 0;
+    }, 1500);
+    return;
+  }
+
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Response Text:", this.responseText); // Ghi lại phản hồi
+      try {
+        var response = JSON.parse(this.responseText); // Xử lý phản hồi dưới dạng JSON
+        if (response.status === "success") {
+          document.getElementById("notice").innerHTML = add_notice("success", "Thêm sản phẩm vào giỏ hàng thành công");
+        } else {
+          document.getElementById("notice").innerHTML = add_notice("fail", "Thêm sản phẩm vào giỏ hàng thất bại");
         }
-        else if(this.responseText == "0"){
-          document.getElementById("notice").innerHTML = add_notice("fail", "Thêm thất bại");
-          document.getElementsByClassName("alert")[0].style.display = "block";
-          setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-        }
+        document.getElementsByClassName("alert")[0].style.display = "block";
+        setTimeout(function() {
+          document.getElementsByClassName("alert")[0].style.opacity = 0;
+        }, 1500);
+      } catch (e) {
+        console.log("Lỗi xử lý phản hồi: ", e);
       }
-	  };
-    xmlhttp.open("GET", "?url=Home/create_cart/" + day_str.getFullYear() + "-" + String(day_str.getMonth() + 1) + "-" + String(day_str.getDate()) + "/" + element.value + "/" + element.parentNode.parentNode.getElementsByTagName("input")[0].value + "/", true);
-    xmlhttp.send();
-  }
+    }
+  };
+
+  // Gửi yêu cầu AJAX với phương thức POST
+  xmlhttp.open("POST", "?url=Home/create_cart", true);
+  xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xmlhttp.send("cart_date=" + encodeURIComponent(new Date().toISOString()) +
+               "&product_id=" + encodeURIComponent(productId) +
+               "&quantity=" + encodeURIComponent(quantity));
 }
+
+// Thêm hàm thông báo (nếu chưa có)
+function add_notice(alert, string) {
+  return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
+}
+
 
 function upload_pic(element){
   var fileSelected = element.files;

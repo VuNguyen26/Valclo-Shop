@@ -203,7 +203,7 @@
                       <div class=\"d-flex justify-content-between\">";
                       if($data["user"] == "customer" || $data["user"] == "member"){
                         echo "<div style=\"text-align: left;\" class=\"quantity-section\"><div class=\"plus-qty-btn\"><i class=\"fas fa-minus-circle\" onclick=\"minus(this);\"></i></button></div>
-                        <input type=\"text\" class=\"qty-buy\" value=\"1\" disabled><div class=\"minus-qty-btn\"><i class=\"fas fa-plus-circle\" onclick=\"plus(this);\"></i></div>
+                        <input type=\"text\" class=\"qty-buy\" value=\"1\"id=\"quantity-" . $row["id"] . "\"><div class=\"minus-qty-btn\"><i class=\"fas fa-plus-circle\" onclick=\"plus(this);\"></i></div>
                         </div><div style=\"text-align: right\"><button type=\"button\" class=\"btn btn-primary addToCart\" onclick=\"add_Product(this);\"><span hidden>" . $row["id"] . "</span>Add to cart</button></div></div></div></div></div>";
                       } else if($data["user"] == "manager"){
                         echo "<div style=\"text-align: left;\" class=\"quantity-section\">

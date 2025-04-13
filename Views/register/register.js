@@ -1,3 +1,4 @@
+// Đảm bảo khai báo hàm trước khi sử dụng
 function add_notice(alert, string) {
   return '<div class="alert ' + alert + ' mt-2" role="alert"><strong>' + string + '</strong></div>';
 }
@@ -12,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const invalids = form.querySelectorAll(".invalid-feedback");
     let check = false;
 
+    // Kiểm tra các trường input có bị bỏ trống không
     inputs.forEach((input, index) => {
       if (input.value.trim() === "") {
         invalids[index].style.display = "block";
@@ -23,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (check) return;
 
+    // Kiểm tra mật khẩu và xác thực mật khẩu có giống nhau không
     if (inputs[4].value !== inputs[5].value) {
       invalids[6].style.display = "block";
       return;
@@ -30,14 +33,16 @@ document.addEventListener("DOMContentLoaded", function () {
       invalids[6].style.display = "none";
     }
 
+    // Tạo URL cho yêu cầu AJAX
     const url =
-      `?url=Home/create_account/` +
-      encodeURIComponent(inputs[0].value) + "/" +
-      encodeURIComponent(inputs[1].value) + "/" +
-      encodeURIComponent(inputs[2].value) + "/" +
-      encodeURIComponent(inputs[3].value) + "/" +
-      encodeURIComponent(inputs[4].value) + "/";
+      `?url=/Home/create_account/` +
+      encodeURIComponent(inputs[0].value) + "/" +  // fname
+      encodeURIComponent(inputs[1].value) + "/" +  // cmnd
+      encodeURIComponent(inputs[2].value) + "/" +  // email
+      encodeURIComponent(inputs[3].value) + "/" +  // username
+      encodeURIComponent(inputs[4].value) + "/";   // password
 
+    // Gửi yêu cầu AJAX
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
       if (this.readyState === 4) {
@@ -45,19 +50,19 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Response:", this.responseText);
 
         const notice = document.getElementById("notice");
+        
+        // Kiểm tra kết nối với server
         if (this.status !== 200) {
           notice.innerHTML = add_notice("alert-danger", "Lỗi kết nối đến server!");
           return;
         }
 
-        if (this.responseText === "null1") {
-          notice.innerHTML = add_notice("alert-danger", "Bạn là thành viên bị cấm");
-        } else if (this.responseText === "null2") {
-          notice.innerHTML = add_notice("alert-danger", "Tài khoản của bạn đã tồn tại");
-        } else if (this.responseText === "null3") {
-          notice.innerHTML = add_notice("alert-danger", "Tạo tài khoản thất bại");
-        } else if (this.responseText === "ok") {
-          notice.innerHTML = add_notice("alert-success", "Tạo tài khoản thành công");
+        // Xử lý phản hồi từ server
+        const response = JSON.parse(this.responseText);  // Phản hồi trả về từ server
+        if (response.status === "error") {
+          notice.innerHTML = add_notice("alert-danger", response.message);
+        } else if (response.status === "success") {
+          notice.innerHTML = add_notice("alert-success", response.message);
           setTimeout(() => {
             window.location.href = "?url=/Home/Login/";
           }, 2000);
@@ -66,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     };
-
     xmlhttp.open("GET", url, true);
     xmlhttp.send();
   });

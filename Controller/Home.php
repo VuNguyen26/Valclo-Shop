@@ -280,11 +280,25 @@ $order_info = [
         function member_page($user){
             if($user == "member"){
                 $mem = $this->model($user);
+        
+                // Lấy giỏ hàng của người dùng
                 $cartid = $mem->get_cart($_SESSION["id"]);
-                $product_in_cart = array();
-                foreach($cartid as $id){
-                    array_push($product_in_cart,(["cartid" => $id, "product" =>  $mem->get_product_in_cart_mem((int)$id["id"])]));
+                
+                // Kiểm tra nếu kết quả truy vấn trả về là hợp lệ
+                if ($cartid && is_array($cartid)) {
+                    $product_in_cart = array();
+                    foreach($cartid as $id){
+                        array_push($product_in_cart, [
+                            "cartid" => $id, 
+                            "product" => $mem->get_product_in_cart_mem((int)$id["id"])
+                        ]);
+                    }
+                } else {
+                    // Nếu không có giỏ hàng, có thể gán mảng rỗng hoặc xử lý theo cách bạn muốn
+                    $product_in_cart = [];
                 }
+        
+                // Trả về view với các dữ liệu cần thiết
                 $this->view("Memberpage", [
                     "user" => $mem->get_user($_SESSION["id"]),
                     "product_in_cart" => $product_in_cart,
@@ -301,6 +315,7 @@ $order_info = [
                 $this->Login($user, "member_page");
             }
         }
+        
         function add_item_comment($user, $array){
             $this->model($user)->add_item_comment($array[2], $array[3], $array[4], $_SESSION["id"]);
         }   
@@ -323,16 +338,27 @@ $order_info = [
             }
             else echo "null";
         }
-        function create_cart($user, $array){
-            if(!isset($_SESSION["id_cart"]) || !isset($_SESSION["cart_date"]) || $_SESSION["cart_date"] != $array[2]){
-                $_SESSION["cart_date"] = $array[2];
-                if($this->model($user)->create_cart($_SESSION["id"], $_SESSION["cart_date"])){
-                    $_SESSION["cart_date"] = $array[2];
-                    $_SESSION["id_cart"] = mysqli_fetch_array($this->model($user)->get_cart_for_session())["id"];
-                }
+        public function create_cart($user, $array) {
+            $productId = $array[0];  // ID sản phẩm
+            $quantity = $array[1];    // Số lượng sản phẩm
+            
+            // Kiểm tra nếu có dữ liệu hợp lệ
+            if (empty($productId) || empty($quantity) || $quantity <= 0) {
+                echo json_encode(["status" => "error", "message" => "Thông tin sản phẩm hoặc số lượng không hợp lệ"]);
+                return;
             }
-            echo $this->model($user)->create_product_incart($array[3], $_SESSION["id_cart"], $array[4]);
-        }
+            
+            if (!isset($_SESSION["id_cart"])) {
+                // Tạo giỏ hàng mới nếu chưa có
+                $this->model($user)->create_cart($_SESSION["id"], $productId, $quantity);
+            } else {
+                // Nếu giỏ hàng đã tồn tại, thêm sản phẩm vào giỏ
+                $this->model($user)->create_product_incart($productId, $_SESSION["id_cart"], $quantity);
+            }
+            
+            echo json_encode(["status" => "success", "message" => "Thêm sản phẩm vào giỏ hàng thành công"]);
+        }              
+        
         function add_new_item($user){
             if(isset($_POST["iname"]) && isset($_POST["price"]) && isset($_FILES["image-url"]) && isset($_POST["description"]) && isset($_POST["remain"]) && isset($_POST["category"]))
             {
@@ -564,38 +590,39 @@ $order_info = [
             }
             else echo "null";
         }
-        function create_account($user, $array){
-            // $array[2] = fname, $array[3] = cmnd, $array[4] = email, $array[5] = username, $array[6] = password
+
+function create_account($user, $array) {
+    // Kiểm tra xem người dùng có bị cấm không
+    $ban_check = $this->model($user)->check_account_ban($array[3]);
+    if (mysqli_num_rows($ban_check) > 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Tài khoản bị cấm!']);
+        return;
+    }
+
+    // Kiểm tra tài khoản đã tồn tại chưa
+    $exist_check = $this->model($user)->check_account_inside($array[3], $array[4]);
+    if (mysqli_num_rows($exist_check) > 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Tài khoản hoặc email đã tồn tại!']);
+        return;
+    }
+
+    // Tạo tài khoản
+    $success = $this->model($user)->create_account(
+        $array[2], // fname
+        $array[3], // cmnd
+        $array[4], // email
+        $array[5], // username
+        $array[6]  // password
+    );
+
+    if ($success) {
+        echo json_encode(['status' => 'success', 'message' => 'Tạo tài khoản thành công!']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Lỗi khi tạo tài khoản!']);
+    }
+}
+
         
-            // Kiểm tra xem người dùng có bị cấm không
-            $ban_check = $this->model($user)->check_account_ban($array[3]);
-            if(mysqli_num_rows($ban_check) > 0){
-                echo "null1"; // Bị cấm
-                return;
-            }
-        
-            // Kiểm tra tài khoản đã tồn tại chưa
-            $exist_check = $this->model($user)->check_account_inside($array[3], $array[4]);
-            if(mysqli_num_rows($exist_check) > 0){
-                echo "null2"; // Tài khoản tồn tại
-                return;
-            }
-        
-            // Tạo tài khoản
-            $success = $this->model($user)->create_account(
-                $array[2], // fname
-                $array[3], // cmnd
-                $array[4], // email
-                $array[5], // username
-                $array[6]  // password
-            );
-        
-            if($success){
-                echo "ok";
-            } else {
-                echo "null3"; // Lỗi khi tạo tài khoản
-            }
-        }
         function cancel($user) {
             if (!isset($_SESSION['id']) || $user !== "member") {
                 die("Bạn chưa đăng nhập.");

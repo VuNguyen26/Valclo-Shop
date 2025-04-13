@@ -149,31 +149,6 @@ button.onclick = function(){
   xmlhttp.send();
 };
 
-function remove_combo(element){
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
-    console.log(this.responseText);
-    if (this.readyState == 4 && this.status == 200){
-        if(this.responseText != "null"){
-          document.getElementById("notice").innerHTML = add_notice("success", "Xóa combo thành công" );
-          var h3 = document.getElementsByClassName("container-fuild")[0].children[0].children[1].getElementsByTagName("h3")[0];
-          h3.innerText = h3.innerText.split("(")[0] + "(" + String(Number(h3.innerText.split("(")[1].split(" ")[0]) - 1) + " " +  h3.innerText.split("(")[1].split(" ")[1] + " " + h3.innerText.split("(")[1].split(" ")[2];
-          var h5 = document.getElementsByClassName("container-fuild")[0].children[0].children[1].getElementsByTagName("h5")[0];
-          h5.innerText = enformat(String(Number(deformat(h5.innerText.split("(")[0])) - Number(element.parentNode.parentNode.parentNode.getElementsByTagName("h3")[0].innerText.split("/")[0]))) + "(đ)";
-          document.getElementsByClassName("alert")[0].style.display = "block";
-          setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-          element.parentNode.parentNode.parentNode.parentNode.remove();
-          }
-        else{
-          document.getElementById("notice").innerHTML = add_notice("fail", "Xóa combo thất bại" );
-          document.getElementsByClassName("alert")[0].style.display = "block";
-          setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-        }
-    }
-  };
-  xmlhttp.open("GET", "?url=Home/delete_order_combo_id/" + element.parentNode.parentNode.parentNode.getElementsByTagName("span")[0].innerText + "/", true);
-  xmlhttp.send();
-}
 
 function remove_product_incart(element){
   var id = element.parentNode.parentNode.value;
@@ -199,3 +174,54 @@ function remove_product_incart(element){
   xmlhttp.open("GET", "?url=Home/delete_product_incart/" + id + "/", true);
   xmlhttp.send();
 }
+
+function add_Product(element) {
+  var productId = element.value; // Lấy ID sản phẩm
+  var quantityElement = element.parentNode.parentNode.getElementsByClassName("value_click")[0]; // Lấy phần tử số lượng sản phẩm
+  var quantity = quantityElement ? parseInt(quantityElement.innerText) : 0; // Lấy giá trị số lượng, nếu không có thì gán = 0
+
+  // Kiểm tra xem người dùng đã đăng nhập chưa
+  if (user == "customer") {
+    window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
+    return;
+  } 
+
+  // Kiểm tra thông tin sản phẩm và số lượng
+  if (!productId || isNaN(quantity) || quantity <= 0) {
+    console.log("Thông tin sản phẩm không hợp lệ");
+    document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin sản phẩm hoặc số lượng không hợp lệ");
+    document.getElementsByClassName("alert")[0].style.display = "block";
+    setTimeout(function() {
+      document.getElementsByClassName("alert")[0].style.opacity = 0;
+    }, 1500);
+    return;
+  }
+
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      try {
+        var response = JSON.parse(this.responseText); // Xử lý phản hồi dưới dạng JSON
+        if (response.status === "success") {
+          document.getElementById("notice").innerHTML = add_notice("success", "Thêm sản phẩm vào giỏ hàng thành công");
+        } else {
+          document.getElementById("notice").innerHTML = add_notice("fail", "Thêm sản phẩm vào giỏ hàng thất bại");
+        }
+        document.getElementsByClassName("alert")[0].style.display = "block";
+        setTimeout(function() {
+          document.getElementsByClassName("alert")[0].style.opacity = 0;
+        }, 1500);
+      } catch (e) {
+        console.log("Lỗi xử lý phản hồi: ", e);
+      }
+    }
+  };
+
+  // Gửi yêu cầu AJAX với phương thức POST
+  xmlhttp.open("POST", "?url=Home/create_cart", true);
+  xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  xmlhttp.send("cart_date=" + encodeURIComponent(new Date().toISOString()) +
+               "&product_id=" + encodeURIComponent(productId) +
+               "&quantity=" + encodeURIComponent(quantity));
+}
+

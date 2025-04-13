@@ -140,20 +140,62 @@ class customer extends DB {
     }
 
     public function get_sum_cart($id) {
-        $query = "SELECT SUM(`product_in_cart`.`QUANTITY` * `product`.`PRICE`) FROM `product`, `product_in_cart`, `cart`, `account` WHERE `product_in_cart`.`PID` = `product`.`ID` AND `product_in_cart`.`OID` = `cart`.`ID` AND `cart`.`UID` = `account`.`ID` AND `cart`.`STATE` = 1 AND `account`.`ID` = $id;";
+        // Tính tổng giá trị giỏ hàng cho người dùng với ID = $id
+        $query = "SELECT SUM(`cart`.`quantity` * `product`.`price`) 
+                  FROM `cart`
+                  JOIN `product` ON `cart`.`product_id` = `product`.`id`
+                  WHERE `cart`.`user_id` = $id AND `cart`.`state` = 1";
+    
         return mysqli_query($this->connect, $query);
     }
-
+    
+    public function create_product_incart($productId, $userId, $quantity) {
+        // Kiểm tra xem sản phẩm đã có trong giỏ chưa
+        $query = "SELECT `ID`, `QUANTITY` FROM `cart` WHERE `UID` = ? AND `PID` = ?";
+        $stmt = $this->connect->prepare($query);
+        $stmt->bind_param("ii", $userId, $productId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            // Nếu sản phẩm đã có trong giỏ, cập nhật số lượng
+            $row = $result->fetch_assoc();
+            $newQuantity = $row['QUANTITY'] + $quantity; // Cộng thêm số lượng
+            $updateQuery = "UPDATE `cart` SET `QUANTITY` = ? WHERE `ID` = ?";
+            $updateStmt = $this->connect->prepare($updateQuery);
+            $updateStmt->bind_param("ii", $newQuantity, $row['ID']);
+            return $updateStmt->execute();
+        } else {
+            // Nếu sản phẩm chưa có trong giỏ, thêm mới
+            $insertQuery = "INSERT INTO `cart` (`UID`, `PID`, `QUANTITY`, `SIZE`) VALUES (?, ?, ?, 'L')";
+            $insertStmt = $this->connect->prepare($insertQuery);
+            $insertStmt->bind_param("iii", $userId, $productId, $quantity);
+            return $insertStmt->execute();
+        }
+    }
+    
     public function check_account_ban($cmnd) {
         $query = "SELECT `ID` as `id` FROM `ban_account` WHERE `CMND` = '$cmnd';";
-        return mysqli_query($this->connect, $query);
+        $result = mysqli_query($this->connect, $query);
+    
+        if (!$result) {
+            die("Error in query: " . mysqli_error($this->connect)); // Debug error if query fails
+        }
+    
+        return $result;
     }
-
+    
     public function check_account_inside($cmnd, $mail) {
         $query = "SELECT `ID` as `id` FROM `account` WHERE `EMAIL` = '$mail' OR `CMND` = '$cmnd';";
-        return mysqli_query($this->connect, $query);
+        $result = mysqli_query($this->connect, $query);
+    
+        if (!$result) {
+            die("Error in query: " . mysqli_error($this->connect)); // Debug error if query fails
+        }
+    
+        return $result;
     }
-
+    
     public function create_account($fname, $cmnd, $mail, $user, $pwd){
         $query = "INSERT INTO `account` (
             `CMND`, `FNAME`, `PHONE`, `ADDRESS`, 
@@ -170,6 +212,6 @@ class customer extends DB {
         )";
     
         return mysqli_query($this->connect, $query);
-    }           
+    }            
 }
 ?>

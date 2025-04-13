@@ -308,3 +308,13 @@
   .fail{
     background-color: rgb(251, 30, 30);
   }
+  /* Ẩn dropdown menu khi không có class 'show' */
+.login-button .dropdown-menu {
+  display: none;
+}
+
+/* Hiển thị dropdown menu khi có class 'show' */
+.login-button .dropdown-menu.show {
+  display: block;
+  z-index: 9999;
+}
