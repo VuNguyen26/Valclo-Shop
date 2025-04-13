@@ -82,9 +82,7 @@ class member extends customer{
     }
      
     public function get_cart($id){
-        $query =    "SELECT     `cart`.`ID` AS `id`,   
-                                `cart`.`TIME` AS `time`, 
-                                `cart`.`STATE` AS `state`
+        $query =    "SELECT `cart`.`ID` AS `id`
                     FROM `cart`, `account`
                     WHERE `cart`.`UID` = " . $id ."
                     GROUP BY `cart`.`ID`";
@@ -115,11 +113,6 @@ class member extends customer{
         // ngược lại, tạo record mới
         else  $query = "INSERT INTO `cart` (`cart`.`UID`, `cart`.`PID`, `cart`.`QUANTITY`) VALUES(" . $id . "," . $id_product . "," . $quantity . ")";
         // thực thi query
-        return mysqli_query($this->connect, $query);
-    }
-    public function create_product_incart($pid, $oid, $quantity){
-        $query =    "INSERT INTO `cart`(`cart`.`PID`, `cart`.`OID`, `cart`.`QUANTITY`)
-                    VALUES (" . $pid . ", " . $oid . ", " . $quantity . ");";
         return mysqli_query($this->connect, $query);
     }
     public function update_pic($id ,$path){
