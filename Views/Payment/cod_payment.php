@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
@@ -10,15 +10,18 @@ if (!isset($_GET["oids"]) || empty($_SESSION["id"])) {
 
 $user_id = $_SESSION["id"];
 $oids = $_GET["oids"]; // VD: "1,2,3"
-$params = ["member", "update_cart_combo", $oids, "cod"]; // truyền đủ 4 tham số cho Home.php
+$params = ["member", "update_cart", $oids]; // Gọi đúng hàm hiện có
 
 // Gọi hàm update_cart_combo trong Controller
 $home = new Home();
 ob_start(); // Bắt kết quả tránh lỗi header
-$home->update_cart_combo("member", $params);
+$home->update_cart("member", $params);
 ob_end_clean(); // Kết thúc bắt kết quả
 
+// 👉 THÊM DÒNG NÀY: Xóa giỏ hàng sau thanh toán
+unset($_SESSION["cart"]);
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

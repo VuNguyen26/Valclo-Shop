@@ -27,14 +27,23 @@ class Home extends Controller{
         function About_us($user){
             $this->view("About_US", []);
         }
-        function Products($user, $sort_1="", $sort_2=""){
+        function Products($user, $sort_1 = "", $sort_2 = "") {
             $cus = $this->model($user);
+        
+            // Lấy từ khóa tìm kiếm nếu có
+            $search = isset($_GET['search']) ? $_GET['search'] : null;
+        
             $this->view("Products", [
                 "cate" => $cus->get_product_cates(),
-                "product" => $cus->get_products(isset($_GET['sort-by']) ? $_GET['sort-by'] : null , isset($_GET['order-by']) ? $_GET['order-by'] : null , isset($_GET['page']) ? $_GET['page'] : 1),
+                "product" => $cus->get_products(
+                    isset($_GET['sort-by']) ? $_GET['sort-by'] : null,
+                    isset($_GET['order-by']) ? $_GET['order-by'] : null,
+                    isset($_GET['page']) ? $_GET['page'] : 1,
+                    $search // ✅ Truyền từ khóa tìm kiếm vào model
+                ),
                 "user" => $user
             ]);
-        }
+        }        
         
         function Item($user, $pid){
             $cus = $this->model($user);
@@ -226,23 +235,31 @@ class Home extends Controller{
             if($this->model($user)->delete_product_incart((int)$array[2])) echo "ok";
             else echo "null";
         }
-        function check_login($user, $array){
-            if($array[2] == "admin" &&  $array[3] == "admin"){ // bình luận trang tin tức / bình luần trang item // add to cart
+        function check_login($user, $array) {
+            // Tài khoản quản trị
+            if (isset($array[2]) && isset($array[3]) && $array[2] == "admin" && $array[3] == "admin") {
                 $_SESSION["user"] = "manager";
-                if(!isset($array[4])) $array[4] = "Home_page";
-                echo "?url=/Home/" . $array[4] . "/";
-            }
-            else{ 
-                $id = mysqli_fetch_array($this->model($user)->get_id_user($array[2],  $array[3]), MYSQLI_NUM);
-                if($id == null) echo "null";
-                else {
+                $redirect = isset($array[4]) ? $array[4] : "Home_page";
+                echo "?url=/Home/" . $redirect . "/";
+            } 
+            // Tài khoản thành viên
+            else if (isset($array[2]) && isset($array[3])) {
+                $id = mysqli_fetch_array($this->model($user)->get_id_user($array[2], $array[3]), MYSQLI_NUM);
+                if ($id == null) {
+                    echo "null";
+                } else {
                     $_SESSION["id"] = (int)$id[0];
                     $_SESSION["user"] = "member";
-                    if(!isset($array[4])) $array[4] = "Home_page";
-                    echo "?url=/Home/" . $array[4] . "/";
+                    $redirect = isset($array[4]) ? $array[4] : "Home_page";
+                    echo "?url=/Home/" . $redirect . "/";
                 }
+            } 
+            // Trường hợp thiếu thông tin đăng nhập
+            else {
+                echo "null";
             }
         }
+        
         function update_product_in_cart($user, $array){
             $action = $this->model($user);
             for($i = 0; $i < (int)$array[2]; $i++){
@@ -251,6 +268,12 @@ class Home extends Controller{
             echo "?url=/Home/Payment/";
         }
 
+        function update_cart($user, $params) {
+            $mem = $this->model($user);
+            $oid = (int)$params[2];
+            $mem->update_cart($oid);
+        }
+        
         function order_detail($user, $params) {
             if ($user === "member") {
                 $mem = $this->model($user);

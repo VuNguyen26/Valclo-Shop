@@ -60,9 +60,12 @@ for (let index = 0; index < document.getElementsByClassName("addToCart").length;
   document.getElementsByClassName("addToCart")[index].getElementsByTagName("span")[0].remove();
 }
 
-for (let index = 0; index < document.getElementsByClassName("addToCart").length; index++) {
-  console.log(document.getElementsByClassName("addToCart")[index].value);
+const addToCartButtons = document.getElementsByClassName("addToCart");
+
+for (let button of addToCartButtons) {
+  console.log(button.value);
 }
+
 function add_Product(element){
   if(user == "customer"){
     window.location.href = "?url=Home/Login/";

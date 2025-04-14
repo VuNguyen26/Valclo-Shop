@@ -10,47 +10,63 @@ class customer extends DB {
         return mysqli_query($this->connect, $query);
     }
 
-    public function get_products($sort_1, $sort_2, $page) {
+    public function get_products($sort_1, $sort_2, $page, $search = null) {
         # variable
         $query = ""; // câu truy vấn tổng
         $query_paginate = ""; // câu truy vấn phân trang LIMIT, OFFSET
         $limit_record = 12; // giới hạn số sản phẩm trên 1 trang
-        
-
+    
         # sort
         if(!in_array($sort_1,['featured','pname','price'])) $sort_1 = null;
         if(!in_array($sort_2,['ASC','DESC'])) $sort_2 = null;
-
+    
+        # điều kiện tìm kiếm
+        $search_condition = "";
+        if ($search !== null && $search !== "") {
+            $search = mysqli_real_escape_string($this->connect, $search); // tránh SQL injection
+            $search_condition = " WHERE `product`.`NAME` LIKE '%$search%' ";
+        }
+    
         # pagination
-        // lấy tổng sản phẩm
-        $total_record = mysqli_fetch_assoc(mysqli_query($this->connect, 'SELECT COUNT(*) AS total FROM `product`'))['total'];
+        // lấy tổng sản phẩm có áp dụng tìm kiếm
+        $count_query = "SELECT COUNT(*) AS total FROM `product`" . ($search_condition ? $search_condition : "");
+        $total_record = mysqli_fetch_assoc(mysqli_query($this->connect, $count_query))['total'];
+    
         // tính tổng trang
-        $total_page = ceil($total_record/$limit_record);
-
+        $total_page = ceil($total_record / $limit_record);
+    
         // validate
-        if($page > $total_page || !is_numeric($page) || $page < 1) die('400 Bad Request'); // báo lỗi
-
-        // tạo truy vấn paginate
-        $query_paginate = " LIMIT ".( ($page - 1) * $limit_record ) . ", ".$limit_record;
-
+        if ($page > $total_page || !is_numeric($page) || $page < 1) die('400 Bad Request');
+    
+        // tạo truy vấn phân trang
+        $query_paginate = " LIMIT " . (($page - 1) * $limit_record) . ", " . $limit_record;
+    
+        # Tạo câu query chính
         if ($sort_1 == "" && $sort_2 == "") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ";
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
+                      FROM `product` $search_condition";
         } else if ($sort_1 == "featured") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` WHERE `product`.`TOP_PRODUCT` ORDER BY `product`.`TOP_PRODUCT` ASC ";
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
+                      FROM `product` WHERE `product`.`TOP_PRODUCT` = 1" . ($search_condition ? " AND `product`.`NAME` LIKE '%$search%'" : "") . " ORDER BY `product`.`TOP_PRODUCT` ASC";
         } else if ($sort_1 == "pname") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`NAME` $sort_2 ";
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
+                      FROM `product` $search_condition ORDER BY `product`.`NAME` $sort_2";
         } else if ($sort_1 == "price") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' FROM `product` ORDER BY `product`.`PRICE` $sort_2 ";
-        } else die('404 Not Found');
-
+            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
+                      FROM `product` $search_condition ORDER BY `product`.`PRICE` $sort_2";
+        } else {
+            die('404 Not Found');
+        }
+    
         return [
             'sort_1' => $sort_1,
             'sort_2' => $sort_2,
             'total_page' => $total_page,
             'active_page' => $page,
-            'list' => mysqli_query($this->connect, $query.$query_paginate)
+            'list' => mysqli_query($this->connect, $query . $query_paginate)
         ];
     }
+    
 
     public function get_product_in_combo($id) {
         $query = "SELECT `product`.`NAME` AS `name` FROM `product_in_combo`, `product` WHERE `product_in_combo`.`PID` = `product`.`ID` AND `product_in_combo`.`CBID` = $id";

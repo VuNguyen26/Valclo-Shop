@@ -45,8 +45,7 @@
     <div class="company-product">
 
       <!-- Navigation -->
-    <?php require_once("./Views/Navbar/index.php"); ?>
-      <script src="./Views/Navbar/navbarScript.js" index='2'></script>
+      <?php require_once("./Views/Navbar/index.php"); ?>
       
       <!-- Filter bar and sort -->
       <div class="header-product">
@@ -254,6 +253,7 @@
       <script src="../Views/footer/footerScript.js"></script-->
     <?php require_once("./Views/footer/index.php");?>
     </div>
+    <script src="./Views/Navbar/navbarScript.js"></script>
     <script src="./Views/Products/product.js"></script>
   </body>
 </html>

@@ -74,7 +74,6 @@
 									</div>
 								</div>
 							</div>
-	
 							<div class="form-group mt-2 mb-2">
 								<label class="d-flex justify-content-between" for="password">Mật khẩu
 								<a href="?url=/Home/forgot/" class="float-right">
@@ -106,8 +105,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="demo" hidden><?php if(is_array($data["key"])) echo $data["key"][2];
-									else  echo $data["key"]; ?></div>
+	<!-- ❌ Đã xóa <div class="demo"> vì không cần truyền history_str -->
+
 	<!--div class="footer-holder"></div>
 	<script src="./Views/footer/footerScript.js"></script-->
 	

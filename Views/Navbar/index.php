@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="./Views/Navbar/navbar.css">
+<link rel="stylesheet" href="./Views/Navbar/navbar.css?v=<?= filemtime('./Views/Navbar/navbar.css') ?>">
 <div id="navbar" class="sticky-top">
   <nav>
     <h1><i class="fab fa-shopify"></i><a href="?url=Home/Home_page/">VCS</a></h1>
@@ -17,12 +17,14 @@
       <li><a href="?url=Home/Contact_us/">Liên hệ</a></li>
     </ul>
 
-    <form class="form">
-      <div class="form-group">
-        <input class="form-control" type="text" placeholder="Search...">  
-      </div>
-      <button class="btn btn-dark" type="button" onclick="search_item(this)"><i class="fas fa-search"></i></button>
-    </form>
+    <form class="form" onsubmit="return false;">
+  <div class="form-group">
+    <input id="search-box" class="form-control" type="text" placeholder="Search...">
+  </div>
+  <button class="btn btn-dark" type="button" onclick="search_item(this)">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
 
     <div class="cart">
       <button id="cart-button-nav" class="btn btn-primary" type="button"><a href="<?php if(!isset($_SESSION["user"]) || isset($_SESSION["user"]) && $_SESSION["user"] != "manager") echo "?url=Home/Cart/"; else echo "#";?>"><i class="fas fa-shopping-cart"></i> Giỏ</a></button>
@@ -62,15 +64,19 @@
 </div>
 
 <!-- Add the JavaScript for dropdown toggle -->
+ <!-- Import script tìm kiếm -->
+<script src="./Views/Navbar/navbarScript.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const dropdownButton = document.querySelector(".dropdown-toggle");
     const dropdownMenu = document.querySelector(".dropdown-menu");
 
-    // Xử lý sự kiện click vào button dropdown
-    dropdownButton.addEventListener("click", function() {
-      // Toggle class 'show' để hiển thị/ẩn dropdown menu
-      dropdownMenu.classList.toggle("show");
-    });
+    // ✅ Kiểm tra tồn tại trước khi gán sự kiện
+    if (dropdownButton && dropdownMenu) {
+      dropdownButton.addEventListener("click", function () {
+        dropdownMenu.classList.toggle("show");
+      });
+    }
   });
 </script>
+
