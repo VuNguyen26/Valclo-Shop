@@ -1,23 +1,39 @@
 <?php
+
+$result = $_GET['resultCode'] ?? null;
+$orderIds = $_GET['oids'] ?? '';
+require_once("./Function/DB.php");
+require_once("./Model/member.php");
+
+if (!empty($_SESSION["id"])) {
+    $uid = $_SESSION["id"];
+    $mem = new Member();
+    $mem->clear_cart($uid);
+    }
+
 $result = $_GET['resultCode'] ?? null;
 $message = $_GET['message'] ?? '';
 $orderIds = $_GET['oids'] ?? '';
-
 $displayMessage = "❌ Thanh toán thất bại hoặc bị hủy.";
 $callUpdate = false;
 
 if ($result === "0" && !empty($orderIds)) {
-    $displayMessage = "✅ Thanh toán MoMo thành công!";
-    $callUpdate = true;
-    require_once("./Function/DB.php");
-    require_once("./Model/member.php");
-    if (!empty($_SESSION["id"])) {
-        $mem = new Member();
-        $mem->clear_cart($_SESSION["id"]);
-    }
-    $oidArray = explode("/", $orderIds);
-    $count = count($oidArray);
+  $displayMessage = "✅ Thanh toán MoMo thành công!";
+  $callUpdate = true;
+
+  require_once("./Function/DB.php");
+  require_once("./Model/member.php");
+
+  if (!empty($_SESSION["id"])) {
+      $uid = $_SESSION["id"];
+      $mem = new Member();
+      $mem->clear_cart($uid);
+  }
+
+  $oidArray = explode("/", $orderIds);
+  $count = count($oidArray);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">

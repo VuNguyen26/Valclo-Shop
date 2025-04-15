@@ -60,3 +60,5 @@ if (isset($jsonResult['payUrl'])) {
 } else {
     echo "Không nhận được payUrl từ MoMo";
 }
+header("Location: ?url=Payment/success&oids=123");
+exit;

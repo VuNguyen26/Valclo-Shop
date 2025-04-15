@@ -104,18 +104,19 @@ class member extends customer{
         return mysqli_query($this->connect, $query);
     }
     public function create_cart($id, $id_product, $quantity){
-        // kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
         $result = mysqli_query($this->connect, "SELECT `ID` FROM `cart` WHERE `UID` = $id AND PID = $id_product");
         $row = mysqli_fetch_assoc($result);
-
         $check_exist_product = $row['ID'] ?? null;
-        // nếu đã tồn tại, tức là trả về ID cart -> update số lượng
-        if($check_exist_product) $query = "UPDATE `cart` SET `QUANTITY` = `QUANTITY` + ".$quantity." WHERE `ID` = ".$check_exist_product;
-        // ngược lại, tạo record mới
-        else  $query = "INSERT INTO `cart` (`cart`.`UID`, `cart`.`PID`, `cart`.`QUANTITY`) VALUES(" . $id . "," . $id_product . "," . $quantity . ")";
-        // thực thi query
+    
+        if($check_exist_product) {
+            $query = "UPDATE `cart` SET `QUANTITY` = `QUANTITY` + $quantity WHERE `ID` = $check_exist_product";
+        } else {
+            $query = "INSERT INTO `cart` (`cart`.`UID`, `cart`.`PID`, `cart`.`QUANTITY`) VALUES($id, $id_product, $quantity)";
+        }
+    
         return mysqli_query($this->connect, $query);
     }
+    
     public function update_pic($id ,$path){
         $query =    "UPDATE `account`
                     SET `account`.`IMG_URL` = \"" . $path . "\"
@@ -163,8 +164,19 @@ class member extends customer{
     }
     public function clear_cart($uid) {
         $query = "DELETE FROM cart WHERE UID = " . intval($uid);
-        return mysqli_query($this->connect, $query);
-    }    
+        $result = mysqli_query($this->connect, $query);
+        
+        $log = "Xóa giỏ hàng UID=$uid\nQuery: $query\n";
+        
+        if (!$result) {
+            $log .= "❌ Lỗi MySQL: " . mysqli_error($this->connect) . "\n";
+        } else {
+            $log .= "✅ Xóa thành công\n";
+        }
+    
+        }
+        
+        
     public function delete_order_combo_id($id){
         $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);

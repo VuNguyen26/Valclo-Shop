@@ -26,3 +26,5 @@ if (isset($data['resultCode']) && $data['resultCode'] == 0) {
     http_response_code(400);
     echo "Thanh toán thất bại hoặc bị hủy";
 }
+header("Location: ?url=Payment/success&oids=123");
+exit;

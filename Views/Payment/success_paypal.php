@@ -1,4 +1,13 @@
 <?php
+
+require_once("./Function/DB.php");
+require_once("./Model/member.php");
+
+if (!empty($_SESSION["id"])) {
+    $mem = new Member();
+    $mem->clear_cart($_SESSION["id"]);
+    }
+
 $result = $_GET['result'] ?? '0';
 $oids = $_GET['oids'] ?? '';
 

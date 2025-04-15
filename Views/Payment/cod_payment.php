@@ -1,5 +1,7 @@
 <?php 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
 require_once("./Controller/Home.php");
@@ -16,8 +18,13 @@ $params = ["member", "update_cart", $oids]; // Gọi đúng hàm hiện có
 $home = new Home();
 ob_start(); // Bắt kết quả tránh lỗi header
 $home->update_cart("member", $params);
+require_once("./Model/member.php");
+$mem = new Member();
+$mem->clear_cart($_SESSION["id"]);
 ob_end_clean(); // Kết thúc bắt kết quả
-
+require_once("./Model/member.php");
+$mem = new Member();
+$mem->clear_cart($_SESSION["id"]);
 // 👉 THÊM DÒNG NÀY: Xóa giỏ hàng sau thanh toán
 $mem = new Member();
 $mem->clear_cart($user_id);
