@@ -19,6 +19,8 @@ $home->update_cart("member", $params);
 ob_end_clean(); // Kết thúc bắt kết quả
 
 // 👉 THÊM DÒNG NÀY: Xóa giỏ hàng sau thanh toán
+$mem = new Member();
+$mem->clear_cart($user_id);
 unset($_SESSION["cart"]);
 ?>
 

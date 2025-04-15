@@ -361,26 +361,24 @@ $order_info = [
             }
             else echo "null";
         }
-        public function create_cart($user, $array) {
-            $productId = $array['product_id'];  // ID sản phẩm
-            $quantity = $array['quantity'];    // Số lượng sản phẩm
-            
-            // Kiểm tra nếu có dữ liệu hợp lệ
+        public function create_cart($user) {
+            $productId = $_POST['product_id'] ?? null;
+            $quantity = $_POST['quantity'] ?? null;
+        
             if (empty($productId) || empty($quantity) || $quantity <= 0) {
                 echo json_encode(["status" => "error", "message" => "Thông tin sản phẩm hoặc số lượng không hợp lệ"]);
                 return;
             }
-            
-            if (!isset($_SESSION["id_cart"])) {
-                // Tạo giỏ hàng mới nếu chưa có
-                $this->model($user)->create_cart($_SESSION["id"], $productId, $quantity);
-            } else {
-                // Nếu giỏ hàng đã tồn tại, thêm sản phẩm vào giỏ
-                $this->model($user)->create_product_incart($productId, $_SESSION["id_cart"], $quantity);
+        
+            if (!isset($_SESSION["id"])) {
+                echo json_encode(["status" => "error", "message" => "Người dùng chưa đăng nhập"]);
+                return;
             }
-            
+        
+            $this->model($user)->create_cart($_SESSION["id"], $productId, $quantity);
+        
             echo json_encode(["status" => "success", "message" => "Thêm sản phẩm vào giỏ hàng thành công"]);
-        }              
+        }                      
         
         function add_new_item($user){
             if(isset($_POST["iname"]) && isset($_POST["price"]) && isset($_FILES["image-url"]) && isset($_POST["description"]) && isset($_POST["remain"]) && isset($_POST["category"]))

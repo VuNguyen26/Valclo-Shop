@@ -160,12 +160,12 @@ function remove_product_incart(element){
         var h3 = document.getElementsByClassName("container-fuild")[0].children[0].children[1].getElementsByTagName("h3")[0];
         h3.innerText = h3.innerText.split("(")[0] + "(" + String(Number(h3.innerText.split("(")[1].split(" ")[0]) - 1) + " " +  h3.innerText.split("(")[1].split(" ")[1] + " " + h3.innerText.split("(")[1].split(" ")[2];
         element.parentNode.parentNode.remove();
-        document.getElementById("notice").innerHTML = add_notice("success", "Xóa sẳn phẩm thành công" );
+        document.getElementById("notice").innerHTML = add_notice("success", "Xóa sản phẩm thành công" );
         document.getElementsByClassName("alert")[0].style.display = "block";
         setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
       }
       else if(this.responseText == "null"){
-        document.getElementById("notice").innerHTML = add_notice("fail", "Xóa sẳn phẩm thất bại" );
+        document.getElementById("notice").innerHTML = add_notice("fail", "Xóa sản phẩm thất bại" );
         document.getElementsByClassName("alert")[0].style.display = "block";
         setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
       }

@@ -9,6 +9,12 @@ $callUpdate = false;
 if ($result === "0" && !empty($orderIds)) {
     $displayMessage = "✅ Thanh toán MoMo thành công!";
     $callUpdate = true;
+    require_once("./Function/DB.php");
+    require_once("./Model/member.php");
+    if (!empty($_SESSION["id"])) {
+        $mem = new Member();
+        $mem->clear_cart($_SESSION["id"]);
+    }
     $oidArray = explode("/", $orderIds);
     $count = count($oidArray);
 }

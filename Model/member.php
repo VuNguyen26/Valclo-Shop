@@ -105,9 +105,10 @@ class member extends customer{
     }
     public function create_cart($id, $id_product, $quantity){
         // kiểm tra sản phẩm đã tồn tại trong giỏ hàng chưa
-        $check_exist_product = mysqli_fetch_assoc(
-            mysqli_query($this->connect,"SELECT `ID` FROM `cart` WHERE `UID` = ".$id." AND PID = ".$id_product)
-        )['ID'];
+        $result = mysqli_query($this->connect, "SELECT `ID` FROM `cart` WHERE `UID` = $id AND PID = $id_product");
+        $row = mysqli_fetch_assoc($result);
+
+        $check_exist_product = $row['ID'] ?? null;
         // nếu đã tồn tại, tức là trả về ID cart -> update số lượng
         if($check_exist_product) $query = "UPDATE `cart` SET `QUANTITY` = `QUANTITY` + ".$quantity." WHERE `ID` = ".$check_exist_product;
         // ngược lại, tạo record mới
@@ -160,13 +161,10 @@ class member extends customer{
                     WHERE `account`.`ID` = " . $id ;
         return mysqli_query($this->connect, $query);
     }
-    public function clear_cart(){
-        $query =    "DELETE FROM `cart` 
-                    WHERE `cart`.`ID` NOT IN (  SELECT `cart`.`ID` FROM `cart`
-                                                WHERE `cart`.`OID` = `cart`.`ID`
-                                                GROUP BY `cart`.`ID`)";
+    public function clear_cart($uid) {
+        $query = "DELETE FROM cart WHERE UID = " . intval($uid);
         return mysqli_query($this->connect, $query);
-    }
+    }    
     public function delete_order_combo_id($id){
         $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);
