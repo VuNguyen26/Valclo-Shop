@@ -58,11 +58,14 @@
               $page = $data['product']['active_page'];
 
               # render option category
-              $render_option_category = '<option value="All">Tất cả</option>';
+              (isset($_GET['category']) && $_GET['category'] == 'all') ? $choose_all = 'selected' : $choose_all = '';
+
+              $render_option_category = '<option '. $choose_all .' value="all">Tất cả</option>';
               foreach($data["cate"] as $row){
-                $name_category = $row["cate"];
+                $name_category = $row["name_category"];
+                (isset($_GET['category']) && $_GET['category'] == $name_category) ? $choose = 'selected' : $choose = '';
                 $render_option_category .= <<<HTML
-                    <option value="{$name_category}">{$name_category}</option>
+                    <option {$choose} value="{$name_category}">{$name_category}</option>
                 HTML;
               }
                 
@@ -70,10 +73,11 @@
               <<<HTML
               <form class="container-fluid px-5 d-flex justify-content-between" action="/" method="GET">
                 <input type="hidden" name="url" value="Home/Products">
+                <input type="hidden" name="search" value="">
                 <div class="col-6 p-0">
                   <div class="w-50">
                     <label for="sort-by">Danh mục</label>
-                    <select class="w-100" name="sort-by" id="sort-by">
+                    <select class="w-100" name="category" id="sort-by">
                       {$render_option_category}
                     </select>
                   </div>
@@ -240,7 +244,7 @@
         <?php if($data['product']['total_page'] > 1) : ?>
           <div class="my-3 d-flex align-items-center justify-content-center gap-2">
           <?php for ($i=1; $i <= $data['product']['total_page']; $i++) : ?>
-            <a href="/?url=Home/Products&sort-by=<?= $data['product']['sort_1'] ?>&order-by=<?= $data['product']['sort_2'] ?>&page=<?= $i ?>" class="btn btn-outline-warning <?= $i == $data['product']['active_page'] ? 'active' : '' ?>">
+            <a href="/?url=Home/Products&search=<?= $data['product']['active_search']?>&category=<?= $data['product']['active_category'] ?>&sort-by=<?= $data['product']['sort_1'] ?>&order-by=<?= $data['product']['sort_2'] ?>&page=<?= $i ?>" class="btn btn-outline-warning <?= $i == $data['product']['active_page'] ? 'active' : '' ?>">
               <?= $i ?>
             </a>
           <?php endfor ?>

@@ -21,7 +21,7 @@ class Home extends Controller{
                 "user" => $user,
                 "news" => $news_list,
                 "collection" => $cus->get_swiper_slide_collection(), //$data["collection"] = $cus->get_swiper_slide_collection() 
-                "featured" => $cus->get_products("featured", "", 1)["list"]
+                "featured" => $cus->get_products("featured", "", 1, "", "all")["list"]
             ]);
         }
         function About_us($user){
@@ -36,6 +36,7 @@ class Home extends Controller{
             $this->view("Products", [
                 "cate" => $cus->get_product_cates(),
                 "product" => $cus->get_products(
+                    isset($_GET['category']) ? $_GET['category'] : null,
                     isset($_GET['sort-by']) ? $_GET['sort-by'] : null,
                     isset($_GET['order-by']) ? $_GET['order-by'] : null,
                     isset($_GET['page']) ? $_GET['page'] : 1,
