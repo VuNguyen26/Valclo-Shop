@@ -27,7 +27,7 @@ class customer extends DB {
         if(!in_array($sort_2,['ASC','DESC'])) $sort_2 = null;
     
         # điều kiện tìm kiếm
-        $search_condition = " WHERE 1 ";
+        $search_condition = " 1";
         if ($search !== null && $search !== "") {
             $search = mysqli_real_escape_string($this->connect, $search); // tránh SQL injection
             $search_condition = " WHERE `product`.`NAME` LIKE '%$search%' ";
@@ -51,7 +51,7 @@ class customer extends DB {
     
         # pagination
         // lấy tổng sản phẩm có áp dụng tìm kiếm
-        $count_query = "SELECT COUNT(*) AS total FROM `product`" . $search_condition . $query_category;
+        $count_query = "SELECT COUNT(*) AS total FROM `product` WHERE" . $search_condition . $query_category;
         
         $total_record = mysqli_fetch_assoc(mysqli_query($this->connect, $count_query))['total'];
 
@@ -67,26 +67,25 @@ class customer extends DB {
         // tạo truy vấn phân trang
         $query_paginate = " LIMIT " . (($page - 1) * $limit_record) . ", " . $limit_record;
     
-        # Tạo câu query chính
-        if ($sort_1 == "" && $sort_2 == "") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
-                      FROM `product` $search_condition" . $query_category;
-        } else if ($sort_1 == "featured") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
-                      FROM `product` WHERE `product`.`TOP_PRODUCT` = 1 ORDER BY `product`.`TOP_PRODUCT` ASC";
-        } else if ($sort_1 == "collection") {
-            $query = "SELECT `category`.`name_category`, `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
-                      FROM `product` LEFT JOIN `category` ON `product`.`CATEGORY` = `category`.`id` WHERE `product`.`TOP_PRODUCT` = 1 GROUP BY `product`.`CATEGORY` ORDER BY `product`.`TOP_PRODUCT` ASC";
-        } else if ($sort_1 == "pname") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
-                      FROM `product` $search_condition $query_category ORDER BY `product`.`NAME` $sort_2";
-        } else if ($sort_1 == "price") {
-            $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
-                      FROM `product` $search_condition $query_category  ORDER BY `product`.`PRICE` $sort_2";
-        } else {
-            die('404 Not Found');
-        }
+        # main query
+        $query = "SELECT 
+        `p`.`ID` AS 'id',
+        `p`.`name` AS 'name',
+        `p`.`price` AS 'price',
+        `p`.`IMG_URL` AS 'img',
+        `p`.`TOP_PRODUCT` as 'top_seller',
+        `c`.`name_category` 
+        FROM `product` `p`
+        JOIN `category` `c`
+        ON `p`.`CATEGORY` = `c`.`ID`
+        WHERE ";
 
+        if ($sort_1 == "" && $sort_2 == "") $query .=  $search_condition . $query_category;
+        else if ($sort_1 == "featured") $query .= "`p`.`TOP_PRODUCT` = 1 ORDER BY `p`.`TOP_PRODUCT` ASC";
+        else if ($sort_1 == "collection") $query .= "1 GROUP BY `p`.`CATEGORY` ORDER BY `p`.`TOP_PRODUCT` ASC";
+        else if ($sort_1 == "pname") $query .= $search_condition . $query_category ." ORDER BY `p`.`NAME` ". $sort_2;
+        else if ($sort_1 == "price") $query .= $search_condition . $query_category ." ORDER BY `p`.`PRICE` ". $sort_2;
+        else die('404 Not Found');
 
         return [
             'active_category' => $category,
