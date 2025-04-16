@@ -49,19 +49,6 @@
       
       <!-- Filter bar and sort -->
       <div class="header-product">
-        <div id="myBtnContainer" class="filterBar">
-          <div class="tab-filter active-filter" onclick="filterSelection('all')"> All</div>
-          <?php
-                if(empty($data["cate"])) echo "empty cate";
-                else{
-                  foreach($data["cate"] as $row){
-                    echo "<div class=\"tab-filter\" onclick=\"filterSelection('" . $row["cate"] . "')\">" . $row["cate"] . "</div>";
-                  }
-                }
-          ?>
-        </div>
-  
-        
           <?php
             if($data["user"] == "customer" || $data["user"] == "member"){
               (isset($_GET['sort-by']) && $_GET['sort-by'] === 'pname') ? $select_pname = 'selected' : $select_pname = '';
@@ -69,28 +56,50 @@
               (isset($_GET['order-by']) && $_GET['order-by'] === 'ASC') ? $select_asc = 'selected' : $select_asc = '';
               (isset($_GET['order-by']) && $_GET['order-by'] === 'DESC') ? $select_desc = 'selected' : $select_desc = '';
               $page = $data['product']['active_page'];
-              echo <<<HTML
-              <div class="form-sort">
-              <form action="/" method="GET">
+
+              # render option category
+              $render_option_category = '<option value="All">Tất cả</option>';
+              foreach($data["cate"] as $row){
+                $name_category = $row["cate"];
+                $render_option_category .= <<<HTML
+                    <option value="{$name_category}">{$name_category}</option>
+                HTML;
+              }
+                
+              echo 
+              <<<HTML
+              <form class="container-fluid px-5 d-flex justify-content-between" action="/" method="GET">
                 <input type="hidden" name="url" value="Home/Products">
-                <div class="item">
-                  <label for="sort-by">Sort By</label>
-                  <select name="sort-by" id="sort-by">
-                    <option {$select_pname} value="pname">Name</option>
-                    <option {$select_price} value="price">Price</option>
-                  </select>
+                <div class="col-6 p-0">
+                  <div class="w-50">
+                    <label for="sort-by">Danh mục</label>
+                    <select class="w-100" name="sort-by" id="sort-by">
+                      {$render_option_category}
+                    </select>
+                  </div>
                 </div>
-                <div class="item">
-                  <label for="order-by">Order</label>
-                  <select name="order-by" id="order-by">
-                    <option {$select_asc} value="ASC">ASC</option>
-                    <option {$select_desc} value="DESC">DESC</option>
-                  </select>
+                <div class="col-6 p-0 d-flex justify-content-end gap-2">
+                  <div class="col-3">
+                    <label for="sort-by">Sắp xếp theo</label>
+                    <select class="w-100" name="sort-by" id="sort-by">
+                      <option {$select_pname} value="pname">Tên sản phẩm</option>
+                      <option {$select_price} value="price">Giá sản phẩm</option>
+                    </select>
+                  </div>
+                  <div class="col-3">
+                    <label for="order-by">Thức tự</label>
+                    <select class="w-100" name="order-by" id="order-by">
+                      <option {$select_asc} value="ASC">Tăng dần</option>
+                      <option {$select_desc} value="DESC">Giảm dần</option>
+                    </select>
+                  </div>
+                  <input type="hidden" name="page" value="{$page}">
+                  <div class="col-3 d-flex flex-column">
+                    <label class="invisible" for="order-by">Action</label>
+                    <button class="btn btn-warning" type="submit"><i class="fa-sm fas fa-search me-2"></i>Lọc</button>
+                  </div>
                 </div>
-                <input type="hidden" name="page" value="{$page}">
-                <button class="sort-btn" type="submit">Apply</button>
             </form>
-            </div>
             HTML;
             } else if($data["user"] == "manager") {
               echo "<div class=\"form-sort\">
@@ -194,47 +203,38 @@
                   else{
                     $count = 0;
                     foreach($data["product"]["list"] as $row){
-                      echo "<div class=\"col filterDiv " . $row["cate"] . "\"><div class=\"card\"><a href=\"?url=Home/Item/" . $row["id"] . "/\"><img src=\"" . $row["img"] .
-                      "\"class=\"card-img-top\" alt=\"card-grid-image\" /></a>
-                      <div class=\"card-body\"><h5 class=\"card-title\">" . $row["name"] .
-                      "</h5>
-                      <p class=\"card-text each-item-price fw-bold fs-5\">" . $row["price"] . "đ</p>
-                      <div class=\"d-flex justify-content-between\">";
-                      if($data["user"] == "customer" || $data["user"] == "member"){
-                        echo "<div style=\"text-align: left;\" class=\"quantity-section\"><div class=\"plus-qty-btn\"><i class=\"fas fa-minus-circle\" onclick=\"minus(this);\"></i></button></div>
-                        <input type=\"text\" class=\"qty-buy\" value=\"1\"id=\"quantity-" . $row["id"] . "\"><div class=\"minus-qty-btn\"><i class=\"fas fa-plus-circle\" onclick=\"plus(this);\"></i></div>
-                        </div><div style=\"text-align: right\"><button type=\"button\" class=\"btn btn-primary addToCart\" onclick=\"add_Product(this);\"><span hidden>" . $row["id"] . "</span>Add to cart</button></div></div></div></div></div>";
-                      } else if($data["user"] == "manager"){
-                        echo "<div style=\"text-align: left;\" class=\"quantity-section\">
-                        <button type=\"button\" class=\"btn btn-primary\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal-" .$count . "\"><i class=\"far fa-trash-alt\"></i>
-                        Xóa
-                        </button>
-                        <div class=\"modal fade\" id=\"exampleModal-" .$count . "\" tabindex=\"-1\" aria-labelledby=\"exampleModalLabel-" .$count . "\" aria-hidden=\"true\">
-                          <div class=\"modal-dialog modal-dialog-centered\">
-                            <div class=\"modal-content\">
-                              <div class=\"modal-header\">
-                                <h5 class=\"modal-title\" id=\"exampleModalLabel-" .$count . "\">Xác nhận</h5>
-                                <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
-                              </div>
-                              <div class=\"modal-body\">
-                                Bạn có chắc chắn muốn xóa sản phẩm này
-                              </div>
-                              <div class=\"modal-footer\">
-                                <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>
-                                <button type=\"button\" class=\"btn btn-primary\" data-bs-dismiss=\"modal\" onclick=\"remove_item(" . (int)$row["id"] . ", this)\">Xác nhận</button>
+                      $id = $row['id'];
+                      $img = $row['img'];
+                      $name = $row['name'];
+                      $price = number_format($row['price'],0,',','.');
+                      echo <<<HTML
+                      <div class="col">
+                        <div class="card">
+                          <a href="?url=Home/Item/{$id}/"><img src="{$img}"class="card-img-top" alt="card-grid-image" /></a>
+                          <div class="card-body">
+                            <h5 class="card-title">{$name}</h5>
+                              <p class="card-text fw-bold fs-5">{$price} <sup>vnđ</sup></p>
+                              <div class="d-flex justify-content-between">
+                                <div style="text-align: left;" class="quantity-section">
+                                  <div class="plus-qty-btn">
+                                    <i class="fas fa-minus-circle" onclick="minus(this);"></i></button>
+                                  </div>
+                                  <input type="text" class="qty-buy" value="1"id="quantity-{$id}">
+                                  <div class="minus-qty-btn"><i class="fas fa-plus-circle" onclick="plus(this);"></i></div>
+                                </div>
+                                <div style="text-align: right">
+                                  <button type="button" class="btn btn-primary addToCart" onclick="add_Product(this);">
+                                    <span hidden>{$id}</span>Thêm vào giỏ
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        </div><div style=\"text-align: right\"><a href=\"?url=Home/Item/" . $row["id"] . "/\"><button type=\"button\" class=\"btn btn-primary\"><i class=\"far fa-edit\"></i>
-                        Chỉnh sửa
-                        </button></a></div></div></div></div></div>";
-                      }
-                      $count += 1;
+                      HTML;
                     }
                   }
               ?>
-
           </div>
         </div>
         <?php if($data['product']['total_page'] > 1) : ?>
