@@ -543,7 +543,6 @@ $order_info = [
                     $total = 0;
                     if ($cart != NULL) $total += (int)$cart;
                     $this->model($user)->update_Rank($_SESSION["id"], $total);
-                    $this->model($user)->clear_cart();
                 } else {
                     error_log("Failed to fetch cart sum for user " . $_SESSION["id"]);
                 }

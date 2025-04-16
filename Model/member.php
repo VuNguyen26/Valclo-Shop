@@ -119,9 +119,7 @@ class member extends customer{
         $query =    "SELECT SUM(`cart`.`QUANTITY`*`product`.`PRICE`)  as `sum`
                     FROM `product`, `cart`, `account`
                     WHERE   `cart`.`PID` = `product`.`ID`
-                        AND `cart`.`OID` = `cart`.`ID`
                         AND `cart`.`UID` = `account`.`ID`
-                        AND `cart`.`STATE` = 1
                         AND `account`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);
     }
