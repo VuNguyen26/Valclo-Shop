@@ -91,7 +91,7 @@
                     </select>
                   </div>
                   <div class="col-3">
-                    <label for="order-by">Thức tự</label>
+                    <label for="order-by">Thứ tự</label>
                     <select class="w-100" name="order-by" id="order-by">
                       <option {$select_asc} value="ASC">Tăng dần</option>
                       <option {$select_desc} value="DESC">Giảm dần</option>
