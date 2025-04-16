@@ -1,5 +1,4 @@
 <?php
-
 $result = $_GET['resultCode'] ?? null;
 $orderIds = $_GET['oids'] ?? '';
 $message = $_GET['message'] ?? '';  // Khởi tạo thông điệp mặc định
@@ -11,10 +10,9 @@ $displayMessage = "Thanh toán thất bại.";
 $callUpdate = false;
 
 if ($result === "0" && !empty($orderIds)) {
-    // Thanh toán thành công
+
     $displayMessage = "✅ Thanh toán MoMo thành công!";
     $callUpdate = true;
-
     // Chỉ xóa giỏ hàng khi thanh toán thành công
     if (!empty($_SESSION["id"])) {
         $uid = $_SESSION["id"];
@@ -22,28 +20,24 @@ if ($result === "0" && !empty($orderIds)) {
         $mem->clear_cart($uid);
     }
 
-    // Lưu thông tin vào bảng `transaction_history`
-    $db = new DB(); // Create DB object
+    $db = new DB();
     $oidArray = explode("/", $orderIds);
     $count = count($oidArray);
 
     foreach ($oidArray as $orderId) {
-        // Cập nhật trạng thái thanh toán trong bảng `order`
-        $update_order_sql = "UPDATE `order` SET `payment_status` = 'completed' WHERE `ID` = ?";
-        $stmt = mysqli_prepare($db->connect, $update_order_sql);
-        mysqli_stmt_bind_param($stmt, "i", $orderId);
-        mysqli_stmt_execute($stmt);
-
-        // Save transaction info to transaction_history table
-        $transaction_sql = "INSERT INTO `transaction_history` (order_id, transaction_id, payment_method, amount, status) 
-                             VALUES (?, ?, 'COD', (SELECT TOTAL_PRICE FROM `order` WHERE ID = ?), 'completed')";
-        $stmt = mysqli_prepare($db->connect, $transaction_sql);
-        $transaction_id = uniqid('COD_'); // Generate unique transaction ID for COD
-        mysqli_stmt_bind_param($stmt, "isi", $orderId, $transaction_id, $orderId);
-        mysqli_stmt_execute($stmt);
-    }
+      // --- UPDATE ORDER PAYMENT STATUS ---
+      $update_order_sql = "UPDATE `order` SET `payment_status` = 'completed' WHERE `ID` = ?";
+      $stmt1 = mysqli_prepare($db->connect, $update_order_sql);
+  
+      if ($stmt1) {
+          mysqli_stmt_bind_param($stmt1, "i", $orderId);
+          mysqli_stmt_execute($stmt1);
+          mysqli_stmt_close($stmt1);
+      } else {
+          error_log("Lỗi prepare update_order_sql: " . mysqli_error($db->connect));
+      }
+  }  
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -116,7 +110,7 @@ if ($result === "0" && !empty($orderIds)) {
       const updateUrl = "?url=Home/update_cart_combo/<?= $count ?>/<?= $orderIds ?>";
       fetch(updateUrl)
         .then(res => res.text())
-        .then(data => console.log("✅ MoMo update:", data));
+        .then(data => console.log("MoMo update:", data));
     </script>
   <?php endif; ?>
 </body>
