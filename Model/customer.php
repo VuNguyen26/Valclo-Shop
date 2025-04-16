@@ -30,7 +30,7 @@ class customer extends DB {
         $search_condition = " 1";
         if ($search !== null && $search !== "") {
             $search = mysqli_real_escape_string($this->connect, $search); // tránh SQL injection
-            $search_condition = " WHERE `product`.`NAME` LIKE '%$search%' ";
+            $search_condition = " WHERE `p`.`name` LIKE '%$search%' ";
         }
 
         # cateories query
@@ -51,9 +51,32 @@ class customer extends DB {
     
         # pagination
         // lấy tổng sản phẩm có áp dụng tìm kiếm
-        $count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE" . $search_condition . $query_category;
         
-        $total_record = mysqli_fetch_assoc(mysqli_query($this->connect, $count_query))['total'];
+
+// Remove redundant WHERE clauses
+if (strpos($search_condition, 'WHERE') !== false) {
+    $search_condition = substr($search_condition, strpos($search_condition, 'WHERE') + 5); // Remove first WHERE
+}
+
+if (strpos($query_category, 'WHERE') !== false) {
+    $query_category = substr($query_category, strpos($query_category, 'WHERE') + 5); // Remove first WHERE
+}
+
+// Construct the final query
+$count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE" . $search_condition . $query_category;
+
+if (strpos($count_query, 'WHERE WHERE') !== false) {
+    die('Lỗi SQL: Câu truy vấn chứa 2 từ khóa WHERE');
+}
+
+        
+        
+$result = mysqli_query($this->connect, $count_query);
+if (!$result) {
+    die('Lỗi truy vấn SQL: ' . mysqli_error($this->connect) . '<br>Câu truy vấn: ' . $count_query);
+}
+$total_record = mysqli_fetch_assoc($result)['total'];
+
 
         // null
         if(!$total_record) die('Sản phẩm không có');
