@@ -367,12 +367,12 @@ $order_info = [
             $quantity = $_POST['quantity'] ?? null;
         
             if (empty($productId) || empty($quantity) || $quantity <= 0) {
-                echo json_encode(["status" => "error", "message" => "Thông tin sản phẩm hoặc số lượng không hợp lệ"]);
+                echo json_encode(["status" => "error", "message" => "ABC"]);
                 return;
             }
         
             if (!isset($_SESSION["id"])) {
-                echo json_encode(["status" => "error", "message" => "Người dùng chưa đăng nhập"]);
+                echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập để sản phẩm thêm vào giỏ hàng"]);
                 return;
             }
         

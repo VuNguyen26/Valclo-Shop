@@ -80,46 +80,49 @@ for (let index = 0; index < document.getElementsByClassName("addToCart").length;
 }
 
 function add_Product(element) {
-  var productId = element.value; // Lấy ID sản phẩm
-  var quantityElement = element.parentNode.parentNode.getElementsByClassName("qty-buy")[0]; // Lấy phần tử số lượng sản phẩm
-  var quantity = quantityElement ? parseInt(quantityElement.value) : 0; // Lấy giá trị số lượng, nếu không có thì gán = 0
+  // Lấy ID sản phẩm từ <span>
+  var productId = element.querySelector('span').innerText; 
+
+  // Lấy phần tử số lượng sản phẩm
+  var quantityElement = element.parentNode.previousElementSibling.previousElementSibling;
+  var quantity = quantityElement ? parseInt(quantityElement.value) : 0;
 
   // Kiểm tra xem người dùng đã đăng nhập chưa
   if (user == "customer") {
-    window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
-    return;
+      window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập
+      return;
   }
 
   // Kiểm tra thông tin sản phẩm và số lượng
   if (!productId || isNaN(quantity) || quantity <= 0) {
-    console.log("Thông tin sản phẩm không hợp lệ");
-    document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin sản phẩm hoặc số lượng không hợp lệ");
-    document.getElementsByClassName("alert")[0].style.display = "block";
-    setTimeout(function() {
-      document.getElementsByClassName("alert")[0].style.opacity = 0;
-    }, 1500);
-    return;
+      console.log("Thông tin sản phẩm không hợp lệ");
+      document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin sản phẩm hoặc số lượng không hợp lệ");
+      document.getElementsByClassName("alert")[0].style.display = "block";
+      setTimeout(function() {
+          document.getElementsByClassName("alert")[0].style.opacity = 0;
+      }, 1500);
+      return;
   }
 
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      console.log("Response Text:", this.responseText); // Ghi lại phản hồi
-      try {
-        var response = JSON.parse(this.responseText); // Xử lý phản hồi dưới dạng JSON
-        if (response.status === "success") {
-          document.getElementById("notice").innerHTML = add_notice("success", "Thêm sản phẩm vào giỏ hàng thành công");
-        } else {
-          document.getElementById("notice").innerHTML = add_notice("fail", "Thêm sản phẩm vào giỏ hàng thất bại");
-        }
-        document.getElementsByClassName("alert")[0].style.display = "block";
-        setTimeout(function() {
-          document.getElementsByClassName("alert")[0].style.opacity = 0;
-        }, 1500);
-      } catch (e) {
-        console.log("Lỗi xử lý phản hồi: ", e);
+      if (this.readyState == 4 && this.status == 200) {
+          console.log("Response Text:", this.responseText);
+          try {
+              var response = JSON.parse(this.responseText);
+              if (response.status === "success") {
+                  document.getElementById("notice").innerHTML = add_notice("success", response.message);
+              } else {
+                  document.getElementById("notice").innerHTML = add_notice("fail" ,response.message);
+              }
+              document.getElementsByClassName("alert")[0].style.display = "block";
+              setTimeout(function() {
+                  document.getElementsByClassName("alert")[0].style.opacity = 0;
+              }, 1500);
+          } catch (e) {
+              console.log("Lỗi xử lý phản hồi: ", e);
+          }
       }
-    }
   };
 
   // Gửi yêu cầu AJAX với phương thức POST

@@ -221,15 +221,17 @@
                               <div class="d-flex justify-content-between">
                                 <div style="text-align: left;" class="quantity-section">
                                   <div class="plus-qty-btn">
-                                    <i class="fas fa-minus-circle" onclick="minus(this);"></i></button>
+                                      <i class="fas fa-minus-circle" onclick="minus(this);"></i>
                                   </div>
-                                  <input type="text" class="qty-buy" value="1"id="quantity-{$id}">
-                                  <div class="minus-qty-btn"><i class="fas fa-plus-circle" onclick="plus(this);"></i></div>
-                                </div>
-                                <div style="text-align: right">
-                                  <button type="button" class="btn btn-primary addToCart" onclick="add_Product(this);">
-                                    <span hidden>{$id}</span>Thêm vào giỏ
-                                  </button>
+                                  <input type="text" class="qty-buy" value="1" id="quantity-{$id}">
+                                  <div class="minus-qty-btn">
+                                      <i class="fas fa-plus-circle" onclick="plus(this);"></i>
+                                  </div>
+                                  <div style="text-align: right">
+                                      <button type="button" class="btn btn-primary addToCart" onclick="add_Product(this);">
+                                          <span hidden>{$id}</span>Thêm vào giỏ
+                                      </button>
+                                  </div>
                                 </div>
                               </div>
                             </div>
