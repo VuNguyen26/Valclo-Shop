@@ -151,15 +151,18 @@
           $shirt = false;
           $pant = false;
           $ass = false;
-            foreach($data["collection"] as $row)
-            {
-              if(($row["cate"] == "Shirt" && !$shirt) || ($row["cate"] == "Trousers" && !$pant) || ($row["cate"] == "Accessories" && !$ass)){
-                if($row["cate"] == "Shirt") {$shirt = true;}
-                if($row["cate"] == "Trousers") {$pant = true;}
-                if($row["cate"] == "Accessories") {$ass = true;}
-                echo "<div class=\"shop-item\">";
-                echo "<img src=\"" . $row["img"] . "\"alt=\"image\"/><div class=\"collection-content\"><h3>" . $row["cate"] . "</h3><a href=\"?url=Home/Products\">MUA NGAY</a></div></div>";
-              }
+            foreach($data["collection"] as $row) {
+              $img = $row['img'];
+              $cate = $row['name_category'];
+              echo <<<HTML
+              <div class="shop-item">
+                <img src="{$img}"alt="{$img}"/>
+                <div class="collection-content">
+                  <h3>{$cate}</h3>
+                  <a href="?url=Home/Products&category={$cate}">XEM THÊM</a>
+                </div>
+              </div>
+              HTML;
             }
           ?>
           </div>

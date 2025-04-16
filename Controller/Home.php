@@ -20,7 +20,7 @@ class Home extends Controller{
             $this->view("Home_page", [
                 "user" => $user,
                 "news" => $news_list,
-                "collection" => $cus->get_swiper_slide_collection(), //$data["collection"] = $cus->get_swiper_slide_collection() 
+                "collection" => $cus->get_products("collection", "", 1, "", "all")["list"],
                 "featured" => $cus->get_products("featured", "", 1, "", "all")["list"]
             ]);
         }

@@ -23,7 +23,7 @@ class customer extends DB {
         $limit_record = 12; // giới hạn số sản phẩm trên 1 trang
     
         # sort
-        if(!in_array($sort_1,['featured','pname','price'])) $sort_1 = null;
+        if(!in_array($sort_1,['collection','featured','pname','price'])) $sort_1 = null;
         if(!in_array($sort_2,['ASC','DESC'])) $sort_2 = null;
     
         # điều kiện tìm kiếm
@@ -73,7 +73,10 @@ class customer extends DB {
                       FROM `product` $search_condition" . $query_category;
         } else if ($sort_1 == "featured") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
-                      FROM `product` WHERE `product`.`TOP_PRODUCT` = 1" . ($search_condition ? " AND `product`.`NAME` LIKE '%$search%'" : "") . $query_category . " ORDER BY `product`.`TOP_PRODUCT` ASC";
+                      FROM `product` WHERE `product`.`TOP_PRODUCT` = 1 ORDER BY `product`.`TOP_PRODUCT` ASC";
+        } else if ($sort_1 == "collection") {
+            $query = "SELECT `category`.`name_category`, `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
+                      FROM `product` LEFT JOIN `category` ON `product`.`CATEGORY` = `category`.`id` WHERE `product`.`TOP_PRODUCT` = 1 GROUP BY `product`.`CATEGORY` ORDER BY `product`.`TOP_PRODUCT` ASC";
         } else if ($sort_1 == "pname") {
             $query = "SELECT `product`.`ID` AS 'id', `product`.`IMG_URL` AS 'img', `product`.`NAME` AS 'name', `product`.`PRICE` AS 'price', `product`.`DECS` AS 'decs', `product`.`CATEGORY` as 'cate', `product`.`TOP_PRODUCT` as 'top_seller' 
                       FROM `product` $search_condition $query_category ORDER BY `product`.`NAME` $sort_2";
