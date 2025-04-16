@@ -98,70 +98,9 @@ if ($result === "0" && !empty($orderIds)) {
         Vui lòng thử lại hoặc chọn phương thức khác.
       <?php endif; ?>
     </p>
-    <!-- Nút "Xem chi tiết đơn hàng" -->
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderDetailModal">Xem chi tiết đơn hàng</button>
+    <!-- Nút "Quay về trang chủ" -->
+    <a href="index.php" class="btn btn-success">Quay về trang chủ</a>
   </div>
-
-  <!-- Modal (Popup) để hiển thị chi tiết đơn hàng -->
-  <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="orderDetailModalLabel">Chi tiết đơn hàng</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Tên sản phẩm</th>
-                <th scope="col">Số lượng</th>
-                <th scope="col">Giá</th>
-              </tr>
-            </thead>
-            <tbody id="orderDetails">
-              <!-- Chi tiết đơn hàng sẽ được tải ở đây -->
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <!-- Nút Quay về trang chủ -->
-          <a href="index.php" class="btn btn-success">Quay về trang chủ</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript để hiển thị chi tiết đơn hàng -->
-  <script>
-    // Giả sử bạn có thông tin chi tiết đơn hàng từ server hoặc có dữ liệu mẫu
-    let orderDetailsData = [
-      { product_name: "Sản phẩm 1", quantity: 2, price: 200000 },
-      { product_name: "Sản phẩm 2", quantity: 1, price: 150000 }
-    ];
-
-    // Hàm để hiển thị chi tiết đơn hàng vào modal
-    function displayOrderDetails() {
-      const orderDetailsTable = document.getElementById('orderDetails');
-      orderDetailsTable.innerHTML = '';  // Xóa dữ liệu cũ trong bảng
-
-      orderDetailsData.forEach(detail => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${detail.product_name}</td>
-          <td>${detail.quantity}</td>
-          <td>${detail.price.toLocaleString()} VND</td>
-        `;
-        orderDetailsTable.appendChild(row);
-      });
-    }
-
-    // Lắng nghe sự kiện khi modal mở ra để hiển thị chi tiết đơn hàng
-    $('#orderDetailModal').on('shown.bs.modal', function () {
-      displayOrderDetails(); // Hiển thị chi tiết đơn hàng khi modal được mở
-    });
-  </script>
 
   <!-- Thêm các thư viện Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>

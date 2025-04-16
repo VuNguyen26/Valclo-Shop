@@ -55,31 +55,6 @@
               $count = 0;
               $total = 0;
               $check = 0;
-                if(!empty($data["order_combo"])){
-
-                    foreach($data["order_combo"] as $row){
-                      $count += 1;
-                      $total += (int)$row["price"];
-                        echo "<div class=\"col-12 mb-4\">
-                        <section>
-                            <div class=\"card\">
-                                <div class=\"card-header text-center py-1\">
-                                    <h5 class=\"mb-0 fw-bold\">" . $row["name"] . "</h5>
-                                    </div>		
-                                    <div class=\"card-body\">
-                                        <h3 class=\"text-warning mb-2\">" . $row["price"] . "/tháng</h3>
-                                        <h6>Mỗi hộp bao gồm: </h6>
-                                        <ol class=\"list-group list-group-numbered\">";
-                                        foreach($row["product"] as $product){
-                                            echo "<li class=\"list-group-item\">" . $product["name"] . "</li>";
-                                        }
-                        echo        "</ol>
-                                    </div>
-                                    <div class=\"card-footer d-flex justify-content-between py-3\">
-                                    <h4>Chu kì: " . $row["cycle"] . "</h4><h4>Size: " . $row["size"] . "</h4>";
-                      echo "</div></div></section></div>";
-                    }
-                }
                     if(!empty($data["product_in_cart"]))
                     {
                       foreach($data["product_in_cart"] as $row){
@@ -225,11 +200,6 @@
       alert("❌ Vui lòng chọn phương thức thanh toán");
     }
   });
-
-  // Nếu bạn vẫn còn modal cũ (không dùng nữa), có thể xoá đoạn này:
-  // document.querySelector(".close").onclick = function () {
-  //   document.getElementById("myModal").style.display = "none";
-  // };
 </script>
 
 
