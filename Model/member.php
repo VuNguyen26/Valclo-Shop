@@ -68,19 +68,7 @@ class member extends customer{
             return  mysqli_query($this->connect, $query);
         }
     }
-    public function update_cart($oid) {
-        // Trừ tồn kho
-        $query = "UPDATE product p
-                  JOIN product_in_cart pic ON p.ID = pic.PID
-                  SET p.NUMBER = p.NUMBER - pic.QUANTITY
-                  WHERE pic.UID = $oid";
-        mysqli_query($this->connect, $query);
     
-        // Cập nhật trạng thái cart
-        $query = "UPDATE cart SET STATE = 1 WHERE ID = $oid";
-        return mysqli_query($this->connect, $query);
-    }
-     
     public function get_cart($id){
         $query =    "SELECT `cart`.`ID` AS `id`
                     FROM `cart`, `account`

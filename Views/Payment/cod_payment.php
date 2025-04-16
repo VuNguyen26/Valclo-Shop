@@ -16,7 +16,6 @@ $params = ["member", "update_cart", $oids];
 
 $home = new Home();
 ob_start();
-$home->update_cart("member", $params);
 require_once("./Model/member.php");
 $mem = new Member();
 $mem->clear_cart($_SESSION["id"]);
