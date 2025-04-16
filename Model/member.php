@@ -123,25 +123,6 @@ class member extends customer{
                     WHERE `account`.`ID` = " . $id ;
         return mysqli_query($this->connect, $query);
     }
-    public function create_order_combo($uid, $time, $cbid, $cycle, $size){
-        $query =    "INSERT INTO `order_combo`(`order_combo`.`UID`, `order_combo`.`CBID`, `order_combo`.`TIME`, `order_combo`.`CYCLE`, `order_combo`.`SIZE`)
-                    VALUES(" . $uid . ", " . $cbid . ", \"" . $time . "\", " . $cycle . ", \"" . $size . "\");";
-        return mysqli_query($this->connect, $query);
-    }
-    public function update_order_combo($id){
-        $query =    "UPDATE `order_combo`
-                    SET `order_combo`.`STATE` = 1
-                    WHERE `order_combo`.`UID` = " . $id;
-        return mysqli_query($this->connect, $query);
-    }
-    public function delete_order_combo($id){
-        $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`STATE` = 0 AND `order_combo`.`UID` = " . $id;
-        return mysqli_query($this->connect, $query);
-    }
-    function delete_order_combo_cbid($id, $cbid){
-        $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`UID` = " . $id . " AND `order_combo`.`CBID` = " . $cbid . " AND `order_combo`.`STATE` = 0";
-        return mysqli_query($this->connect, $query);
-    }
     function add_comment_news($content, $nid, $cid){
         $query = "INSERT INTO `comment_news` (`nid`, `cid`, `content`, `time`) VALUE (" . $nid . ", " . $cid . ", \"" . $content . "\", \"" . date("Y/m/d") . "\")";
         return mysqli_query($this->connect, $query);
@@ -165,21 +146,6 @@ class member extends customer{
     public function clear_cart($uid) {
         $query = "DELETE FROM cart WHERE UID = " . intval($uid);
         $result = mysqli_query($this->connect, $query);
-        
-        $log = "Xóa giỏ hàng UID=$uid\nQuery: $query\n";
-        
-        if (!$result) {
-            $log .= "❌ Lỗi MySQL: " . mysqli_error($this->connect) . "\n";
-        } else {
-            $log .= "✅ Xóa thành công\n";
-        }
-    
-        }
-        
-        
-    public function delete_order_combo_id($id){
-        $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`ID` = " . $id;
-        return mysqli_query($this->connect, $query);
     }
     public function get_order_by_id($order_id) {
         $query = "SELECT * FROM cart WHERE ID = " . $order_id;

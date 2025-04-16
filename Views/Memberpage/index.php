@@ -1,3 +1,8 @@
+<?php
+require_once(__DIR__ . "/../../Function/DB.php");
+$db = new DB(); 
+$conn = $db->connect; 
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -73,6 +78,7 @@
                         <div class="row margin-none point">
                             <div class="col-2"><i class="fas fa-shopping-cart"></i></div>
                             <div class="col-10 paddingr-none click"><h5>Lịch sử giao dịch</h5></div>
+                            
                         </div>
                     </div>
                 </div>
@@ -104,7 +110,7 @@
                             <div class="col-12 mt-4 border_bot"><h1>Hồ sơ của tôi</h1></div>
                             <div class="col-12 border_bot mt-5 mb-3 ">
                                 <div class="row justify-content-center">
-                                <div class="col-12 d-flex justify-content-center mb-5"><label for="file_pic" style="cursor: pointer;" class="pic"><img src="<?php foreach($data["user"] as $row) echo $row["img"] ?>" alt="profile" class="profile"/></label><input type="file" id="file_pic" name="file_pic" onchange="upload_pic(this)"hidden></div>
+                                    <div class="col-12 d-flex justify-content-center mb-5"><label for="file_pic" style="cursor: pointer;" class="pic"><img src="<?php foreach($data["user"] as $row) echo $row["img"] ?>" alt="profile" class="profile"/></label><input type="file" id="file_pic" name="file_pic" onchange="upload_pic(this)"hidden></div>
                                     <div class="col-5 col-md-3">Họ tên:</div>
                                     <div class="col-7 col-md-8"><input type="text" name="fname" value="<?php foreach($data["user"] as $row) echo $row["name"];?>"></div>
                                     <div class="col-5 col-md-3">Email:</div>
@@ -123,111 +129,68 @@
                         </form>
                     </div>
 
-
                     <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Thay đổi mật khẩu</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="row justify-content-center">
-                        <div class="col-5 col-ms-4">Mật khẩu hiện tại:</div>
-                        <div class="col-5 col-ms-7"><input type="text" name="" value="<?php foreach($data["user"] as $row) echo $row["pwd"];?>" disabled></div>
-                        <div class="col-5 col-ms-4">Mật khẩu mới:</div>
-                        <div class="col-5 col-ms-7"><input type="password"  name="pwd" value=""></div>
-                        <div class="col-5 col-ms-4">Xác thực mật khẩu:</div>
-                        <div class="col-5 col-ms-7"><input type="password"  name="re_pwd" value=""></div>
-                        <div class="col-6 mt-3 edit-profile-btn d-flex justify-content-center"><button type="button" class="btn btn-primary" onclick="completechange(this)">Hoàn tất</button></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-                </div>
-                <div class="row justify-content-center click">
-                    <div class="col-12 mt-4 border_bot"><h1>Đơn hàng đã đặt</h1></div>
-                    <div class="col-12 mt-3 d-flex flex-wrap">
-                        <?php 
-                        if(!empty($data["product_in_cart"])){
-                            foreach($data["product_in_cart"] as $row){
-                                if(empty(mysqli_fetch_array($row["product"]))) continue;
-                                $total = 0;
-                                $h4 = "";
-                                if((int)$row["cartid"]["state"] == 0) $h4 = "Chưa thanh toán";
-                                else $h4 = $row["cartid"]["time"];
-                            
-                                echo "<div class=\"row justify-content-between node\">
-                                <div class=\"col-12 border_bot\">
-                                    <div class=\"d-flex justify-content-between\">
-                                        <h4>Mã hóa đơn: #" . $row["cartid"]["id"] . "</h4>
-                                        <h5>" . $h4 . "</h5>
-                                    </div>
-                                </div>";
-                            
-                                foreach($row["product"] as $product){
-                                    $total += (int)$product["price"] * (int)$product["num"];
-                                    echo "<div class=\"col-12 col-md-6\">
-                                        <div class=\"row\">
-                                            <div class=\"col-5 d-flex justify-content-center\">
-                                                <img src=\"" . $product["img"] . "\" alt=\"item\">
-                                            </div>
-                                            <div class=\"col-7\">
-                                                <div class=\"row\">
-                                                    <div class=\"col-12\"><h5>" . $product["name"] . "</h5></div>
-                                                    <div class=\"col-12\">Số lượng: " . $product["num"] . "</div>
-                                                    <div class=\"col-12\">Size: " . $product["size"] . "</div>
-                                                    <div class=\"col-12 price\">Tổng tiền: " . number_format($product["num"] * $product["price"], 0, ',', '.') . "đ</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>";
-                                }
-                            
-                                echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
-                            
-                                // 👉 Chỉ hiện nút "Xem chi tiết" nếu đã thanh toán
-                                if ((int)$row["cartid"]["state"] == 1) {
-                                    echo "<div class=\"col-12 text-end mt-2\">
-                                        <a href='?url=Home/order_detail/" . $row["cartid"]["id"] . "' class='btn btn-sm btn-outline-primary'>
-                                            Xem chi tiết
-                                        </a>
-                                    </div>";
-                                }
-                            
-                                echo "</div>"; // kết thúc node
-                            }                            
-                        }
-                        if(!empty($data["order_combo"])){
-                            echo "<div class=\"row \"><div class=\"row nonemg text-center center_my\">";
-                            foreach($data["order_combo"] as $row){
-                                echo "<div class=\"col-lg-6 mb-4\">
-                                    <div class=\"card\">
-                                        <div class=\"card-header text-center py-1\">
-                                            <h5 class=\"mb-0 fw-bold\">" . $row["name"] . "</h5>
-                                            </div>		
-                                            <div class=\"card-body\">
-                                                <h3 class=\"text-warning mb-2\">" . $row["price"] . "/tháng</h3>
-                                                <h6>Mỗi hộp bao gồm: </h6>
-                                                <ol class=\"list-group list-group-numbered\">";
-                                                foreach($row["product"] as $product){
-                                                    echo "<li class=\"list-group-item\">" . $product["name"] . "</li>";
-                                                }
-                                echo        "</ol>
-                                            <div class=\"d-flex justify-content-between py-3\">
-                                            <h5>Chu kì: " . $row["cycle"] . "</h5><h5>Size: " . $row["size"] . "</h5>
-                                            </div>
-                                            </div>
-                                            <div class=\"card-footer d-flex justify-content-end py-3\">
-                                            <h5 class=\"mb-0 fw-bold\">" . $row["time"] . "</h5>";
-                              echo "</div></div></div>";
-                            }
-                            echo "</div></div></div>";
-                        }
-                        ?> 
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2>Thay đổi mật khẩu</h2>
+                                <span class="close">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row justify-content-center">
+                                    <div class="col-5 col-ms-4">Mật khẩu hiện tại:</div>
+                                    <div class="col-5 col-ms-7"><input type="text" name="" value="<?php foreach($data["user"] as $row) echo $row["pwd"];?>" disabled></div>
+                                    <div class="col-5 col-ms-4">Mật khẩu mới:</div>
+                                    <div class="col-5 col-ms-7"><input type="password"  name="pwd" value=""></div>
+                                    <div class="col-5 col-ms-4">Xác thực mật khẩu:</div>
+                                    <div class="col-5 col-ms-7"><input type="password"  name="re_pwd" value=""></div>
+                                    <div class="col-6 mt-3 edit-profile-btn d-flex justify-content-center"><button type="button" class="btn btn-primary" onclick="completechange(this)">Hoàn tất</button></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="row justify-content-center click">
+                        <div class="col-12 mt-4 border_bot"><h1>Đơn hàng đã đặt</h1></div>
+                        <div class="col-12 mt-3 d-flex flex-wrap">
+                            <?php 
+                                // Lấy đơn hàng từ bảng `order`
+                                $user_id = $_SESSION["id"]; 
+$query = "SELECT * FROM `order` WHERE `UID` = $user_id AND `STATUS` IN ('Đã giao', 'Đã xác nhận')";
+$result = mysqli_query($conn, $query);
+ 
+
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $total = $row['TOTAL_PRICE'];
+                                        $status = $row['STATUS'];
+                                        $order_id = $row['ID'];
+                                        $time = $row['TIME'];
+
+                                        // Hiển thị thông tin đơn hàng
+                                        echo "<div class=\"row justify-content-between node\">";
+                                        echo "<div class=\"col-12 border_bot\">";
+                                        echo "<div class=\"d-flex justify-content-between\">";
+                                        echo "<h4>Mã đơn hàng: #" . $order_id . "</h4>";
+                                        echo "<h5>" . $status . "</h5>";
+                                        echo "</div></div>";
+
+                                        echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
+
+                                        // Chỉ hiển thị nút "Xem chi tiết" nếu trạng thái là "Đã giao" hoặc "Đã xác nhận"
+                                        if ($status == "Đã giao" || $status == "Đã xác nhận") {
+                                            echo "<div class=\"col-12 text-end mt-2\">";
+                                            echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary'>Xem chi tiết</a>";
+                                            echo "</div>";
+                                        }
+
+                                        echo "</div>"; // kết thúc node
+                                    }
+                                } else {
+                                    echo "<p>Chưa có đơn hàng nào.</p>";
+                                }
+                            ?>
+                        </div>
+                    </div>
             </div>
         </div>
         <?php endif; ?>
@@ -252,29 +215,10 @@
         <?php endif;?>
     </div>
 
-    
-
-    <!--Body-->
-    <?php if($data["state"] == "manager") echo "<div id=\"myModal\" class=\"modal\">
-        <div class=\"modal-content\">
-            <div class=\"modal-header\">
-                <h2>Thông tin khách hàng</h2>
-                <span class=\"close\">&times;</span>
-            </div>
-            <div class=\"modal-body\">
-            </div>
-            <div class=\"modal-footer justify-content-end d-inline-flex\">
-            <button type=\"button\" class=\"btn btn-danger modal-button\" onclick=\"remove_account(this)\">Xóa tài khoản</button>
-            <button type=\"button\" class=\"btn btn-danger modal-button\" onclick=\"ban_account(this)\">Cấm tài khoản</button>
-        </div>
-        </div>
-    </div>";
-     ?>
+    <!--Footer-->
     <?php require_once("./Views/footer/index.php");?>
     <?php if($data["state"] == "member") echo "<script src=\"./Views/Memberpage/myscript.js\"></script>"; 
     else if($data["state"] == "manager") echo "<script src=\"./Views/Memberpage/manascript.js\"></script>";
     ?>  
-    <!--Footer-->
   </body>
 </html>
-

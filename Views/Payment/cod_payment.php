@@ -11,21 +11,20 @@ if (!isset($_GET["oids"]) || empty($_SESSION["id"])) {
 }
 
 $user_id = $_SESSION["id"];
-$oids = $_GET["oids"]; // VD: "1,2,3"
-$params = ["member", "update_cart", $oids]; // Gọi đúng hàm hiện có
+$oids = $_GET["oids"];
+$params = ["member", "update_cart", $oids];
 
-// Gọi hàm update_cart_combo trong Controller
 $home = new Home();
-ob_start(); // Bắt kết quả tránh lỗi header
+ob_start();
 $home->update_cart("member", $params);
 require_once("./Model/member.php");
 $mem = new Member();
 $mem->clear_cart($_SESSION["id"]);
-ob_end_clean(); // Kết thúc bắt kết quả
+ob_end_clean();
 require_once("./Model/member.php");
 $mem = new Member();
 $mem->clear_cart($_SESSION["id"]);
-// 👉 THÊM DÒNG NÀY: Xóa giỏ hàng sau thanh toán
+
 $mem = new Member();
 $mem->clear_cart($user_id);
 unset($_SESSION["cart"]);
