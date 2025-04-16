@@ -36,11 +36,11 @@ class Home extends Controller{
             $this->view("Products", [
                 "cate" => $cus->get_product_cates(),
                 "product" => $cus->get_products(
-                    isset($_GET['category']) ? $_GET['category'] : null,
                     isset($_GET['sort-by']) ? $_GET['sort-by'] : null,
                     isset($_GET['order-by']) ? $_GET['order-by'] : null,
                     isset($_GET['page']) ? $_GET['page'] : 1,
-                    $search // ✅ Truyền từ khóa tìm kiếm vào model
+                    isset($_GET['search']) ? $_GET['search'] : '',
+                    isset($_GET['category']) ? $_GET['category'] : 'all',
                 ),
                 "user" => $user
             ]);
