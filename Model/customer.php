@@ -45,13 +45,13 @@ class customer extends DB {
             // check
             $id_category = $this->check_exist_cate($category);
             if(!$id_category) die('404 Not Found'); // nếu không tồn tại danh mục đang tìm, n
-            else $query_category = ' AND `product`.`CATEGORY` = '.$id_category['id'];
+            else $query_category = ' AND `p`.`CATEGORY` = '.$id_category['id'];
         }
 
     
         # pagination
         // lấy tổng sản phẩm có áp dụng tìm kiếm
-        $count_query = "SELECT COUNT(*) AS total FROM `product` WHERE" . $search_condition . $query_category;
+        $count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE" . $search_condition . $query_category;
         
         $total_record = mysqli_fetch_assoc(mysqli_query($this->connect, $count_query))['total'];
 
