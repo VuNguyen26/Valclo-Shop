@@ -614,11 +614,12 @@ $order_info = [
 
 function create_account($user, $array) {
     // Kiểm tra xem người dùng có bị cấm không
-    $ban_check = $this->model($user)->check_account_ban($array[3]);
-    if (mysqli_num_rows($ban_check) > 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Tài khoản bị cấm!']);
-        return;
-    }
+    // Bỏ kiểm tra tài khoản bị cấm vì không có bảng hoặc cột liên quan
+    // $ban_check = $this->model($user)->check_account_ban($array[3]);
+    // if (mysqli_num_rows($ban_check) > 0) {
+    //     echo json_encode(['status' => 'error', 'message' => 'Tài khoản bị cấm!']);
+    //     return;
+    // }
 
     // Kiểm tra tài khoản đã tồn tại chưa
     $exist_check = $this->model($user)->check_account_inside($array[3], $array[4]);

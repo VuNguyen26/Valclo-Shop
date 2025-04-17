@@ -105,11 +105,10 @@
                 </div>
 
                 <div class="card mt-3">
-                  <button type="submit" class="btn btn-warning btn-block w-100 mybtn">Đăng kí</button>
+                  <button type="button" class="btn btn-warning btn-block w-100 mybtn">Đăng kí</button>
+                  <!-- Hiển thị thông báo thành công/lỗi -->
+                  <div id="notice" style="margin-top: 10px;"></div>
                 </div>
-
-                <!-- Thông báo -->
-                <div id="notice" class="mt-3"></div>
 
                 <div class="mt-4 text-center">
                   Bạn đã có tài khoản? <a href="?url=/Home/Login">Đăng nhập</a>

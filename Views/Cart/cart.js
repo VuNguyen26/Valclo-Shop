@@ -62,7 +62,7 @@ document.getElementsByClassName("btn btn-primary")[3].onclick = function(){
   
   for (let index = 0; index < input.length; index++) {
     if(input[index].value == ""){
-      document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin của bạn bị trống" );
+      document.getElementById("notice").innerHTML = add_notice("fail", "Vui lòng cập nhật địa chỉ giao hàng" );
       document.getElementsByClassName("alert")[0].style.display = "block";
       setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
       return;
@@ -123,7 +123,7 @@ button.onclick = function(){
   var input = button.parentNode.getElementsByTagName("input");
   for (let index = 0; index < input.length; index++) {
     if(input[index].value == ""){
-      document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin của bạn bị trống" );
+      document.getElementById("notice").innerHTML = add_notice("fail", "Vui lòng cập nhật địa chỉ giao hàng" );
       document.getElementsByClassName("alert")[0].style.display = "block";
       setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
       return;

@@ -244,16 +244,16 @@ $total_record = mysqli_fetch_assoc($result)['total'];
         }
     }
     
-    public function check_account_ban($cmnd) {
-        $query = "SELECT `ID` as `id` FROM `ban_account` WHERE `CMND` = '$cmnd';";
-        $result = mysqli_query($this->connect, $query);
+    // public function check_account_ban($cmnd) {
+    //     $query = "SELECT `ID` as `id` FROM `ban_account` WHERE `CMND` = '$cmnd';";
+    //     $result = mysqli_query($this->connect, $query);
     
-        if (!$result) {
-            die("Error in query: " . mysqli_error($this->connect)); // Debug error if query fails
-        }
+    //     if (!$result) {
+    //         die("Error in query: " . mysqli_error($this->connect)); // Debug error if query fails
+    //     }
     
-        return $result;
-    }
+    //     return $result;
+    // }
     
     public function check_account_inside($cmnd, $mail) {
         $query = "SELECT `ID` as `id` FROM `account` WHERE `EMAIL` = '$mail' OR `CMND` = '$cmnd';";
