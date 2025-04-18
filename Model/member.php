@@ -151,6 +151,43 @@ class member extends customer{
     public function update_payment_method($oid, $method) {
         $query = "UPDATE cart SET METHOD = '$method' WHERE ID = $oid";
         return mysqli_query($this->connect, $query);
-    }    
+    }
+    public function get_orders($uid) {
+        $orders = [];
+        $query = "SELECT * FROM `order` WHERE UID = " . intval($uid) . " ORDER BY TIME DESC";
+        $result = mysqli_query($this->connect, $query);
+    
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $orders[] = $row;
+            }
+        }
+    
+        return $orders;
+    }
+    public function create_order_from_cart($uid) {
+        $conn = (new DB())->connect;
+    
+        // Lấy danh sách sản phẩm trong giỏ hàng
+        $result = mysqli_query($conn, "SELECT p.ID, p.PRICE, c.QUANTITY
+                                       FROM cart c JOIN product p ON c.PID = p.ID
+                                       WHERE c.UID = $uid");
+    
+        $total = 0;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $total += $row["PRICE"] * $row["QUANTITY"];
+        }
+    
+        // Thông tin đơn hàng
+        $today = date("Y-m-d");
+        $status = "Chờ xác nhận";
+    
+        // Thêm đơn hàng vào bảng order
+        $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("issd", $uid, $today, $status, $total);
+        $stmt->execute();
+    }
+    
+       
 }
 ?>

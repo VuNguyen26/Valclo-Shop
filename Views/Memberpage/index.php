@@ -1,7 +1,18 @@
 <?php
 require_once(__DIR__ . "/../../Function/DB.php");
-$db = new DB(); 
-$conn = $db->connect; 
+$db = new DB();
+$conn = $db->connect;
+
+// --- Thêm hàm ở đây ---
+function render_status($status) {
+    return match($status) {
+        "Chờ xác nhận" => '<span class="badge bg-warning text-dark badge-status">Chờ xác nhận</span>',
+        "Đã xác nhận" => '<span class="badge bg-success badge-status">Đã xác nhận</span>',
+        "Đang giao" => '<span class="badge bg-info text-dark badge-status">Đang giao</span>',
+        "Đã giao" => '<span class="badge bg-primary badge-status">Đã giao</span>',
+        default => '<span class="badge bg-secondary badge-status">Không xác định</span>',
+    };
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -152,43 +163,36 @@ $conn = $db->connect;
                 <div class="row justify-content-center click">
                         <div class="col-12 mt-4 border_bot"><h1>Đơn hàng đã đặt</h1></div>
                         <div class="col-12 mt-3 d-flex flex-wrap">
-                            <?php 
-                                // Lấy đơn hàng từ bảng `order`
-                                $user_id = $_SESSION["id"]; 
-$query = "SELECT * FROM `order` WHERE `UID` = $user_id AND `STATUS` IN ('Đã giao', 'Đã xác nhận')";
-$result = mysqli_query($conn, $query);
- 
+                        <?php
+if (!empty($data["orders"])) {
+    foreach ($data["orders"] as $row) {
+        $total = $row['TOTAL_PRICE'];
+        $status = $row['STATUS'];
+        $order_id = $row['ID'];
+        $time = $row['TIME'];
 
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        $total = $row['TOTAL_PRICE'];
-                                        $status = $row['STATUS'];
-                                        $order_id = $row['ID'];
-                                        $time = $row['TIME'];
+        echo "<div class=\"row justify-content-between node\">";
+        echo "<div class=\"col-12 border_bot\">";
+        echo "<div class=\"d-flex justify-content-between\">";
+        echo "<h4>Mã đơn hàng: #" . $order_id . "</h4>";
+        echo render_status($status);
+        echo "</div></div>";
 
-                                        // Hiển thị thông tin đơn hàng
-                                        echo "<div class=\"row justify-content-between node\">";
-                                        echo "<div class=\"col-12 border_bot\">";
-                                        echo "<div class=\"d-flex justify-content-between\">";
-                                        echo "<h4>Mã đơn hàng: #" . $order_id . "</h4>";
-                                        echo "<h5>" . $status . "</h5>";
-                                        echo "</div></div>";
+        echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
 
-                                        echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
+        if ($status == "Đã giao" || $status == "Đã xác nhận") {
+            echo "<div class=\"col-12 text-end mt-2\">";
+            echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary'>Xem chi tiết</a>";
+            echo "</div>";
+        }
 
-                                        // Chỉ hiển thị nút "Xem chi tiết" nếu trạng thái là "Đã giao" hoặc "Đã xác nhận"
-                                        if ($status == "Đã giao" || $status == "Đã xác nhận") {
-                                            echo "<div class=\"col-12 text-end mt-2\">";
-                                            echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary'>Xem chi tiết</a>";
-                                            echo "</div>";
-                                        }
+        echo "</div>"; // kết thúc node
+    }
+} else {
+    echo "<p>Chưa có đơn hàng nào.</p>";
+}
+?>
 
-                                        echo "</div>"; // kết thúc node
-                                    }
-                                } else {
-                                    echo "<p>Chưa có đơn hàng nào.</p>";
-                                }
-                            ?>
                         </div>
                     </div>
             </div>

@@ -163,44 +163,7 @@ class manager extends customer{
                     FROM `account`";
         return mysqli_query($this->connect, $query);
     }
-    public function add_product_in_combo($cbid, $shirt, $pant, $ass){
-
-        $query = "INSERT INTO `product_in_combo` (`product_in_combo`.`CBID`, `product_in_combo`.`PID`) VALUE (" . (int)$cbid . ", " . (int)$shirt . ");";
-        mysqli_query($this->connect, $query);
-        $query = "INSERT INTO `product_in_combo` (`product_in_combo`.`CBID`, `product_in_combo`.`PID`) VALUE (" . (int)$cbid . ", " . (int)$pant . ");";
-        mysqli_query($this->connect, $query);
-        $query = "INSERT INTO `product_in_combo` (`product_in_combo`.`CBID`, `product_in_combo`.`PID`) VALUE (" . (int)$cbid . ", " . (int)$ass . ");";
-        return mysqli_query($this->connect, $query);
-    }
-    public function update_product_in_combo($cbid, $shirt, $pant, $ass){
-        $query = "select id FROM product_in_combo WHERE cbid = '$cbid' limit 1";
-        $id = "";
-        $result = mysqli_query($this->connect, $query);
-        while($row = $result->fetch_assoc()) {
-            $id = $row["id"];
-        }
-        // echo ($id);
-        // echo ($cbid);
-        $query = "UPDATE `product_in_combo` SET `product_in_combo`.`PID`=" . (int)$shirt. " WHERE `product_in_combo`.`ID`=" .(int)$id;
-        mysqli_query($this->connect, $query);
-        $query = "UPDATE `product_in_combo` SET `product_in_combo`.`PID`=" . (int)$pant. " WHERE `product_in_combo`.`ID`=" .(int)$id;
-        mysqli_query($this->connect, $query);
-        $query = "UPDATE `product_in_combo` SET `product_in_combo`.`PID`=" . (int)$ass. " WHERE `product_in_combo`.`ID`=" .(int)$id;
-        mysqli_query($this->connect, $query);
-    }
-    public function add_cycle($time){
-        $time = $time . " ngày";
-        $query = "INSERT INTO `cycle` (`cycle`.`CYCLE`) VALUE (\"" . $time . "\");";
-        return mysqli_query($this->connect, $query);
-    }
-    public function delete_combo($cid){
-        $query = "DELETE FROM `order_combo` WHERE `order_combo`.`CBID` = " . $cid . ";";
-        mysqli_query($this->connect, $query);
-        $query = "DELETE FROM `product_in_combo` WHERE `product_in_combo`.`CBID` = " . $cid . ";";
-        mysqli_query($this->connect, $query);
-        $query = "DELETE FROM `combo` WHERE `combo`.`ID` = " . $cid . ";";
-        return mysqli_query($this->connect, $query);
-    }
+    
     public function get_user($id){
         $query =    "SELECT `account`.`FNAME` AS `name`,
                             `account`.`PHONE` AS `phone`,

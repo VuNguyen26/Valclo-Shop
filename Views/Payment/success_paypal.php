@@ -1,29 +1,51 @@
 <?php
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
 
-if (!empty($_SESSION["id"])) {
-    $mem = new Member();
-    $mem->clear_cart($_SESSION["id"]);
-    }
-
+$uid = $_SESSION["id"] ?? null;
 $result = $_GET['result'] ?? '0';
 $oids = $_GET['oids'] ?? '';
-
-$displayMessage = "❌ Thanh toán thất bại hoặc bị hủy.";
 $success = false;
+$displayMessage = "❌ Thanh toán thất bại hoặc bị hủy.";
 
-if ($result === "1" && !empty($oids)) {
-    $displayMessage = "✅ Bạn đã thanh toán PayPal thành công!";
+// Nếu thanh toán thành công
+if ($result === "1" && !empty($uid)) {
+    $db = new DB();
+    $conn = $db->connect;
+    $mem = new Member();
+
+    // Lấy sản phẩm từ giỏ hàng để tính tổng
+    $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
+    $result = mysqli_query($conn, $query);
+    $total = 0;
+    while ($row = mysqli_fetch_assoc($result)) {
+        $total += $row["PRICE"] * $row["QUANTITY"];
+    }
+
+    // Thêm vào bảng `order`
+    $today = date("Y-m-d");
+    $status = "Chờ xác nhận";
+    $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("issd", $uid, $today, $status, $total);
+    $stmt->execute();
+
+    // Xoá giỏ hàng
+    $mem->clear_cart($uid);
+    unset($_SESSION["cart"]);
+
+    // Cập nhật giao diện
     $success = true;
+    $displayMessage = "✅ Bạn đã thanh toán PayPal thành công!";
 }
 ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Kế Quả Thanh Toán PayPal</title>
+  <title>Kết Quả Thanh Toán PayPal</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -71,35 +93,28 @@ if ($result === "1" && !empty($oids)) {
     </h3>
     <p class="mt-3">
       <?php if ($success): ?>
+        <strong>Phương thức:</strong> Thanh toán qua PayPal.<br>
         Cảm ơn bạn đã mua hàng tại <strong>Valclo Shop</strong>.
       <?php else: ?>
         Vui lòng thử lại hoặc chọn phương thức khác.
       <?php endif; ?>
     </p>
-    <a href="?url=Home/Home_page" class="btn btn-success btn-back">⬅️ Về trang chủ</a>
+    <a href="<?= $success ? '?url=Home/member_page' : '?url=Home/Home_page' ?>" class="btn btn-success btn-back">
+      <?= $success ? '📦 Xem chi tiết đơn hàng' : '⬅️ Về trang chủ' ?>
+    </a>
   </div>
 
   <?php if ($success): ?>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
-    <script>
-  // Bắn confetti và nhạc
-  confetti({
-    particleCount: 100,
-    spread: 80,
-    origin: { y: 0.6 }
-  });
-
-  const audio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c6abdb845.mp3");
-  audio.play();
-
-  // 👉 Thêm logic đếm số lượng OID
-  const oids = "<?= $oids ?>"; // Ví dụ: "66" hoặc "66/67/68"
-  const count = oids.split("/").length;
-
-  fetch("?url=Home/update_cart_combo/customer/<?= $oids ?>")
-  .then(res => res.text())
-  .then(data => console.log("✅ Cập nhật giỏ hàng:", data));
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+  <script>
+    confetti({
+      particleCount: 100,
+      spread: 80,
+      origin: { y: 0.6 }
+    });
+    const audio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c6abdb845.mp3");
+    audio.play();
+  </script>
   <?php endif; ?>
 </body>
 </html>

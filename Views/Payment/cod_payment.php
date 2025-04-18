@@ -4,27 +4,18 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
-require_once("./Controller/Home.php");
 
-if (!isset($_GET["oids"]) || empty($_SESSION["id"])) {
+if (!isset($_SESSION["id"])) {
     die("Thiếu thông tin để tạo đơn hàng.");
 }
 
 $user_id = $_SESSION["id"];
-$oids = $_GET["oids"];
-$params = ["member", "update_cart", $oids];
 
-$home = new Home();
-ob_start();
-require_once("./Model/member.php");
+// ✅ Tạo đơn hàng từ giỏ hiện tại
 $mem = new Member();
-$mem->clear_cart($_SESSION["id"]);
-ob_end_clean();
-require_once("./Model/member.php");
-$mem = new Member();
-$mem->clear_cart($_SESSION["id"]);
+$mem->create_order_from_cart($user_id);
 
-$mem = new Member();
+// ✅ Xóa giỏ hàng
 $mem->clear_cart($user_id);
 unset($_SESSION["cart"]);
 ?>

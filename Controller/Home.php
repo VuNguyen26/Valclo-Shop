@@ -302,43 +302,45 @@ $order_info = [
         }
     
         function member_page($user){
-            if($user == "member"){
+            if ($user == "member") {
                 $mem = $this->model($user);
         
-                // Lấy giỏ hàng của người dùng
+                // Lấy giỏ hàng
                 $cartid = $mem->get_cart($_SESSION["id"]);
-                
-                // Kiểm tra nếu kết quả truy vấn trả về là hợp lệ
+        
                 if ($cartid && is_array($cartid)) {
                     $product_in_cart = array();
-                    foreach($cartid as $id){
+                    foreach ($cartid as $id) {
                         array_push($product_in_cart, [
-                            "cartid" => $id, 
+                            "cartid" => $id,
                             "product" => $mem->get_product_in_cart_mem((int)$id["id"])
                         ]);
                     }
                 } else {
-                    // Nếu không có giỏ hàng, có thể gán mảng rỗng hoặc xử lý theo cách bạn muốn
                     $product_in_cart = [];
                 }
         
-                // Trả về view với các dữ liệu cần thiết
+                // ✅ Thêm: lấy danh sách đơn hàng đã mua
+                $orders = $mem->get_orders($_SESSION["id"]); // viết thêm hàm này trong Model/member.php
+        
+                // Trả về view
                 $this->view("Memberpage", [
                     "user" => $mem->get_user($_SESSION["id"]),
                     "product_in_cart" => $product_in_cart,
+                    "orders" => $orders, // gửi sang view
                     "state" => $user
                 ]);
             }
-            else if($user == "manager"){
+            else if ($user == "manager") {
                 $this->view("Memberpage", [
                     "state" => $user,
                     "member" => $this->model($user)->get_all_user_info()
                 ]);
-            }
-            else{
+            } else {
                 $this->Login($user, "member_page");
             }
         }
+        
         
         function add_item_comment($user, $array){
             $this->model($user)->add_item_comment($array[2], $array[3], $array[4], $_SESSION["id"]);
