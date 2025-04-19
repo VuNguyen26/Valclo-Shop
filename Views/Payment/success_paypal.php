@@ -104,8 +104,7 @@ if ($result === "1" && !empty($uid)) {
         Vui lòng thử lại hoặc chọn phương thức khác.
       <?php endif; ?>
     </p>
-    <a href="<?= $success ? '?url=Home/member_page' : '?url=Home/Home_page' ?>" class="btn btn-success btn-back">
-      <?= $success ? '📦 Xem chi tiết đơn hàng' : '⬅️ Về trang chủ' ?>
+    <a href="?url=Home/order_detail&oids=<?php echo $new_oid; ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
     </a>
   </div>
 

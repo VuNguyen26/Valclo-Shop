@@ -30,7 +30,7 @@ if ($result === "0" && !empty($_SESSION["id"])) {
     if ($total > 0) {
         $today = date("Y-m-d");
         $status = "Chờ xác nhận";
-        $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, 'MoMo')");
+        $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, 'Momo')");
         $stmt->bind_param("issd", $uid, $today, $status, $total);
         $stmt->execute();
         $oid = $conn->insert_id;
@@ -112,7 +112,7 @@ if ($result === "0" && !empty($_SESSION["id"])) {
 </h3>
     <p><strong>Phương thức:</strong> Thanh toán qua ví MoMo.</p>
     <p>Cảm ơn bạn đã mua sắm tại <strong>Valclo Shop</strong>.</p>
-    <a href="?url=Home/member_page" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
+    <a href="?url=Home/order_detail&oids=<?php echo $new_oid; ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
   </div>
 
   <canvas class="confetti-canvas" id="confetti"></canvas>
