@@ -6,10 +6,10 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
 
-$displayMessage = "Thanh toán thất bại";
+$displayMessage = "Thanh toán thất bại hoặc bị hủy.";
 $success = false;
 
-// Momo trả về resultCode = 0 là thành công
+// MoMo trả về resultCode = 0 là thanh toán thành công
 $result = $_GET['resultCode'] ?? null;
 
 if ($result === "0" && !empty($_SESSION["id"])) {
@@ -18,43 +18,51 @@ if ($result === "0" && !empty($_SESSION["id"])) {
     $conn = $db->connect;
     $mem = new Member();
 
-    // 1. Lấy sản phẩm trong giỏ để tính tổng
+    // 1. Lấy sản phẩm trong giỏ
     $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
     $res = mysqli_query($conn, $query);
-    $total = 0;
-    while ($row = mysqli_fetch_assoc($res)) {
-        $total += $row["PRICE"] * $row["QUANTITY"];
-    }
 
-    // 2. Nếu có sản phẩm, tạo đơn hàng
-    if ($total > 0) {
-        $today = date("Y-m-d");
-        $status = "Chờ xác nhận";
-        $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, 'Momo')");
-        $stmt->bind_param("issd", $uid, $today, $status, $total);
-        $stmt->execute();
-        $oid = $conn->insert_id;
+    // 2. Kiểm tra giỏ có dữ liệu không
+    if ($res && mysqli_num_rows($res) > 0) {
+        $total = 0;
+        while ($row = mysqli_fetch_assoc($res)) {
+            $total += $row["PRICE"] * $row["QUANTITY"];
+        }
 
-        // 3. Ghi chi tiết đơn hàng
-        $mem->insert_order_detail($oid, $uid);
+        if ($total > 0) {
+            // 3. Tạo đơn hàng
+            $today = date("Y-m-d");
+            $status = "Chờ xác nhận";
+            $method = "Momo";
 
-        // 4. Xoá giỏ hàng
-        $mem->clear_cart($uid);
-        unset($_SESSION["cart"]);
+            $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("issds", $uid, $today, $status, $total, $method);
+            $stmt->execute();
+            $oid = $conn->insert_id;
 
-        $success = true;
-        $displayMessage = "Thanh toán MoMo thành công!";
+            // 4. Ghi chi tiết đơn hàng
+            $mem->insert_order_detail($oid, $uid);
+
+            // 5. Xóa giỏ hàng
+            $mem->clear_cart($uid);
+            unset($_SESSION["cart"]);
+
+            // 6. Thành công
+            $success = true;
+            $displayMessage = "Thanh toán MoMo thành công!";
+        } else {
+            $displayMessage = "Không thể tính tổng giá trị đơn hàng.";
+        }
     } else {
-        $displayMessage = "⚠️ Giỏ hàng trống hoặc có lỗi.";
+        $displayMessage = "Giỏ hàng trống hoặc đã được xử lý trước đó.";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Thanh toán MOMO</title>
+  <title>Thanh toán MoMo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -105,14 +113,21 @@ if ($result === "0" && !empty($_SESSION["id"])) {
   </style>
 </head>
 <body>
-  <div class="result-box success">
+  <div class="result-box <?= $success ? 'success' : '' ?>">
     <div class="icon"><?= $success ? "✅" : "❌" ?></div>
     <h3 style="color: <?= $success ? '#198754' : '#dc3545' ?>;">
-  <?= $displayMessage ?>
-</h3>
+      <?= $displayMessage ?>
+    </h3>
     <p><strong>Phương thức:</strong> Thanh toán qua ví MoMo.</p>
     <p>Cảm ơn bạn đã mua sắm tại <strong>Valclo Shop</strong>.</p>
-    <a href="?url=Home/order_detail&oids=<?php echo $new_oid; ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
+
+    <!-- Nút hiển thị khi thanh toán thành công -->
+    <?php if ($success): ?>
+      <a href="?url=Home/order_detail&oids=<?= $oid ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
+    <?php else: ?>
+      <!-- Nút hiển thị khi thanh toán thất bại -->
+      <a href="?url=Home/Home_page" class="btn btn-secondary mt-3">Quay lại trang chủ</a>
+    <?php endif; ?>
   </div>
 
   <canvas class="confetti-canvas" id="confetti"></canvas>

@@ -25,22 +25,23 @@ if ($result === "1" && !empty($uid)) {
         $total += $row["PRICE"] * $row["QUANTITY"];
     }
 
-    // Thêm vào bảng `order`
+    // ✅ Thêm vào bảng order với METHOD = 'Paypal'
     $today = date("Y-m-d");
     $status = "Chờ xác nhận";
-    $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("issd", $uid, $today, $status, $total);
+    $method = "Paypal";
+    $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("issds", $uid, $today, $status, $total, $method);
     $stmt->execute();
     $order_id = $conn->insert_id;
 
     // ✅ Ghi chi tiết đơn hàng từ giỏ vào order_detail
     $mem->insert_order_detail($order_id, $uid);
 
-    // Xoá giỏ hàng
+    // ✅ Xoá giỏ hàng
     $mem->clear_cart($uid);
     unset($_SESSION["cart"]);
 
-    // Cập nhật giao diện
+    // ✅ Hiển thị thông báo thành công
     $success = true;
     $displayMessage = "✅ Bạn đã thanh toán PayPal thành công!";
 }
@@ -104,7 +105,7 @@ if ($result === "1" && !empty($uid)) {
         Vui lòng thử lại hoặc chọn phương thức khác.
       <?php endif; ?>
     </p>
-    <a href="?url=Home/order_detail&oids=<?php echo $new_oid; ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
+    <a href="?url=Home/order_detail&oids=<?= $order_id ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
     </a>
   </div>
 
