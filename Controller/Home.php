@@ -341,6 +341,17 @@ $order_info = [
             }
         }
         
+        public function reorder($id) {
+            if (!isset($_SESSION["id"])) die("Vui lòng đăng nhập");
+            
+            $uid = $_SESSION["id"];
+            $mem = $this->model("member");
+        
+            $new_oid = $mem->reorder($id, $uid);
+        
+            // 👉 Redirect về trang lịch sử giao dịch
+            header("Location: ?url=Home/member_page");
+        }
         
         function add_item_comment($user, $array){
             $this->model($user)->add_item_comment($array[2], $array[3], $array[4], $_SESSION["id"]);

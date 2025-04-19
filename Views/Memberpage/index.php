@@ -178,11 +178,28 @@ if (!empty($data["orders"])) {
         echo render_status($status);
         echo "</div></div>";
 
+        // Lấy chi tiết sản phẩm từ bảng order_detail và product
+        if (!empty($row["details"])) {
+            foreach ($row["details"] as $item) {
+                // Đảm bảo rằng IMG_URL có tồn tại
+                if (!empty($item["IMG_URL"])) {
+                    echo "<div class='col-12 mt-2 d-flex align-items-center border_bot'>";
+                    echo "<img src='{$item["IMG_URL"]}' alt='product' style='width: 70px; height: 70px; object-fit: cover; border-radius: 8px; margin-right: 15px;'>";
+                    echo "<div>";
+                    echo "<strong>{$item["NAME"]}</strong><br>";
+                    echo "Số lượng: {$item["QUANTITY"]}<br>";
+                    echo "Size: {$item["SIZE"]}";
+                    echo "</div>";
+                    echo "</div>";
+                }
+            }
+        }        
         echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
 
         if ($status == "Đã giao" || $status == "Đã xác nhận") {
             echo "<div class=\"col-12 text-end mt-2\">";
-            echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary'>Xem chi tiết</a>";
+            echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary me-2'>Xem chi tiết</a>";
+            echo "<a href='?url=Home/Item/4/" . $order_id . "' class='btn btn-sm btn-outline-success'>Mua lại</a>";
             echo "</div>";
         }
 
@@ -191,6 +208,7 @@ if (!empty($data["orders"])) {
 } else {
     echo "<p>Chưa có đơn hàng nào.</p>";
 }
+
 ?>
 
                         </div>

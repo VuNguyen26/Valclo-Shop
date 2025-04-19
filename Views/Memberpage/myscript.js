@@ -36,29 +36,18 @@ click[1].onclick = function(){
     document.getElementsByClassName("click")[3].style.display = "flex";
     document.getElementsByClassName("click")[2].style.display = "none";
 };
-for (var i = 0; i < click[3].getElementsByClassName("node").length; i++) {
-    var node = click[3].getElementsByClassName("node")[i];
-    var price = node.getElementsByClassName("price");
-    var h5 = node.getElementsByTagName("h5");
-
-    if (h5.length > 0) {
-        var check = h5[0];
-        if (check.innerText !== "Chưa thanh toán") {
-            if ((Date.now() - new Date(check.innerText)) / 86400000 > 15) {
-                check.innerText = "Đã giao";
-            } else {
-                check.innerText = "Đang giao";
-            }
-        }
+for(var i = 0; i < click[3].getElementsByClassName("node").length; i++){
+    var price = click[3].getElementsByClassName("node")[i].getElementsByClassName("price");
+    var check = click[3].getElementsByClassName("node")[i].getElementsByTagName("h5")[0];
+    if(check.innerText != "Chưa thanh toán"){
+        if((Date.now() - new Date(check.innerText))/86400000 > 15) check.innerText = "Đã giao";
+        else check.innerText = "Đang giao";
     }
-
     for (let index = 0; index < price.length; index++) {
-        let parts = price[index].innerText.split(" ");
-        if (parts.length >= 3) {
-            price[index].innerText = `${parts[0]} ${parts[0]} ${enformat(parts[2])}(đ)`;
-        }
+        price[index].innerText = price[index].innerText.split(" ")[0] + " " + price[index].innerText.split(" ")[0] + " " + enformat(price[index].innerText.split(" ")[2]) + "(đ)";
     }
 }
+
 
 var modal = document.getElementById("myModal");
 var span = document.getElementsByClassName("close")[0];
@@ -171,6 +160,60 @@ function completechange(element){
     xmlhttp.open("GET", "?url=Home/update_password_profile/" + input[1].value + "/", true);
     xmlhttp.send();
 }
+/*
+document.getElementsByTagName("button")[3].onclick = function(){
+    if(document.getElementsByTagName("button")[3].innerText == "Thiết lập tài khoản"){
+        document.getElementsByTagName("button")[3].innerText = "Xác nhận";
+        var form = document.getElementsByTagName("button")[3].parentNode.parentNode;
+        form.innerHTML = "<form action=\"?url=Home/update_profile\" id=\"edit-profile\" method=\"POST\" enctype=\"multipart/form-data\" onsubmit=\"return false\">" + form.innerHTML + "</form>";
+        var linkimg = click[0].parentNode.parentNode.parentNode.getElementsByTagName("img")[0].getAttribute("src");
+        document.getElementsByTagName("button")[3].parentNode.parentNode.getElementsByClassName("col-12")[1].attributes[0].value = 'col-12 border_bot mt-3 mb-3 ';
+        var profile = document.getElementsByTagName("button")[3].parentNode.parentNode.getElementsByClassName("row")[0];
+        var fname = profile.getElementsByClassName("col-7")[0].innerText;
+        var mail = profile.getElementsByClassName("col-7")[1].innerText;
+        var user = profile.getElementsByClassName("col-7")[2].innerText;
+        var cmnd = profile.getElementsByClassName("col-7")[3].innerText;
+        var phone = profile.getElementsByClassName("col-7")[4].innerText;
+        var add = profile.getElementsByClassName("col-7")[5].innerText;
+        profile.innerHTML = "<div class=\"col-12 d-flex justify-content-center mb-5\"><label for=\"file_pic\" style=\"cursor: pointer;\" class=\"pic\"><img src=\"" + linkimg + "\" alt=\"profile\" class=\"profile\"/></label><input type=\"file\" id=\"file_pic\" name=\"file_pic\" onchange=\"upload_pic(this)\"hidden></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Họ tên:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"text\" name=\"fname\" value=\"" + fname + "\"></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Email:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"email\"  name=\"mail\" value=\"" + mail + "\"></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Tên đăng nhập:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"text\"  name=\"username\" value=\"" + user + "\"></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Mật khẩu:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"password\" name=\"pwd\" value=\"" + pwd + "\"><div class=\"mybutton_click\" onclick=\"myFunction(4)\">Hiện</div></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Xác nhận:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"password\" name=\"re_pwd\" value=\"\" ><div class=\"mybutton_click\" onclick=\"myFunction(5)\">Hiện</div></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">CMND/CCCD:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"text\"  name=\"cmnd\" value=\"" + cmnd + "\"></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Số điện thoại:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"text\"  name=\"phone\" value=\"" + phone + "\"></div>";
+        profile.innerHTML += "<div class=\"col-5 col-md-3\">Địa chỉ:</div>";
+        profile.innerHTML += "<div class=\"col-7 col-md-8\"><input type=\"text\"  name=\"address\" value=\"" + add + "\"></div>";
+        document.getElementsByTagName("button")[3].onclick = function(){
+            var form = document.getElementsByClassName("col-12 border_bot mt-3 mb-3 ")[0];
+            for(var i = 1; i < form.getElementsByTagName("input").length; i++){
+                if(form.getElementsByTagName("input")[i].value == ""){
+                    document.getElementById("notice").innerHTML = add_notice("fail", "Hãy điền thông tin còn thiếu" + form.getElementsByTagName("input")[i].value + i);
+                    document.getElementsByClassName("alert")[0].style.display = "block";
+                    setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
+                     return;
+                }
+            }
+            if(form.getElementsByTagName("input")[4].value != form.getElementsByTagName("input")[5].value){
+                document.getElementById("notice").innerHTML = add_notice("fail", "Mật khẩu xác minh bị sai");
+                document.getElementsByClassName("alert")[0].style.display = "block";
+                setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
+            }
+            document.getElementsByTagName("button")[3].parentNode.parentNode.submit();
+        }
+    }
+};
+*/
+
+
 
 var cart = document.getElementsByClassName("card");
 for (let index = 0; index < cart.length; index++) {

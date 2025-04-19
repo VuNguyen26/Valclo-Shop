@@ -4,7 +4,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // Kiểm tra nếu thanh toán thành công
 if (isset($data['resultCode']) && $data['resultCode'] == 0) {
-    // ✅ Thanh toán thành công
+    //  Thanh toán thành công
 
     // Lấy oids từ query string (đã đính kèm ở momo_payment.php)
     $oids = $_GET['oids'] ?? '';
@@ -22,7 +22,7 @@ if (isset($data['resultCode']) && $data['resultCode'] == 0) {
         echo "Thiếu mã đơn hàng (oids)";
     }
 } else {
-    // ❌ Thanh toán thất bại hoặc bị hủy
+    //  Thanh toán thất bại hoặc bị hủy
     http_response_code(400);
     echo "Thanh toán thất bại hoặc bị hủy";
 }

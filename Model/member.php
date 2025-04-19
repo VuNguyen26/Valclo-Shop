@@ -154,40 +154,136 @@ class member extends customer{
     }
     public function get_orders($uid) {
         $orders = [];
-        $query = "SELECT * FROM `order` WHERE UID = " . intval($uid) . " ORDER BY TIME DESC";
-        $result = mysqli_query($this->connect, $query);
+        $conn = $this->connect;
     
-        if ($result) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $orders[] = $row;
+        // 1. Truy vấn danh sách đơn hàng theo UID
+        $order_sql = "SELECT * FROM `order` WHERE UID = ? ORDER BY TIME DESC";
+        $stmt_order = $conn->prepare($order_sql);
+        if (!$stmt_order) {
+            die("❌ Lỗi prepare order_sql: " . $conn->error);
+        }
+    
+        $stmt_order->bind_param("i", $uid);
+        $stmt_order->execute();
+        $result_order = $stmt_order->get_result();
+    
+        // 2. Lặp từng đơn hàng
+        while ($order = $result_order->fetch_assoc()) {
+            $order_id = $order["ID"];
+    
+            // 2.1 Truy vấn chi tiết sản phẩm trong đơn hàng
+            $detail_sql = "SELECT od.*, p.NAME, p.IMG_URL 
+                           FROM order_detail od 
+                           JOIN product p ON od.PID = p.ID 
+                           WHERE od.ORDER_ID = ?";
+            $stmt_detail = $conn->prepare($detail_sql);
+            if (!$stmt_detail) {
+                die("❌ Lỗi prepare detail_sql: " . $conn->error);
             }
+    
+            $stmt_detail->bind_param("i", $order_id);
+            $stmt_detail->execute();
+            $result_detail = $stmt_detail->get_result();
+    
+            $details = [];
+            while ($row = $result_detail->fetch_assoc()) {
+                $details[] = $row;
+            }
+    
+            // 2.2 Gắn chi tiết vào đơn hàng
+            $order["details"] = $details;
+            $orders[] = $order;
         }
     
         return $orders;
     }
+    
     public function create_order_from_cart($uid) {
         $conn = (new DB())->connect;
     
         // Lấy danh sách sản phẩm trong giỏ hàng
-        $result = mysqli_query($conn, "SELECT p.ID, p.PRICE, c.QUANTITY
-                                       FROM cart c JOIN product p ON c.PID = p.ID
+        $result = mysqli_query($conn, "SELECT p.ID as PID, p.PRICE, c.QUANTITY, c.SIZE
+                                       FROM cart c 
+                                       JOIN product p ON c.PID = p.ID
                                        WHERE c.UID = $uid");
     
         $total = 0;
+        $cart = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $total += $row["PRICE"] * $row["QUANTITY"];
+            $cart[] = $row;
         }
     
-        // Thông tin đơn hàng
+        // Tạo đơn hàng
         $today = date("Y-m-d");
         $status = "Chờ xác nhận";
     
-        // Thêm đơn hàng vào bảng order
         $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("issd", $uid, $today, $status, $total);
         $stmt->execute();
+    
+        $order_id = $conn->insert_id;
+    
+        // ➕ Ghi từng sản phẩm vào order_detail
+        $stmt_detail = $conn->prepare("INSERT INTO order_detail (ORDER_ID, PID, SIZE, QUANTITY) VALUES (?, ?, ?, ?)");
+    
+        foreach ($cart as $item) {
+            $stmt_detail->bind_param("issi", $order_id, $item["PID"], $item["SIZE"], $item["QUANTITY"]);
+            $stmt_detail->execute();
+        }
+    
+        return $order_id;
+    }
+       
+    public function reorder($old_order_id, $uid) {
+        $conn = $this->connect;
+    
+        // 1. Lấy lại chi tiết đơn hàng cũ
+        $stmt_old = $conn->prepare("SELECT PID, SIZE, QUANTITY FROM order_detail WHERE ORDER_ID = ?");
+        $stmt_old->bind_param("i", $old_order_id);
+        $stmt_old->execute();
+        $result = $stmt_old->get_result();
+    
+        $details = [];
+        $total = 0;
+    
+        while ($row = $result->fetch_assoc()) {
+            // Kiểm tra xem sản phẩm này có tồn tại không trong bảng product
+            $stmt_check = $conn->prepare("SELECT PRICE, IMG_URL FROM product WHERE ID = ?");
+            $stmt_check->bind_param("i", $row["PID"]);
+            $stmt_check->execute();
+            $res = $stmt_check->get_result();
+            
+            if ($res && $price_row = $res->fetch_assoc()) {
+                // Nếu sản phẩm tồn tại, thêm vào chi tiết đơn hàng
+                $row["PRICE"] = $price_row["PRICE"]; // Lưu giá để tính tổng
+                $row["IMG_URL"] = $price_row["IMG_URL"]; // Lưu đường dẫn ảnh
+                $details[] = $row;
+                $total += $price_row["PRICE"] * $row["QUANTITY"];
+            }
+        }
+    
+        if (empty($details)) return false; // Không có sản phẩm hợp lệ
+    
+        // 2. Tạo đơn hàng mới
+        $today = date("Y-m-d");
+        $status = "Chờ xác nhận";
+        $stmt_insert_order = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE) VALUES (?, ?, ?, ?)");
+        $stmt_insert_order->bind_param("issd", $uid, $today, $status, $total);
+        $stmt_insert_order->execute();
+    
+        $new_order_id = $conn->insert_id;
+    
+        // 3. Chèn lại vào order_detail
+        $stmt_insert_detail = $conn->prepare("INSERT INTO order_detail (ORDER_ID, PID, SIZE, QUANTITY) VALUES (?, ?, ?, ?)");
+        
+        foreach ($details as $d) {
+            $stmt_insert_detail->bind_param("issi", $new_order_id, $d["PID"], $d["SIZE"], $d["QUANTITY"]);
+            $stmt_insert_detail->execute();
+        }
+    
+        return $new_order_id;
     }
     
-       
 }
 ?>
