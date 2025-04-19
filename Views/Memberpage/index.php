@@ -6,13 +6,16 @@ $conn = $db->connect;
 // --- Thêm hàm ở đây ---
 function render_status($status) {
     return match($status) {
-        "Chờ xác nhận" => '<span class="badge bg-warning text-dark badge-status">Chờ xác nhận</span>',
-        "Đã xác nhận" => '<span class="badge bg-success badge-status">Đã xác nhận</span>',
-        "Đang giao" => '<span class="badge bg-info text-dark badge-status">Đang giao</span>',
-        "Đã giao" => '<span class="badge bg-primary badge-status">Đã giao</span>',
-        default => '<span class="badge bg-secondary badge-status">Không xác định</span>',
+        "Chờ xác nhận"   => '<span class="badge bg-warning text-dark badge-status">Chờ xác nhận</span>',
+        "Đã xác nhận"    => '<span class="badge bg-success badge-status">Đã xác nhận</span>',
+        "Đang giao"      => '<span class="badge bg-info text-dark badge-status">Đang giao</span>',
+        "Đã giao"        => '<span class="badge bg-primary badge-status">Đã giao</span>',
+        "Khách hàng hủy" => '<span class="badge bg-danger badge-status">Khách hàng hủy</span>',
+        "Cửa hàng hủy"   => '<span class="badge bg-dark text-white badge-status">Cửa hàng hủy</span>',
+        default          => '<span class="badge bg-secondary badge-status">Không xác định</span>',
     };
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -193,22 +196,26 @@ if (!empty($data["orders"])) {
                     echo "</div>";
                 }
             }
-        }        
+        }
+
         echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
 
-        if ($status == "Đã giao" || $status == "Đã xác nhận") {
-            echo "<div class=\"col-12 text-end mt-2\">";
-            echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary me-2'>Xem chi tiết</a>";
-            echo "<a href='?url=Home/Item/4/" . $order_id . "' class='btn btn-sm btn-outline-success'>Mua lại</a>";
-            echo "</div>";
-        }
+        // Nút xem chi tiết và mua lại nếu đơn đã xác nhận hoặc đã giao
+        echo "<div class=\"col-12 text-end mt-2\">";
+echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary me-2'>Xem chi tiết</a>";
+
+if ($status == "Đã giao" || $status == "Đã xác nhận") {
+    echo "<a href='?url=Home/reorder&oid=" . $order_id . "' class='btn btn-sm btn-outline-success'>Mua lại</a>";
+}
+
+echo "</div>";
+
 
         echo "</div>"; // kết thúc node
     }
 } else {
     echo "<p>Chưa có đơn hàng nào.</p>";
 }
-
 ?>
 
                         </div>

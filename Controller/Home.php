@@ -673,37 +673,37 @@ function create_account($user, $array) {
 }
 
         
-        function cancel($user) {
-            if (!isset($_SESSION['id']) || $user !== "member") {
-                die("Bạn chưa đăng nhập.");
-            }
-        
-            if (!isset($_POST['order_id'])) {
-                die("Thiếu mã đơn hàng.");
-            }
-        
-            $order_id = (int)$_POST['order_id'];
-            $model = $this->model($user);
-        
-            // Lấy đơn hàng theo ID
-            $order = $model->get_order_by_id($order_id);
-            if (!$order || $order['uid'] != $_SESSION['id']) {
-                die("Đơn hàng không tồn tại hoặc bạn không có quyền hủy.");
-            }
-        
-            // Chỉ cho phép hủy nếu đang chờ xác nhận
-            if ((int)$order['state'] !== 0) {
-                die("Chỉ đơn hàng đang chờ xác nhận mới được hủy.");
-            }
-        
-            // Cập nhật trạng thái sang 'đã hủy'
-            if ($model->cancel_order($order_id)) {
-                header("Location: ?url=OrderDetail/index&id=$order_id");
-                exit();
-            } else {
-                die("Hủy đơn hàng thất bại.");
-            }
-        }
+function cancel($user) {
+    if (!isset($_SESSION['id']) || $user !== "member") {
+        die("Bạn chưa đăng nhập.");
+    }
+
+    if (!isset($_POST['order_id'])) {
+        die("Thiếu mã đơn hàng.");
+    }
+
+    $order_id = (int)$_POST['order_id'];
+    $model = $this->model($user);
+
+    // 🔧 FIX lỗi ở đây: convert mysqli_result -> array
+    $order = mysqli_fetch_assoc($model->get_order_by_id($order_id));
+
+    if (!$order || $order['uid'] != $_SESSION['id']) {
+        die("Đơn hàng không tồn tại hoặc bạn không có quyền hủy.");
+    }
+
+    if ((int)$order['state'] !== 0) {
+        die("Chỉ đơn hàng đang chờ xác nhận mới được hủy.");
+    }
+
+    if ($model->cancel_order($order_id)) {
+        header("Location: ?url=OrderDetail/index&id=$order_id");
+        exit();
+    } else {
+        die("Hủy đơn hàng thất bại.");
+    }
+}
+
         
     }
 ?>

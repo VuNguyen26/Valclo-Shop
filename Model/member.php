@@ -154,9 +154,9 @@ class member extends customer{
     }
     
     public function cancel_order($order_id) {
-        $query = "UPDATE cart SET STATE = 4 WHERE ID = " . $order_id;
+        $query = "UPDATE `order` SET STATUS = 'Khách hàng hủy' WHERE ID = " . (int)$order_id;
         return mysqli_query($this->connect, $query);
-    }    
+    }        
     public function get_cart_by_id($id){
         $query = "SELECT `UID` as `uid`, `PID` as `pid`, `SIZE` as `size`, `QUANTITY` as `quantity`
                   FROM `cart` WHERE `ID` = $id";
