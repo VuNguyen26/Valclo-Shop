@@ -195,7 +195,7 @@
     } else if (paypal) {
       window.location.href = "?url=Payment/paypal_button&oids=" + string;
     } else if (cod) {
-      window.location.href = "?url=Payment/cod_payment&oids=" + string;
+      window.location.href = "?url=Payment/cod_payment";
     } else {
       alert("❌ Vui lòng chọn phương thức thanh toán");
     }

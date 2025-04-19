@@ -278,23 +278,38 @@ class Home extends Controller{
         function order_detail($user, $params) {
             if ($user === "member") {
                 $mem = $this->model($user);
-                $oid = $params[2]; // Lấy mã hóa đơn từ URL
-                
-                $order_items = $mem->get_product_in_cart_mem($oid);
-$order_meta = mysqli_fetch_array($mem->get_cart_by_id($oid), MYSQLI_ASSOC);
-
-$order_info = [
-    "id" => $oid,
-    "items" => $order_items,
-    "state" => $order_meta["state"] ?? 0,
-    "time" => $order_meta["time"] ?? "Không rõ",
-    "method" => $order_meta["method"] ?? "Không có"
-];
-
-    
+        
+                // 1) Xác định $oid như trước
+                if (isset($params[2]) && ctype_digit($params[2])) {
+                    $oid = (int)$params[2];
+                } elseif (isset($_GET['oids']) && ctype_digit($_GET['oids'])) {
+                    $oid = (int)$_GET['oids'];
+                } else {
+                    die("Thiếu mã đơn hàng để hiển thị chi tiết.");
+                }
+        
+                // 2) Gọi đúng model để lấy chi tiết sản phẩm của đơn
+                $order_items = $mem->get_product_in_order_detail($oid);
+        
+                // 3) Gọi đúng model để lấy meta của đơn (state, time, total)
+                $order_meta = mysqli_fetch_assoc(
+                    $mem->get_order_by_id($oid)
+                );
+        
+                // 4) Gói lại info để chuyển xuống view
+                $order_info = [
+                    "id"     => $oid,
+                    "items"  => $order_items,
+                    "state"  => $order_meta["state"]  ?? 0,
+                    "time"   => $order_meta["time"]   ?? "Không rõ",
+                    "total"  => $order_meta["total"]  ?? 0,
+                    "method"  => $order_meta["method"]  ?? 'Không có'
+                ];
+        
+                // 5) Render view
                 $this->view("OrderDetail", [
                     "order" => $order_info,
-                    "user" => $mem->get_user($_SESSION["id"])
+                    "user"  => $mem->get_user($_SESSION["id"])
                 ]);
             } else {
                 $this->Login($user, "order_detail");

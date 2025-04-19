@@ -65,7 +65,7 @@ unset($_SESSION["cart"]);
       <strong>Phương thức:</strong> Thanh toán khi nhận hàng (COD).<br>
       Cảm ơn bạn đã mua sắm tại <strong>Valclo Shop</strong>.
     </p>
-    <a href="?url=Home/member_page" class="btn btn-success btn-back">📦 Xem chi tiết đơn hàng</a>
+    <a href="?url=Home/order_detail&oids=<?php echo $new_oid; ?>" class="btn btn-success btn-back">📦 Xem chi tiết đơn hàng</a>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
