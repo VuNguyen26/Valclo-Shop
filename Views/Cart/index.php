@@ -160,7 +160,7 @@
                         <h5>" . $total . "</h5>
                         <div class=\"d-flex flex-wrap justify-content-center\">
                             <button id=\"myBtn\" type=\"button\" class=\"btn btn-primary\">Địa chỉ giao hàng</button>
-                            <button type=\"button\" class=\"btn btn-primary\">Thanh toán</button>
+                            <button type=\"button\" class=\"btn btn-primary\">Mua hàng</button>
                         </div>
                     </div>
                 </div>

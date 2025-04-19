@@ -137,7 +137,7 @@
                     <?php 
                           echo "<button id=\"myBtn\" type=\"button\" class=\"btn btn-primary\">Hủy đơn</button>";
                     ?>
-                    <button id="payButton" type="button" class="btn btn-primary">Thanh toán</button>
+                    <button id="payButton" type="button" class="btn btn-primary">Đặt Hàng</button>
                   </div>
                 </div>
               </div>

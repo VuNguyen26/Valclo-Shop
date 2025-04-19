@@ -43,7 +43,7 @@ if ($result === "0" && !empty($_SESSION["id"])) {
         unset($_SESSION["cart"]);
 
         $success = true;
-        $displayMessage = "✅ Thanh toán MoMo thành công!";
+        $displayMessage = "Thanh toán MoMo thành công!";
     } else {
         $displayMessage = "⚠️ Giỏ hàng trống hoặc có lỗi.";
     }
