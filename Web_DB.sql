@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 16, 2025 lúc 09:14 PM
--- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Apr 19, 2025 at 06:59 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `web_db`
+-- Database: `web_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `account`
+-- Table structure for table `account`
 --
 
 CREATE TABLE `account` (
@@ -43,7 +43,7 @@ CREATE TABLE `account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `account`
+-- Dumping data for table `account`
 --
 
 INSERT INTO `account` (`ID`, `CMND`, `FNAME`, `PHONE`, `ADDRESS`, `USERNAME`, `EMAIL`, `PWD`, `IMG_URL`, `RANK`, `STATUS`, `REASON_BANNED`) VALUES
@@ -53,7 +53,7 @@ INSERT INTO `account` (`ID`, `CMND`, `FNAME`, `PHONE`, `ADDRESS`, `USERNAME`, `E
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `admin`
+-- Table structure for table `admin`
 --
 
 CREATE TABLE `admin` (
@@ -62,7 +62,7 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `admin`
+-- Dumping data for table `admin`
 --
 
 INSERT INTO `admin` (`USERNAME`, `PASSWORD`) VALUES
@@ -71,7 +71,7 @@ INSERT INTO `admin` (`USERNAME`, `PASSWORD`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `cart`
+-- Table structure for table `cart`
 --
 
 CREATE TABLE `cart` (
@@ -79,13 +79,14 @@ CREATE TABLE `cart` (
   `UID` bigint(20) NOT NULL,
   `PID` bigint(20) NOT NULL,
   `SIZE` varchar(5) DEFAULT 'L',
-  `QUANTITY` int(11) DEFAULT 1
+  `QUANTITY` int(11) DEFAULT 1,
+  `STATE` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `category`
+-- Table structure for table `category`
 --
 
 CREATE TABLE `category` (
@@ -95,7 +96,7 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `category`
+-- Dumping data for table `category`
 --
 
 INSERT INTO `category` (`id`, `name_category`, `state`) VALUES
@@ -114,7 +115,7 @@ INSERT INTO `category` (`id`, `name_category`, `state`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `comment`
+-- Table structure for table `comment`
 --
 
 CREATE TABLE `comment` (
@@ -127,7 +128,7 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `comment`
+-- Dumping data for table `comment`
 --
 
 INSERT INTO `comment` (`ID`, `PID`, `UID`, `STAR`, `CONTENT`, `TIME`) VALUES
@@ -136,12 +137,14 @@ INSERT INTO `comment` (`ID`, `PID`, `UID`, `STAR`, `CONTENT`, `TIME`) VALUES
 (3, 1, 1, 1, 'Không thích :v', '2025-03-10'),
 (4, 1, 1, 5, 'Tuyệt vời', '2025-04-25'),
 (5, 2, 1, 3, 'Hơi tệ tí nhe', '2025-04-20'),
-(6, 3, 1, 4, 'Tạm ổn', '2025-04-19');
+(6, 3, 1, 4, 'Tạm ổn', '2025-04-19'),
+(7, 1, 1, 5, '', '2025-04-19'),
+(8, 1, 1, 5, 'đẹp', '2025-04-19');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `comment_news`
+-- Table structure for table `comment_news`
 --
 
 CREATE TABLE `comment_news` (
@@ -153,7 +156,7 @@ CREATE TABLE `comment_news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `comment_news`
+-- Dumping data for table `comment_news`
 --
 
 INSERT INTO `comment_news` (`ID`, `NID`, `CID`, `CONTENT`, `TIME`) VALUES
@@ -162,7 +165,7 @@ INSERT INTO `comment_news` (`ID`, `NID`, `CID`, `CONTENT`, `TIME`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `employee_account`
+-- Table structure for table `employee_account`
 --
 
 CREATE TABLE `employee_account` (
@@ -173,7 +176,7 @@ CREATE TABLE `employee_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `employee_account`
+-- Dumping data for table `employee_account`
 --
 
 INSERT INTO `employee_account` (`ID`, `NAME`, `USERNAME`, `PASSWORD`) VALUES
@@ -183,7 +186,7 @@ INSERT INTO `employee_account` (`ID`, `NAME`, `USERNAME`, `PASSWORD`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `message`
+-- Table structure for table `message`
 --
 
 CREATE TABLE `message` (
@@ -197,7 +200,7 @@ CREATE TABLE `message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `message`
+-- Dumping data for table `message`
 --
 
 INSERT INTO `message` (`ID`, `FNAME`, `EMAIL`, `PHONE`, `SUBJECT`, `CONTENT`, `CHECK`) VALUES
@@ -206,7 +209,7 @@ INSERT INTO `message` (`ID`, `FNAME`, `EMAIL`, `PHONE`, `SUBJECT`, `CONTENT`, `C
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `news`
+-- Table structure for table `news`
 --
 
 CREATE TABLE `news` (
@@ -221,7 +224,7 @@ CREATE TABLE `news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `news`
+-- Dumping data for table `news`
 --
 
 INSERT INTO `news` (`ID`, `CID`, `KEY`, `TIME`, `TITLE`, `CONTENT`, `IMG_URL`, `SHORT_CONTENT`) VALUES
@@ -235,7 +238,7 @@ INSERT INTO `news` (`ID`, `CID`, `KEY`, `TIME`, `TITLE`, `CONTENT`, `IMG_URL`, `
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `order`
+-- Table structure for table `order`
 --
 
 CREATE TABLE `order` (
@@ -244,23 +247,25 @@ CREATE TABLE `order` (
   `TIME` date DEFAULT NULL,
   `STATUS` enum('Chờ xác nhận','Đã xác nhận','Đang giao','Đã giao','Khách hàng hủy','Cửa hàng hủy') DEFAULT 'Chờ xác nhận',
   `TOTAL_PRICE` int(11) DEFAULT NULL,
-  `METHOD` enum ('Momo', 'Paypal', 'COD')
+  `METHOD` enum('Momo','Paypal','COD') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `order`
+-- Dumping data for table `order`
 --
 
-INSERT INTO `order` (`ID`, `UID`, `TIME`, `STATUS`, `TOTAL_PRICE`,`METHOD`) VALUES
+INSERT INTO `order` (`ID`, `UID`, `TIME`, `STATUS`, `TOTAL_PRICE`, `METHOD`) VALUES
 (1, 1, '2025-04-10', 'Chờ xác nhận', 1700000, 'COD'),
-(2, 2, '2025-04-11', 'Đã xác nhận', 1300000,'Momo'),
-(3, 2, '2025-04-12', 'Đang giao', 1200000,'COD'),
-(4, 1, '2025-04-13', 'Đã giao', 2200000,'Paypal');
+(2, 2, '2025-04-11', 'Đã xác nhận', 1300000, 'Momo'),
+(3, 2, '2025-04-12', 'Đang giao', 1200000, 'COD'),
+(4, 1, '2025-04-13', 'Đã giao', 2200000, 'Paypal'),
+(35, 1, '2025-04-19', 'Chờ xác nhận', 2500000, 'COD'),
+(41, 1, '2025-04-19', 'Khách hàng hủy', 2450000, 'COD');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `order_detail`
+-- Table structure for table `order_detail`
 --
 
 CREATE TABLE `order_detail` (
@@ -271,7 +276,7 @@ CREATE TABLE `order_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `order_detail`
+-- Dumping data for table `order_detail`
 --
 
 INSERT INTO `order_detail` (`ORDER_ID`, `PID`, `SIZE`, `QUANTITY`) VALUES
@@ -279,14 +284,13 @@ INSERT INTO `order_detail` (`ORDER_ID`, `PID`, `SIZE`, `QUANTITY`) VALUES
 (1, 2, 'L', 1),
 (2, 1, 'S', 1),
 (2, 3, 'XL', 1),
-(3, 2, 'L', 2),
-(4, 4, 'M', 1),
-(4, 5, 'S', 2);
+(35, 1, 'S', 1),
+(41, 10, 'S', 1);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `product`
+-- Table structure for table `product`
 --
 
 CREATE TABLE `product` (
@@ -301,7 +305,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `product`
+-- Dumping data for table `product`
 --
 
 INSERT INTO `product` (`ID`, `NAME`, `PRICE`, `IMG_URL`, `NUMBER`, `DECS`, `CATEGORY`, `TOP_PRODUCT`) VALUES
@@ -399,7 +403,7 @@ INSERT INTO `product` (`ID`, `NAME`, `PRICE`, `IMG_URL`, `NUMBER`, `DECS`, `CATE
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `sub_img_url`
+-- Table structure for table `sub_img_url`
 --
 
 CREATE TABLE `sub_img_url` (
@@ -408,64 +412,17 @@ CREATE TABLE `sub_img_url` (
   `IMG_URL` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Đang đổ dữ liệu cho bảng `sub_img_url`
---
-
-INSERT INTO `sub_img_url` (`ID`, `PID`, `IMG_URL`) VALUES
-(1, 1, 'https://bizweb.dktcdn.net/thumb/1024x1024/100/348/425/products/ao-bong-da-mu-manchester-united-2023-24-2.jpg?v=1717473781560'),
-(2, 1, 'https://product.hstatic.net/1000061481/product/anh_sb_1-01-0-02-212414124222-2_15b8e22d693445e2ad157600732cf110_1024x1024.jpg'),
-(3, 1, 'https://product.hstatic.net/1000061481/product/nh_sp_add_web_4-02-02-078971-01-01-01-01-02-02-02-02-02-02-01-01-02-01_814d1d1ee52b466d84306ea697ae1d32_1024x1024.jpg'),
-(4, 1, 'https://product.hstatic.net/1000061481/product/anh_sp_add_web_3-02-02-01-01-01-1-0-1-01-2_f9b704df047640729fb5cc7b00bded77_1024x1024.jpg'),
-(5, 2, 'https://product.hstatic.net/1000061481/product/anh_sb_1-01-0-02-212414124122-2_1bd4f919ddf74867929ffd87845a0a2c_1024x1024.jpg'),
-(6, 2, 'https://product.hstatic.net/1000061481/product/dd_web_ballak02-01-01-01-01-02-02-02-02-02-02-02-02-01-01-02-02-02-2-2_9e8f67e3af7d4de599728c86242e130f_1024x1024.jpg'),
-(7, 2, 'https://product.hstatic.net/1000061481/product/anh_sp_add_web_bal_-02-02-02-02-02-02-02-02-02-01-01-01-02-02-02-2-2-2_388b306e9785476284efce5f211e9c7b_1024x1024.jpg'),
-(8, 2, 'https://product.hstatic.net/1000061481/product/anh_sp_add-01-01-01-04-203-1-2_b107084e943d453894dd477f408730cb_1024x1024.jpg'),
-(9, 3, 'https://product.hstatic.net/1000061481/product/myach-adidas-jm4205-800x800_d620bd6b53fc4a44b0e28e3849745962_1024x1024.jpg'),
-(10, 3, 'https://product.hstatic.net/1000061481/product/nk_pl_heritage_seitiro_-_sp25_71125c10271b49bfbc64206f76db1037_1024x1024.jpg'),
-(11, 3, 'https://product.hstatic.net/1000061481/product/pl_nk_heritage_ordem_3_-_sp25_53976b21e66149a9a4760a997f980afb_1024x1024.jpg'),
-(12, 3, 'https://product.hstatic.net/1000061481/product/remove-bg.ai_1737339911241_629e125de33042c082aee78a0a56813a_1024x1024.jpg'),
-(13, 4, 'https://product.hstatic.net/1000061481/product/anh_sp_add_weballb_4-02-02-01-01-01-_3e17197c4186488bacf43d3e372919b7_1024x1024.jpg'),
-(14, 4, 'https://product.hstatic.net/1000061481/product/040bb1c326c44ad4bc6ea8bd703aba55_f3586483b6c7491d91efe12fb65cbe49_1024x1024.jpg'),
-(15, 4, 'https://product.hstatic.net/1000061481/product/remove-bg.ai_1735781008586_3374e609ac6549d19fece2f38ec1b12d_1024x1024.png'),
-(16, 4, 'https://product.hstatic.net/1000061481/product/5aa2feadc2c24de58349fe5d6f03ecf1_a3eaa93dcc6e47f99c9cb2f9b062a041_1024x1024.jpg'),
-(17, 5, 'https://product.hstatic.net/1000061481/product/remove-bg.ai_1736928416755_f4416b8350e84b988ac6474436858d37_1024x1024.png'),
-(18, 5, 'https://product.hstatic.net/1000061481/product/nms03114_863d243d54474495b9cac9e5b41e48ef_1024x1024.jpg'),
-(19, 5, 'https://product.hstatic.net/1000061481/product/dbbd2a87c4ba4e189b9670ba97f854b8_53f4965f4af3437baa5cce2f6393fdcc_1024x1024.jpg'),
-(20, 5, 'https://product.hstatic.net/1000061481/product/c6b06feb89854621bea4f54279057437_e680a04d2a04480d946c73073f8d6858_1024x1024.jpg'),
-(21, 6, 'https://product.hstatic.net/1000061481/product/e141af4a71a94c3284f04763f9022577_1f4113a8cce449a09333200715440ec7_1024x1024.jpg'),
-(22, 6, 'https://product.hstatic.net/1000061481/product/3a9ab2b213744404a5eefc7da624d812_a809ad64e4834c0bacb36604ba522576_1024x1024.jpg'),
-(23, 6, 'https://product.hstatic.net/1000061481/product/9d8b241444824369ba28d2af8b8924a3_1a79d56c102c4778987bd66617e4815f_1024x1024.jpg'),
-(24, 6, 'https://product.hstatic.net/1000061481/product/ff0119ea5b814468b32e4540c027c552_287aeadcf7734657b55951e969144118_1024x1024.jpg'),
-(25, 7, 'https://product.hstatic.net/1000061481/product/nms02836-11_0817e5bc556f48c9be3de099f3e79628_1024x1024.jpg'),
-(26, 7, 'https://product.hstatic.net/1000061481/product/nms03785collection_5a6988e1751d4deabc6ef08a0fb32a23_1024x1024.jpg'),
-(27, 7, 'https://product.hstatic.net/1000061481/product/nms06893avatar-2_fbe758e27292402d953dbd005a9c7c52_1024x1024.jpg'),
-(28, 7, 'https://product.hstatic.net/1000061481/product/screenshot_108_cfbf92ad1cee4442a0ad80dff5eebc51_1024x1024.jpg`  '),
-(29, 8, 'https://product.hstatic.net/1000061481/product/5016c8c312884d4796b95bcb5974ea7e_4ed2609cdd5b485cb04a465ede799cca_1024x1024.jpg'),
-(30, 8, 'https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/9b7fcd1c279f4d76a32aad900018207d_9366/Gang_Tay_Multifit_360_Mot_Chiec_trang_HA5872_42_detail.jpg'),
-(31, 8, 'https://assets.adidas.com/images/w_600,f_auto,q_auto/cfe81fed73164e1d9d75ad90001781cd_9366/Gang_Tay_Multifit_360_Mot_Chiec_trang_HA5872.jpg'),
-(32, 8, 'https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/bdb4ca309de245ad9a41ad900016c411_9366/Gang_Tay_Multifit_360_Mot_Chiec_trang_HA5872_01_standard.jpg'),
-(33, 9, 'https://product.hstatic.net/1000061481/product/anh_sp_add-01-01-5787873222-2-2_c60441ab5eac4de4acd29f41ab149111_1024x1024.jpg'),
-(34, 9, 'https://product.hstatic.net/1000061481/product/anh_sp_add-01-01-578787322-2_8bff1b224c1d46318b8e16c031100be0_1024x1024.jpg'),
-(35, 9, 'https://assets.adidas.com/images/w_600,f_auto,q_auto/a4cb579ff54647039f07ae3f012bdfaa_9366/Bong_Pro_Void_UCL_trang_HE3777.jpg'),
-(36, 9, 'https://product.hstatic.net/1000061481/product/anh_sp_add-01-01-5773-2_593d3529223641448e78cda455e6b28b_1024x1024.jpg'),
-(37, 10, 'https://product.hstatic.net/1000061481/product/anh_sp_add_web_3-02-02-01-01-01-01-02_8bab1853087c460bb31a04d2477c8eba_1024x1024.jpg'),
-(38, 10, 'https://product.hstatic.net/1000061481/product/anh_sp_add_web_4-02-02-01-01-01-01_0c842858171046849b29c83f86e3995f_1024x1024.jpg'),
-(39, 10, 'https://product.hstatic.net/1000061481/product/_sp_add_web_3-02-02-01-01-01-01-01-01-01-01-01-01-01-01-01-01-01-01-01_9be438b22de0478a8e6044a21858e474_1024x1024.jpg'),
-(40, 10, 'https://product.hstatic.net/1000061481/product/d99021b7be2c_15c91129cd9c4da7a8cc46c81c490ac8_1024x1024.jpeg');
-
---
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `account`
+-- Indexes for table `account`
 --
 ALTER TABLE `account`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Chỉ mục cho bảng `cart`
+-- Indexes for table `cart`
 --
 ALTER TABLE `cart`
   ADD PRIMARY KEY (`ID`),
@@ -473,20 +430,20 @@ ALTER TABLE `cart`
   ADD KEY `UID` (`UID`);
 
 --
--- Chỉ mục cho bảng `category`
+-- Indexes for table `category`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `comment`
+-- Indexes for table `comment`
 --
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `UID` (`UID`);
 
 --
--- Chỉ mục cho bảng `comment_news`
+-- Indexes for table `comment_news`
 --
 ALTER TABLE `comment_news`
   ADD PRIMARY KEY (`ID`),
@@ -494,166 +451,164 @@ ALTER TABLE `comment_news`
   ADD KEY `NID` (`NID`);
 
 --
--- Chỉ mục cho bảng `employee_account`
+-- Indexes for table `employee_account`
 --
 ALTER TABLE `employee_account`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Chỉ mục cho bảng `message`
+-- Indexes for table `message`
 --
 ALTER TABLE `message`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Chỉ mục cho bảng `news`
+-- Indexes for table `news`
 --
 ALTER TABLE `news`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Chỉ mục cho bảng `order`
+-- Indexes for table `order`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `UID` (`UID`);
 
 --
--- Chỉ mục cho bảng `order_detail`
+-- Indexes for table `order_detail`
 --
 ALTER TABLE `order_detail`
   ADD PRIMARY KEY (`ORDER_ID`,`PID`),
   ADD KEY `PID` (`PID`);
 
 --
--- Chỉ mục cho bảng `product`
+-- Indexes for table `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `fk_category_product` (`CATEGORY`);
 
 --
--- Chỉ mục cho bảng `sub_img_url`
+-- Indexes for table `sub_img_url`
 --
 ALTER TABLE `sub_img_url`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `PID` (`PID`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `account`
+-- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT cho bảng `cart`
+-- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
--- AUTO_INCREMENT cho bảng `category`
+-- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT cho bảng `comment`
+-- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT cho bảng `comment_news`
+-- AUTO_INCREMENT for table `comment_news`
 --
 ALTER TABLE `comment_news`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT cho bảng `employee_account`
+-- AUTO_INCREMENT for table `employee_account`
 --
 ALTER TABLE `employee_account`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT cho bảng `message`
+-- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT cho bảng `news`
+-- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT cho bảng `order`
+-- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
--- AUTO_INCREMENT cho bảng `product`
+-- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
--- AUTO_INCREMENT cho bảng `sub_img_url`
+-- AUTO_INCREMENT for table `sub_img_url`
 --
 ALTER TABLE `sub_img_url`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- Các ràng buộc cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Các ràng buộc cho bảng `cart`
+-- Constraints for table `cart`
 --
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`),
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Các ràng buộc cho bảng `comment`
+-- Constraints for table `comment`
 --
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Các ràng buộc cho bảng `comment_news`
+-- Constraints for table `comment_news`
 --
 ALTER TABLE `comment_news`
   ADD CONSTRAINT `comment_news_ibfk_1` FOREIGN KEY (`CID`) REFERENCES `account` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `comment_news_ibfk_2` FOREIGN KEY (`NID`) REFERENCES `news` (`ID`) ON DELETE CASCADE;
 
 --
--- Các ràng buộc cho bảng `order`
+-- Constraints for table `order`
 --
 ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Các ràng buộc cho bảng `order_detail`
+-- Constraints for table `order_detail`
 --
 ALTER TABLE `order_detail`
   ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`ORDER_ID`) REFERENCES `order` (`ID`),
   ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`);
-
 --
--- Các ràng buộc cho bảng `product`
+-- Constraints for table `product`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`CATEGORY`) REFERENCES `category` (`id`);
-
 --
--- Các ràng buộc cho bảng `sub_img_url`
+-- Constraints for table `sub_img_url`
 --
 ALTER TABLE `sub_img_url`
   ADD CONSTRAINT `sub_img_url_ibfk_1` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`);
