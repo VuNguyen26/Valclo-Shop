@@ -1,47 +1,55 @@
-<?php 
+<?php
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
 
-// ✅ Mặc định hiển thị thất bại
-$displayMessage = "Thanh toán thất bại.";
-$callUpdate = false;
+$displayMessage = "Thanh toán thất bại";
+$success = false;
 
+// Momo trả về resultCode = 0 là thành công
 $result = $_GET['resultCode'] ?? null;
-$orderIds = $_GET['oids'] ?? "";
-$message = $_GET['message'] ?? "";
 
-// ✅ Nếu thành công, cập nhật trạng thái đơn và xóa giỏ
-if ($result === "0" && !empty($orderIds)) {
-    $displayMessage = "✅ Thanh toán MoMo thành công!";
-    $callUpdate = true;
-
-    if (!empty($_SESSION["id"])) {
-        $uid = $_SESSION["id"];
-        $mem = new Member();
-        $mem->clear_cart($uid);
-        unset($_SESSION["cart"]);
-    }
-
+if ($result === "0" && !empty($_SESSION["id"])) {
+    $uid = (int)$_SESSION["id"];
     $db = new DB();
     $conn = $db->connect;
-    $oidArray = explode("/", $orderIds);
-    foreach ($oidArray as $orderId) {
-        $update_order_sql = "UPDATE `order` SET STATUS = 'Chờ xác nhận' WHERE ID = ?";
-        $stmt1 = mysqli_prepare($conn, $update_order_sql);
-        if ($stmt1) {
-            mysqli_stmt_bind_param($stmt1, "i", $orderId);
-            mysqli_stmt_execute($stmt1);
-            mysqli_stmt_close($stmt1);
-        } else {
-            error_log("Lỗi prepare update_order_sql: " . mysqli_error($conn));
-        }
+    $mem = new Member();
+
+    // 1. Lấy sản phẩm trong giỏ để tính tổng
+    $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
+    $res = mysqli_query($conn, $query);
+    $total = 0;
+    while ($row = mysqli_fetch_assoc($res)) {
+        $total += $row["PRICE"] * $row["QUANTITY"];
+    }
+
+    // 2. Nếu có sản phẩm, tạo đơn hàng
+    if ($total > 0) {
+        $today = date("Y-m-d");
+        $status = "Chờ xác nhận";
+        $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, 'MoMo')");
+        $stmt->bind_param("issd", $uid, $today, $status, $total);
+        $stmt->execute();
+        $oid = $conn->insert_id;
+
+        // 3. Ghi chi tiết đơn hàng
+        $mem->insert_order_detail($oid, $uid);
+
+        // 4. Xoá giỏ hàng
+        $mem->clear_cart($uid);
+        unset($_SESSION["cart"]);
+
+        $success = true;
+        $displayMessage = "✅ Thanh toán MoMo thành công!";
+    } else {
+        $displayMessage = "⚠️ Giỏ hàng trống hoặc có lỗi.";
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -98,8 +106,8 @@ if ($result === "0" && !empty($orderIds)) {
 </head>
 <body>
   <div class="result-box success">
-    <div class="icon"><?= $callUpdate ? "✅" : "❌" ?></div>
-    <h3 style="color: <?= $callUpdate ? '#198754' : '#dc3545' ?>;">
+    <div class="icon"><?= $success ? "✅" : "❌" ?></div>
+    <h3 style="color: <?= $success ? '#198754' : '#dc3545' ?>;">
   <?= $displayMessage ?>
 </h3>
     <p><strong>Phương thức:</strong> Thanh toán qua ví MoMo.</p>
@@ -111,7 +119,7 @@ if ($result === "0" && !empty($orderIds)) {
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
   <script>
-    if (<?= json_encode($callUpdate) ?>) {
+    if (<?= json_encode($success) ?>) {
       confetti({
         particleCount: 120,
         spread: 120,

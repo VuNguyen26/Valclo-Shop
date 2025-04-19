@@ -325,6 +325,21 @@ class member extends customer{
     
         return $new_order_id;
     }
+    public function insert_order_detail($order_id, $uid) {
+        $conn = $this->connect;
+        $sql = "INSERT INTO order_detail (ORDER_ID, PID, SIZE, QUANTITY)
+                SELECT $order_id, c.PID, c.SIZE, c.QUANTITY
+                FROM cart c
+                WHERE c.UID = ?";
+        
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            die("❌ Lỗi prepare insert_order_detail: " . $conn->error);
+        }
+        $stmt->bind_param("i", $uid);
+        return $stmt->execute();
+    }
+    
     
 }
 ?>

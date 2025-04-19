@@ -31,6 +31,10 @@ if ($result === "1" && !empty($uid)) {
     $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("issd", $uid, $today, $status, $total);
     $stmt->execute();
+    $order_id = $conn->insert_id;
+
+    // ✅ Ghi chi tiết đơn hàng từ giỏ vào order_detail
+    $mem->insert_order_detail($order_id, $uid);
 
     // Xoá giỏ hàng
     $mem->clear_cart($uid);
@@ -41,6 +45,7 @@ if ($result === "1" && !empty($uid)) {
     $displayMessage = "✅ Bạn đã thanh toán PayPal thành công!";
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
