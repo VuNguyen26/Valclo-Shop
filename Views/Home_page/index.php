@@ -77,36 +77,34 @@
             <div class="swiper-wrapper">
               <div class="swiper-slide">
                 <img
-                  src="./Views/images/avt1.png"alt=""
+                  src="./Views/images/sl6.png"alt=""
                 />
                 <div class="content" >
                   <h1 style="color: white;">
-                    PEACE THROUGH
-                    <br />
-                    ANY POSE
+                  Phong độ thất thường <br> Phong cách bất diệt!😎 
                   </h1>
                   <p style="color: white;">
-                  Nike Yoga Soul Festival Collection
+                  Đồ đẹp chưa chắc giúp bạn ghi bàn, nhưng chắc chắn giúp bạn ghi điểm với cả sân!
                  </p>
 
-                  <a href="?url=Home/Products/" style="color: white;">Buy Now</a>
+                  <a href="?url=Home/Products/" style="color: white;">Mua ngay luôn</a>
                 </div>
               </div>
 
               <div class="swiper-slide">
                 <img
-                  src="./Views/images/avt4.png"
+                  src="./Views/images/sl5.png"
                   alt="hero image"
                 />
                 <div class="content">
                   <h1>
-                    Hỗ trợ đặt combo
+                    Hỗ trợ
                     <br />
-                    <span>20% off</span>
-                    tại cửa hàng
+                    <span>Giao hàng</span>
+                    tận nhà
                   </h1>
                   <p style="color: white;">
-                    Cung cấp các gói chứa đầy đủ một bộ sưu tập phù hợp với từng sở thích, tính cách
+                  Cùng bạn nâng tầm phong cách – mua sắm ngay hôm nay để tự tin hơn trên sân cỏ!
                   </p>
                   <a href="?url=Home/Products/">Mua ngay</a>
                 </div>
@@ -114,18 +112,17 @@
 
               <div class="swiper-slide">
                 <img
-                  src="./Views/images/avt3.png"
+                  src="./Views/images/sl3.png"
                   alt="hero image"
                 />
                 <div class="content">
                   <h1>
-                    Đăng ký ngay
-                    
+                  Đá không hay – Nhưng mặc là phải cháy!🔥
                   </h1>
                   <p style="color: white;">
-                    Nhanh tay đăng ký tài khoản để nhận được nhiều ưu đãi hấp dẫn cũng như những trải nghiệm thú vị nhé!
+                    Nhanh tay mua ngay để có những trải nghiệm thú vị nhé!
                   </p>
-                  <a href="?url=Home/Products/">Mua ngay</a>
+                  <a href="?url=Home/Products/">Mua ngay hôm nay</a>
                 </div>
               </div>
             </div>
