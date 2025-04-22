@@ -1,22 +1,6 @@
 <?php
 session_start();
 include 'connect.php';
-/*
-// Kết nối tới CSDL MySQL
-$sever    = 'localhost';
-$user     = 'root';
-$password = '';
-$database = 'web_db';
-$port     = 3307;
-
-$conn = new mysqli($sever, $user, $password, $database, $port);
-if ($conn) {
-    mysqli_query($conn, "SET NAMES 'utf8'");
-} else {
-    echo "Connection failed: " . $conn->connect_error;
-    exit;
-}
-*/
 
 // Xử lý xóa sản phẩm (GET request)
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
@@ -26,13 +10,13 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     exit;
 }
 
-// Các danh mục hợp lệ
-$valid_categories = ['Shirt', 'Accessories', 'Trousers'];
-
 // Khai báo biến để lưu lỗi và dữ liệu cũ (để giữ giá trị form)
 $errorMessages = [];
 $oldData = [];
 $modalType = ''; // 'add' hoặc 'edit'
+
+// Lấy danh sách danh mục từ bảng CATEGORY
+$categories = $conn->query("SELECT id, name_category FROM CATEGORY WHERE state = 1");
 
 // Xử lý submit form thêm/sửa (dựa vào method POST)
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -42,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $img_url     = trim($_POST['img_url']);
     $number      = intval($_POST['number']);
     $decs        = trim($_POST['decs']);
-    $category    = trim($_POST['category']);
+    $category    = intval($_POST['category']);
     $top_product = intval($_POST['top_product']);
 
     // Lưu lại dữ liệu cũ để tái hiện lên form nếu có lỗi
@@ -68,9 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($img_url) && !filter_var($img_url, FILTER_VALIDATE_URL)) {
         $errorMessages[] = "Đường dẫn ảnh không hợp lệ.";
     }
-    // Ràng buộc: Danh mục phải là một trong các giá trị đã cho
-    if (!in_array($category, $valid_categories)) {
-        $errorMessages[] = "Danh mục phải là một trong: Shirt, Accessories, Trousers.";
+    // Ràng buộc: Danh mục phải tồn tại trong bảng CATEGORY
+    $validCategory = $conn->query("SELECT id FROM CATEGORY WHERE id = $category AND state = 1");
+    if ($validCategory->num_rows == 0) {
+        $errorMessages[] = "Danh mục không hợp lệ.";
     }
 
     // Nếu không có lỗi, tiến hành xử lý thêm hoặc sửa
@@ -79,11 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $name     = $conn->real_escape_string($name);
         $img_url  = $conn->real_escape_string($img_url);
         $decs     = $conn->real_escape_string($decs);
-        $category = $conn->real_escape_string($category);
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             $query = "INSERT INTO PRODUCT (NAME, PRICE, IMG_URL, NUMBER, DECS, CATEGORY, TOP_PRODUCT) 
-                      VALUES ('$name', $price, '$img_url', $number, '$decs', '$category', $top_product)";
+                      VALUES ('$name', $price, '$img_url', $number, '$decs', $category, $top_product)";
             $conn->query($query);
             header("Location: qlsp.php");
             exit;
@@ -96,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                           IMG_URL='$img_url', 
                           NUMBER=$number, 
                           DECS='$decs', 
-                          CATEGORY='$category', 
+                          CATEGORY=$category, 
                           TOP_PRODUCT=$top_product 
                       WHERE ID=$id";
             $conn->query($query);
@@ -121,43 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <title>Quản lý Sản phẩm</title>
     <style>
-        /*
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5); / Nền mờ /
-            display: none;
-            z-index: 1000;
-        }
-        / Khi dùng hash, modal hiển thị qua :target /
-        .modal:target {
-            display: block;
-        }
-        / Nếu có lỗi, ta dùng inline style hiển thị modal (không cần hash) /
-        .modal-content {
-            background: #fff;
-            margin: 10% auto;
-            padding: 20px;
-            width: 30%;
-            border-radius: 8px;
-            position: relative;
-        }
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            text-decoration: none;
-            color: #333;
-        } */
-        /* Nội dung trang chính */
         #page {
             transition: filter 0.3s ease;
         }
-        /* Làm mờ trang chính khi modal hiện */
         #addModal:target ~ #page,
         #editModal:target ~ #page,
         .modal.show ~ #page {
@@ -210,9 +160,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label>Danh mục:</label><br>
                 <select name="category" required>
                     <option value="">--Chọn danh mục--</option>
-                    <option value="Shirt" <?php if(isset($oldData['category']) && $oldData['category']=='Shirt') echo 'selected'; ?>>Shirt</option>
-                    <option value="Accessories" <?php if(isset($oldData['category']) && $oldData['category']=='Accessories') echo 'selected'; ?>>Accessories</option>
-                    <option value="Trousers" <?php if(isset($oldData['category']) && $oldData['category']=='Trousers') echo 'selected'; ?>>Trousers</option>
+                    <?php while ($category = $categories->fetch_assoc()): ?>
+                        <option value="<?php echo $category['id']; ?>" 
+                            <?php if (isset($oldData['category']) && $oldData['category'] == $category['id']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($category['name_category']); ?>
+                        </option>
+                    <?php endwhile; ?>
                 </select>
                 <br><br>
                 
@@ -264,18 +217,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label>Danh mục:</label><br>
                 <select name="category" required>
                     <option value="">--Chọn danh mục--</option>
-                    <option value="Shirt" <?php 
-                        $selected = (isset($oldData['category']) && $oldData['category']=='Shirt') || (!isset($oldData['category']) && $editProduct['CATEGORY']=='Shirt') ? 'selected' : '';
-                        echo $selected;
-                    ?>>Shirt</option>
-                    <option value="Accessories" <?php 
-                        $selected = (isset($oldData['category']) && $oldData['category']=='Accessories') || (!isset($oldData['category']) && $editProduct['CATEGORY']=='Accessories') ? 'selected' : '';
-                        echo $selected;
-                    ?>>Accessories</option>
-                    <option value="Trousers" <?php 
-                        $selected = (isset($oldData['category']) && $oldData['category']=='Trousers') || (!isset($oldData['category']) && $editProduct['CATEGORY']=='Trousers') ? 'selected' : '';
-                        echo $selected;
-                    ?>>Trousers</option>
+                    <?php
+                    $categories = $conn->query("SELECT id, name_category FROM CATEGORY WHERE state = 1");
+                    while ($category = $categories->fetch_assoc()): ?>
+                        <option value="<?php echo $category['id']; ?>" 
+                            <?php if ((isset($oldData['category']) && $oldData['category'] == $category['id']) || 
+                                      (!isset($oldData['category']) && $editProduct['CATEGORY'] == $category['id'])) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($category['name_category']); ?>
+                        </option>
+                    <?php endwhile; ?>
                 </select>
                 <br><br>
                 
@@ -310,7 +260,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <th width="7.5%">Hành động</th>
             </tr>
             <?php 
-            $result = $conn->query("SELECT * FROM PRODUCT ORDER BY ID ASC");
+            $result = $conn->query("
+                SELECT p.ID, p.NAME, p.PRICE, p.IMG_URL, p.NUMBER, p.DECS, c.name_category AS CATEGORY, p.TOP_PRODUCT 
+                FROM PRODUCT p
+                LEFT JOIN CATEGORY c ON p.CATEGORY = c.id
+                ORDER BY p.ID ASC
+            ");
             while($row = $result->fetch_assoc()): ?>
             <tr>
                 <td><?php echo $row['ID']; ?></td>
