@@ -30,20 +30,20 @@
 <body>
     <form class="form_login" action="admin_login.php" method="post">
         <h2>Đăng nhập</h2>
-        <label for="username">Username: </label>
+        <label for="username">Username </label>
         <input type="text" id="username" name="username" placeholder="default username = admin" required>
 
-        <label for="password">Password:</label>
+        <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="default password = 123" required>
 
         <button type="submit" name="Login">Login</button>
-        <p>Login as <a href="employee_login.php" style="color: rgb(215, 65, 93); text-decoration: none">Employee</a></p>
+        <p>Login as <a href="employee_login.php" style="color: rgb(215, 65, 93); text-decoration: none; font-style: oblique">Employee</a></p>
     </form>
 </body>
 
 <style>
     .form_login {
-        width: 360px;
+        width: 390px;
         margin: 50px auto;
         padding: 20px;
         border: 1px solid #ccc;
@@ -75,7 +75,7 @@
     }
 
     .form_login button {
-        width: 100%;
+        width: 50%;
         padding: 10px;
         background-color:rgb(93, 153, 216);
         color: white;
@@ -83,10 +83,13 @@
         border-radius: 5px;
         font-size: 16px;
         cursor: pointer;
+        text-shadow: 2px 2px 4px #000;
+        display: block;
+        margin: 0 auto
     }
 
     .form_login button:hover {
-        background-color: #0056b3;
+        background-color:rgb(239, 20, 100);
     }
 
     .form_login p {

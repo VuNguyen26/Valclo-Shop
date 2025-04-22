@@ -137,6 +137,7 @@ if ($resultOrders) {
                     <th>Mã khách hàng</th>
                     <th>Thời gian</th>
                     <th>Tổng tiền</th>
+                    <th>Phương thức thanh toán</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
@@ -146,6 +147,7 @@ if ($resultOrders) {
                     <td><?php echo $order['UID']; ?></td>
                     <td><?php echo $order['TIME']; ?></td>
                     <td><?php echo $order['TOTAL_PRICE']; ?></td>
+                    <td><?php echo $order['METHOD']; ?></td>
                     <td><?php echo $order['STATUS']; ?></td>
                     <td>
                         <select onchange="changeStatus(<?php echo $order['ID']; ?>, this)"
