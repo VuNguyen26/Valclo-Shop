@@ -4,7 +4,6 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 $city = $district = $ward = $detail = '';
 $address_confirmed = false;
 
-// ✅ Luôn kiểm tra DB để lấy lại địa chỉ mới nhất nếu có ID
 if (isset($_SESSION["id"])) {
     $conn = new mysqli("localhost", "root", "", "web_db");
     if (!$conn->connect_error) {
@@ -320,6 +319,12 @@ window.onload = function () {
   const district = document.getElementById("district");
   const ward = document.getElementById("ward");
 
+  const phoneRegex = /^0[0-9]{9}$/;
+  if (!phoneRegex.test(phone)) {
+    alert("❌ Số điện thoại không hợp lệ. Vui lòng nhập 10 chữ số và bắt đầu bằng số 0.");
+    return;
+  }
+
   if (!id || !name || !phone || !detail || !province.value || !district.value || !ward.value) {
     alert("❌ Vui lòng điền đầy đủ thông tin");
     return;
@@ -350,6 +355,7 @@ window.onload = function () {
   };
   xhr.send(JSON.stringify(data));
 };
+
 };
 </script>
 

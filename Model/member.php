@@ -59,17 +59,13 @@ class member extends customer{
         $query = "UPDATE `account` SET `FNAME` = ?, `PHONE` = ?, `ADDRESS` = ? WHERE `ID` = ?";
         $stmt = $this->connect->prepare($query);
         if (!$stmt) {
-            file_put_contents("log_debug.txt", "Prepare failed: " . $this->connect->error . "\n", FILE_APPEND);
             return false;
-        }
-    
+        }   
         $stmt->bind_param("sssi", $fname, $phone, $addr, $id);
         $success = $stmt->execute();
     
         if (!$success) {
-            file_put_contents("log_debug.txt", "Execute failed: " . $stmt->error . "\n", FILE_APPEND);
-        }
-    
+        }   
         return $success;
     }
     
