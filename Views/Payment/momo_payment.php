@@ -1,4 +1,6 @@
 <?php
+session_start(); // Đảm bảo có session để lấy dữ liệu
+
 $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
 // Cấu hình từ MoMo
@@ -9,9 +11,15 @@ $secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
 // Nhận oids từ URL
 $oids = isset($_GET['oids']) ? $_GET['oids'] : '';
 
+// ✅ Lấy tổng tiền từ session
+if (!isset($_SESSION['total_amount'])) {
+    echo "❌ Không có tổng tiền thanh toán trong session!";
+    exit;
+}
+$amount = strval($_SESSION['total_amount']); // ✅ Đảm bảo là string
+
 // Các tham số đơn hàng
 $orderInfo = "Thanh toán đơn hàng tại Valclo Shop";
-$amount = "10000"; // đơn giá test
 $orderId = time() . "";
 $redirectUrl = "http://localhost/?url=Payment/success";
 if (!empty($oids)) {
@@ -58,7 +66,6 @@ if (isset($jsonResult['payUrl'])) {
     header('Location: ' . $jsonResult['payUrl']);
     exit;
 } else {
-    echo "Không nhận được payUrl từ MoMo";
+    echo "❌ Không nhận được payUrl từ MoMo";
+    exit;
 }
-header("Location: ?url=Payment/success&oids=123");
-exit;

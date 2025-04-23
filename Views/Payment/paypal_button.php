@@ -1,5 +1,17 @@
 <?php
-  $oids = isset($_GET['oids']) ? $_GET['oids'] : ''; // ví dụ: 3/5/7
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+$oids = isset($_GET['oids']) ? $_GET['oids'] : ''; // ví dụ: 3/5/7
+
+// Lấy tổng tiền từ session
+if (!isset($_SESSION['total_amount'])) {
+    die("❌ Không có tổng tiền thanh toán trong session!");
+}
+$totalAmount = $_SESSION['total_amount'];
+
+// Chuyển từ VNĐ sang USD (giả sử 1 USD = 25,000 VNĐ)
+$usdAmount = round($totalAmount / 25000, 2);
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -36,13 +48,14 @@
 
   <script>
     const orderIds = "<?= $oids ?>";
+    const usdAmount = "<?= $usdAmount ?>"; // giá động theo USD
 
     paypal.Buttons({
       createOrder: function(data, actions) {
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: '10.00'
+              value: usdAmount
             }
           }]
         });

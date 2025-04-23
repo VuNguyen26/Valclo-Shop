@@ -47,103 +47,99 @@
 
     <!--Body-->
     <div class="container-fuild payment">
-        <div class="row nonemg d-flex justify-content-center">
-          <div class="col-12 col-md-6 white nonepad">
-            <h3>Các sản phẩm của bạn</h3>
-            <div class="row nonemg text-center">
-              <?php
-              $count = 0;
-              $total = 0;
-              $check = 0;
-                    if(!empty($data["product_in_cart"]))
-                    {
-                      foreach($data["product_in_cart"] as $row){
-                        $count += 1;
-                        $total += (int)$row["price"]*$row["num"];
-                        echo "<div class=\"col-12\">
-                        <div class=\"row node nonemg\">
-                            <div class=\"col-4 d-flex flex-wrap align-content-center justify-content-center\">
-                                <img src=\"" . $row["img"] . "\" alt=\"item\">
-                            </div>
-                            <div class=\"col-8\">
-                                <div class=\"row\">
-                                    <div class=\"col-12\">
-                                        <h5>" . $row["name"] . "</h5>
-                                    </div>
-        
-                                    <div class=\"col-12\">Size: <span>" . $row["size"] . "</span></div>
-                                    <div class=\"col-12\">Số lượng: <span>" . $row["num"] . "</span></div>
-                                    <div class=\"col-12\">Tổng cộng: <span class=\"price\">" . $row["price"]*$row["num"] . "(đ)</span></div>
-                                </div>
-                            </div>
-                        </div>
-                      </div>";
-                    }
-                }
-              ?>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-xl-4 white nonepad body_2">
-              <h3>Phương thức thanh toán</h3>
-              <div class="row d-flex justify-content-center nonemg">
-                <div class="col-12 cart_node">
-                  <div class="row">
-                    <div class="col-2"><input type="radio" name="cart_node" id="cod"></div>
-                    <div class="col-5"><label for="cod"><h5>Thanh toán tiền mặt</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="cod"><img src="https://png.pngtree.com/png-clipart/20210530/original/pngtree-green-banner-cod-cash-on-delivery-flat-hand-grab-money-and-png-image_6351009.jpg" alt="COD picture" ></label></div>
-                  </div>
-                </div>
-                <div class="col-12 cart_node">
-                  <div class="row">
-                    <div class="col-2"><input type="radio" name="cart_node" id="momo"></div>
-                    <div class="col-5"><label for="momo"><h5>MoMo</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="momo"><img src="./Views/images/MoMo Logo.png" alt="MoMo picture" ></label></div>
-                  </div>
-                </div>
-                <div class="col-12 cart_node">
-                  <div class="row">
-                    <div class="col-2"><input type="radio" name="cart_node" id="paypal"></div>
-                    <div class="col-5"><label for="paypal"><h5>Paypal</h5></label></div>
-                    <div class="col-5 d-flex justify-content-end"><label for="paypal"><img src="./Views/images/paypal.png" alt="paypal picture" ></label></div>
-                  </div>
-                </div>
-              </div>
+    <div class="row nonemg d-flex justify-content-center">
+  <div class="col-12 col-md-6 white nonepad">
+    <h3>Các sản phẩm của bạn</h3>
+    <div class="row nonemg text-center">
+      <?php
+      if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
 
-              <div class="row nonemg flex-wrap total">
-                <h4>Tổng kết hóa đơn</h4>
-                <div class="col-12">
-                  <div class="d-flex justify-content-between">
-                    <h6>Tổng phụ (<?php echo $count;?> sản phẩm)</h6><span><?php echo $total ?></span>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="d-flex justify-content-between">
-                    <h6>Phí ưu đãi thành viên</h6><span>23,000(đ)</span>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="d-flex justify-content-between">
-                    <h6>Giảm giá sản phẩm</h6><span>5,000(đ)</span>
-                  </div>
-                </div>
-                
-                <div class="col-12">
-                  <div class="d-flex justify-content-between line-top">
-                    <h6>Tổng cộng: </h6><span></span>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="d-flex flex-wrap justify-content-end">
-                    <?php 
-                          echo "<button id=\"myBtn\" type=\"button\" class=\"btn btn-primary\">Hủy đơn</button>";
-                    ?>
-                    <button id="payButton" type="button" class="btn btn-primary">Đặt Hàng</button>
-                  </div>
-                </div>
-              </div>
+      $count = 0;
+      $total = 0;
 
+      if (!empty($data["product_in_cart"])) {
+        foreach ($data["product_in_cart"] as $row) {
+          $count += 1;
+          $total += (int)$row["price"] * $row["num"];
+          echo "<div class=\"col-12\">
+          <div class=\"row node nonemg\">
+              <div class=\"col-4 d-flex flex-wrap align-content-center justify-content-center\">
+                  <img src=\"" . $row["img"] . "\" alt=\"item\">
+              </div>
+              <div class=\"col-8\">
+                  <div class=\"row\">
+                      <div class=\"col-12\">
+                          <h5>" . $row["name"] . "</h5>
+                      </div>
+                      <div class=\"col-12\">Size: <span>" . $row["size"] . "</span></div>
+                      <div class=\"col-12\">Số lượng: <span>" . $row["num"] . "</span></div>
+                      <div class=\"col-12\">Tổng cộng: <span class=\"price\">" . ($row["price"] * $row["num"]) . "(đ)</span></div>
+                  </div>
+              </div>
           </div>
+        </div>";
+        }
+      }
+
+      // Tổng cộng chính là $total
+      $tong_cong = $total;
+
+      // Lưu vào session
+      $_SESSION['total_amount'] = $tong_cong;
+      ?>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-6 col-xl-4 white nonepad body_2">
+    <h3>Phương thức thanh toán</h3>
+    <div class="row d-flex justify-content-center nonemg">
+      <div class="col-12 cart_node">
+        <div class="row">
+          <div class="col-2"><input type="radio" name="cart_node" id="cod"></div>
+          <div class="col-5"><label for="cod"><h5>Thanh toán tiền mặt</h5></label></div>
+          <div class="col-5 d-flex justify-content-end"><label for="cod"><img src="https://png.pngtree.com/png-clipart/20210530/original/pngtree-green-banner-cod-cash-on-delivery-flat-hand-grab-money-and-png-image_6351009.jpg" alt="COD picture" ></label></div>
         </div>
+      </div>
+      <div class="col-12 cart_node">
+        <div class="row">
+          <div class="col-2"><input type="radio" name="cart_node" id="momo"></div>
+          <div class="col-5"><label for="momo"><h5>MoMo</h5></label></div>
+          <div class="col-5 d-flex justify-content-end"><label for="momo"><img src="./Views/images/MoMo Logo.png" alt="MoMo picture" ></label></div>
+        </div>
+      </div>
+      <div class="col-12 cart_node">
+        <div class="row">
+          <div class="col-2"><input type="radio" name="cart_node" id="paypal"></div>
+          <div class="col-5"><label for="paypal"><h5>Paypal</h5></label></div>
+          <div class="col-5 d-flex justify-content-end"><label for="paypal"><img src="./Views/images/paypal.png" alt="paypal picture" ></label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row nonemg flex-wrap total">
+      <h4>Tổng kết hóa đơn</h4>
+      <div class="col-12">
+        <div class="d-flex justify-content-between">
+          <h6>Tổng phụ (<?php echo $count; ?> sản phẩm)</h6><span><?php echo number_format($total); ?>(đ)</span>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="d-flex justify-content-between line-top">
+          <h6>Tổng cộng: </h6><span><strong><?php echo number_format($tong_cong); ?>(đ)</strong></span>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="d-flex flex-wrap justify-content-end">
+          <button id="myBtn" type="button" class="btn btn-primary">Hủy đơn</button>
+          <button id="payButton" type="button" class="btn btn-primary">Đặt Hàng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     </div>
 
     <div id="myModal" class="modal">
