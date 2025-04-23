@@ -55,12 +55,24 @@ class member extends customer{
                     WHERE   `account`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);
     }
-    public function update_user($id, $fname, $phone, $add){
-        $query =    "UPDATE `account`
-                    SET `account`.`FNAME` = \"" . $fname . "\", `account`.`PHONE` = \"" . $phone ."\", `account`.`ADDRESS` = \"" . $add . "\"
-                    WHERE `account`.`ID` = " . $id .";";
-        return mysqli_query($this->connect, $query);
+    public function update_user($id, $fname, $phone, $addr) {
+        $query = "UPDATE `account` SET `FNAME` = ?, `PHONE` = ?, `ADDRESS` = ? WHERE `ID` = ?";
+        $stmt = $this->connect->prepare($query);
+        if (!$stmt) {
+            file_put_contents("log_debug.txt", "Prepare failed: " . $this->connect->error . "\n", FILE_APPEND);
+            return false;
+        }
+    
+        $stmt->bind_param("sssi", $fname, $phone, $addr, $id);
+        $success = $stmt->execute();
+    
+        if (!$success) {
+            file_put_contents("log_debug.txt", "Execute failed: " . $stmt->error . "\n", FILE_APPEND);
+        }
+    
+        return $success;
     }
+    
     public function update_password_profile($id, $pwd){
         $query =    "UPDATE `account`
                     SET `account`.`PWD` = \"" . $pwd . "\"

@@ -1,3 +1,35 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+
+$city = $district = $ward = $detail = '';
+$address_confirmed = false;
+
+// ✅ Luôn kiểm tra DB để lấy lại địa chỉ mới nhất nếu có ID
+if (isset($_SESSION["id"])) {
+    $conn = new mysqli("localhost", "root", "", "web_db");
+    if (!$conn->connect_error) {
+        $uid = $_SESSION["id"];
+        $result = $conn->query("SELECT ADDRESS FROM account WHERE ID = $uid");
+        if ($result && $row = $result->fetch_assoc()) {
+            if (!empty($row["ADDRESS"])) {
+                $_SESSION["address_confirmed"] = true;
+                $_SESSION["address_from_db"] = $row["ADDRESS"];
+                $address_confirmed = true;
+
+                $parts = explode(', ', $row["ADDRESS"]);
+                if (count($parts) >= 4) {
+                    $detail = $parts[0];
+                    $ward = $parts[1];
+                    $district = $parts[2];
+                    $city = $parts[3];
+                }
+            }
+        }
+        $conn->close();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="vi">
   <head>
@@ -142,42 +174,186 @@
             ?>
         </div>
     </div>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Thông tin cá nhân</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <?php
-                            echo    "<div class=\"col-12\">
-                                        <div class=\"row\">
-                                            <div class=\"col-4\">Họ và tên:  </div>
-                                            <div class=\"col-8\"><input type=\"text\" name=\"name\" value=\"" . $data["user"]["name"] .  "\"></div>
-                                        </div>
-                                    </div>
-                        <div class=\"col-12\">
-                        <div class=\"row\">
-                            <div class=\"col-4\">Số điện thoại: </div>
-                            <div class=\"col-8\"><input type=\"text\" name=\"numberphone\"  value=\"".  $data["user"]["phone"] . "\"></div>
-                            </div>
-                        </div>
-                        <div class=\"col-12\">
-                            <div class=\"row\">
-                                <div class=\"col-4\">Địa chỉ: </div>
-                                <div class=\"col-8\"><input type=\"text\" name=\"address\"  value=\"". $data["user"]["add"] . "\"></div>
-                                </div>
-                            </div>
-                            <div hidden id=\"id\">" . $_SESSION["id"] . "</div>
-                            <button type=\"button\" class=\"btn btn-primary\">Hoàn tất</button>";
-                    ?>      
-                </div>
-            </div>
-        </div>
+    
+    <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+?>
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Thông tin cá nhân</h2>
+      <span class="close">&times;</span>
     </div>
-    <?php require_once("./Views/footer/index.php");?>
-    <script src="./Views/Cart/cart.js" type="text/javascript"></script>
-  </body>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4">Họ và tên:</div>
+            <div class="col-8">
+              <input type="text" name="name" value="<?php echo $data['user']['name']; ?>">
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4">Số điện thoại:</div>
+            <div class="col-8">
+              <input type="text" name="numberphone" value="<?php echo $data['user']['phone']; ?>">
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4">Tỉnh/Thành phố:</div>
+            <div class="col-8"><select id="province" class="form-control"></select></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4">Quận/Huyện:</div>
+            <div class="col-8"><select id="district" class="form-control"></select></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4">Phường/Xã:</div>
+            <div class="col-8"><select id="ward" class="form-control"></select></div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="row">
+            <div class="col-4">Địa chỉ chi tiết:</div>
+            <div class="col-8">
+              <input type="text" id="detail_address" class="form-control" placeholder="Số nhà, tên đường...">
+            </div>
+          </div>
+        </div>
+        <input type="hidden" id="user_id" value="
+        <?php
+             if (session_status() === PHP_SESSION_NONE) session_start();
+             echo isset($_SESSION['id']) ? $_SESSION['id'] : '';
+        ?>">
+
+        <button id="confirmAddressBtn" type="button" class="btn btn-primary">Hoàn tất</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<?php require_once("./Views/footer/index.php"); ?>
+<script src="./Views/Cart/cart.js" type="text/javascript"></script>
+
+<script>
+window.onload = function () {
+  const savedCity = "<?php echo isset($city) ? addslashes($city) : ''; ?>";
+  const savedDistrict = "<?php echo isset($district) ? addslashes($district) : ''; ?>";
+  const savedWard = "<?php echo isset($ward) ? addslashes($ward) : ''; ?>";
+  const savedDetail = "<?php echo isset($detail) ? addslashes($detail) : ''; ?>";
+
+  // Gán lại địa chỉ chi tiết nếu có
+  document.getElementById("detail_address").value = savedDetail;
+
+  fetch("https://provinces.open-api.vn/api/?depth=3")
+    .then(res => res.json())
+    .then(data => {
+      const provinceSelect = document.getElementById("province");
+      const districtSelect = document.getElementById("district");
+      const wardSelect = document.getElementById("ward");
+
+      // Gán tỉnh
+      data.forEach(province => {
+        const opt = new Option(province.name, province.code);
+        if (province.name === savedCity) opt.selected = true;
+        provinceSelect.appendChild(opt);
+      });
+
+      // Nếu có thành phố đã lưu, thì load quận/huyện
+      const selectedProvince = data.find(p => p.name === savedCity);
+      if (selectedProvince) {
+        selectedProvince.districts.forEach(district => {
+          const opt = new Option(district.name, district.code);
+          if (district.name === savedDistrict) opt.selected = true;
+          districtSelect.appendChild(opt);
+        });
+
+        // Nếu có quận đã lưu, thì load phường/xã
+        const selectedDistrict = selectedProvince.districts.find(d => d.name === savedDistrict);
+        if (selectedDistrict) {
+          selectedDistrict.wards.forEach(ward => {
+            const opt = new Option(ward.name, ward.name);
+            if (ward.name === savedWard) opt.selected = true;
+            wardSelect.appendChild(opt);
+          });
+        }
+      }
+
+      // Lắng nghe sự kiện chọn mới
+      provinceSelect.addEventListener("change", function () {
+        const province = data.find(p => p.code == this.value);
+        districtSelect.innerHTML = '<option value="">-- Chọn Huyện --</option>';
+        wardSelect.innerHTML = '<option value="">-- Chọn Xã --</option>';
+        province.districts.forEach(district => {
+          const opt = new Option(district.name, district.code);
+          districtSelect.appendChild(opt);
+        });
+
+        districtSelect.addEventListener("change", function () {
+          const district = province.districts.find(d => d.code == this.value);
+          wardSelect.innerHTML = '<option value="">-- Chọn Xã --</option>';
+          district.wards.forEach(ward => {
+            const opt = new Option(ward.name, ward.name);
+            wardSelect.appendChild(opt);
+          });
+        });
+      });
+    });
+
+  // Gửi địa chỉ khi nhấn nút xác nhận
+  document.getElementById("confirmAddressBtn").onclick = function () {
+  const id = document.getElementById("user_id")?.value?.trim();
+  const name = document.querySelector('input[name="name"]').value.trim();
+  const phone = document.querySelector('input[name="numberphone"]').value.trim();
+  const detail = document.getElementById("detail_address").value.trim();
+  const province = document.getElementById("province");
+  const district = document.getElementById("district");
+  const ward = document.getElementById("ward");
+
+  if (!id || !name || !phone || !detail || !province.value || !district.value || !ward.value) {
+    alert("❌ Vui lòng điền đầy đủ thông tin");
+    return;
+  }
+
+  const fullAddress = `${detail}, ${ward.options[ward.selectedIndex].text}, ${district.options[district.selectedIndex].text}, ${province.options[province.selectedIndex].text}`;
+
+  const data = {
+    id,
+    name,
+    phone,
+    address: fullAddress
+  };
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "?url=Home/update_user", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      if (xhr.responseText === "ok") {
+        alert("✅ Địa chỉ đã được cập nhật thành công!");
+        document.getElementById("myModal").style.display = "none";
+        location.reload();
+      } else {
+        alert("❌ Cập nhật thất bại.");
+      }
+    }
+  };
+  xhr.send(JSON.stringify(data));
+};
+};
+</script>
+
+
+</body>
 </html>
 

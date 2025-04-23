@@ -92,7 +92,6 @@ document.getElementsByClassName("btn btn-primary")[3].onclick = function(){
 
 var list = document.getElementsByClassName("container-fuild")[0].children[0].children[1];
 list.getElementsByTagName("h5")[0].innerText = enformat(String(Number(list.getElementsByTagName("h5")[0].innerText) + totalh5)) + "(đ)";
-/***********************************************************/
 
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("myBtn");
@@ -110,42 +109,47 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 };
-var id = document.getElementById("id");
-button.value = id.innerText;
-id.remove();
+button.value = document.getElementById("user_id").value;
 
 
 function add_notice(alert, string){
   return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
 }
-
-button.onclick = function(){
-  var input = button.parentNode.getElementsByTagName("input");
+button.onclick = function () {
+  const input = button.parentNode.getElementsByTagName("input");
   for (let index = 0; index < input.length; index++) {
-    if(input[index].value == ""){
-      document.getElementById("notice").innerHTML = add_notice("fail", "Vui lòng cập nhật địa chỉ giao hàng" );
+    if (input[index].value == "") {
+      document.getElementById("notice").innerHTML = add_notice("fail", "Vui lòng cập nhật địa chỉ giao hàng");
       document.getElementsByClassName("alert")[0].style.display = "block";
-      setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
+      setTimeout(() => { document.getElementsByClassName("alert")[0].style.opacity = 0; }, 1500);
       return;
     }
   }
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
-    if(this.readyState == 4 && this.status == 200){
-      if(this.responseText == "ok"){
+
+  const name = input[0].value;
+  const phone = input[1].value;
+  const city = input[2].value;
+  const district = input[3].value;
+  const ward = input[4].value;
+  const detail = input[5].value;
+
+  const fullAddress = encodeURIComponent(detail + ", " + ward + ", " + district + ", " + city);
+  const url = `?url=Home/update_user/${button.value}/${encodeURIComponent(name)}/${encodeURIComponent(phone)}/${fullAddress}/`;
+
+  const xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      if (this.responseText == "ok") {
         modal.style.display = "none";
-        document.getElementById("notice").innerHTML = add_notice("success", "Xác nhận thành công" );
-        document.getElementsByClassName("alert")[0].style.display = "block";
-        setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
+        document.getElementById("notice").innerHTML = add_notice("success", "Xác nhận thành công");
+      } else {
+        document.getElementById("notice").innerHTML = add_notice("fail", "Xác nhận thất bại");
       }
-      else if(this.responseText == "null"){
-        document.getElementById("notice").innerHTML = add_notice("fail", "Xác nhận thất bại" );
-        document.getElementsByClassName("alert")[0].style.display = "block";
-        setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-      }
+      document.getElementsByClassName("alert")[0].style.display = "block";
+      setTimeout(() => { document.getElementsByClassName("alert")[0].style.opacity = 0; }, 1500);
     }
   };
-  xmlhttp.open("GET", "?url=Home/update_user/" + button.value + "/" + input[0].value + "/" + input[1].value + "/" + input[2].value + "/", true);
+  xmlhttp.open("GET", url, true);
   xmlhttp.send();
 };
 
@@ -185,7 +189,6 @@ function add_Product(element) {
     window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
     return;
   } 
-
   // Kiểm tra thông tin sản phẩm và số lượng
   if (!productId || isNaN(quantity) || quantity <= 0) {
     console.log("Thông tin sản phẩm không hợp lệ");
@@ -196,7 +199,6 @@ function add_Product(element) {
     }, 1500);
     return;
   }
-
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -216,7 +218,6 @@ function add_Product(element) {
       }
     }
   };
-
   // Gửi yêu cầu AJAX với phương thức POST
   xmlhttp.open("POST", "?url=Home/create_cart", true);
   xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

@@ -228,10 +228,30 @@ class Home extends Controller{
             if($this->model($user)->insert_message($array[2], $array[3], $array[4], $array[5], $array[6])) echo "ok";
             else echo "null";
         }
-        function update_user($user, $array){
-            if($this->model($user)->update_user($array[2], $array[3], $array[4], $array[5])) echo "ok";
-            else echo "null";
+        public function update_user($user) {
+            $input = json_decode(file_get_contents("php://input"), true);
+            file_put_contents("log_debug.txt", "🔧 UPDATE_USER POST: " . print_r($input, true), FILE_APPEND);
+        
+            if (!$input || !isset($_SESSION["id"])) {
+                echo "null";
+                return;
+            }
+        
+            $id = intval($input["id"]);
+            $fname = $input["name"];
+            $phone = $input["phone"];
+            $addr = $input["address"];
+        
+            if ($this->model($user)->update_user($id, $fname, $phone, $addr)) {
+                $_SESSION["address_from_db"] = $addr;
+                echo "ok";
+            } else {
+                echo "null";
+            }
         }
+        
+        
+        
         function delete_product_incart($user, $array){
             if($this->model($user)->delete_product_incart((int)$array[2])) echo "ok";
             else echo "null";
