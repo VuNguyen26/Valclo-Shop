@@ -13,7 +13,6 @@
       type="image/x-icon"
       href="./Views/images/avatar.png"
     />
-
     <!-- link icon -->
     <script src="https://kit.fontawesome.com/320d0ac08e.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,12 +40,10 @@
     <link href="./Views/Navbar/navbar.css" rel="stylesheet">
   </head>
   <body>
-    
-    <!--Nav-->
+
     <?php require_once("./Views/Navbar/index.php"); ?>
     <script src="./Views/Navbar/navbarScript.js" type="text/javascript"></script>
-    <!--Nav-->
-    <!--Body-->
+
     <div class="container-fuild">
         <div class="row nonemg d-flex">
             <div class="col-12">
@@ -59,33 +56,7 @@
                             $total = 0;
                     
                             echo "<div class=\"col-12 col-xxl-11\">
-                            <div class=\"row nonemg d-flex flex-wrap\">";
-                    if(!empty($data["order_combo"])){
-                        foreach($data["order_combo"] as $row){
-                          $count += 1;
-                          $total += (int)$row["price"];
-                            echo "<div class=\"ol-12 col-md-6 col-xl-4 col-xxl-4\">
-                            <section>
-                                <div class=\"card\"><span hidden>" . $row["id"] . "</span>
-                                    <div class=\"card-header text-center d-flex py-1\">
-                                        <h5 class=\"mb-0 col-11 fw-bold\">" . $row["name"] . "</h5><div class=\"col-1\" style=\"cursor: pointer;\" onclick=\"remove_combo(this)\">
-                                        <i class=\"fas fa-times\"></i>    
-                                    </div>
-                                        </div>		
-                                        <div class=\"card-body text-center\">
-                                            <h3 class=\"text-warning mb-2\">" . $row["price"] . "/tháng</h3>
-                                            <h6>Mỗi hộp bao gồm: </h6>
-                                            <ol class=\"list-group list-group-numbered\">";
-                                            foreach($row["product"] as $product){
-                                                echo "<li class=\"list-group-item\">" . $product["name"] . "</li>";
-                                            }
-                            echo        "</ol>
-                                        </div>
-                                        <div class=\"card-footer d-flex justify-content-between py-3\">
-                                        <h4>Chu kì: " . $row["cycle"] . "</h4><h4>Size: " . $row["size"] . "</h4>";
-                          echo "</div></div></section></div>";
-                        }
-                    }
+                            <div class=\"row nonemg d-flex flex-wrap\">";                  
                     if(!empty($data["product_in_cart"])){
                             foreach($data["product_in_cart"] as $row){
                                 $count += 1;
@@ -138,15 +109,13 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                        
+                                                    </div>                       
                                                 <div class=\"col-1\" onclick=\"remove_product_incart(this)\">
                                                     <i class=\"fas fa-times\"></i>    
                                                 </div>
                         
                                             </div>
-                                        </div>";
-                                            
+                                        </div>";                                           
                             }
                         echo "
                         </div>
@@ -202,22 +171,12 @@
                             </div>
                             <div hidden id=\"id\">" . $_SESSION["id"] . "</div>
                             <button type=\"button\" class=\"btn btn-primary\">Hoàn tất</button>";
-                    ?>
-                    
+                    ?>      
                 </div>
             </div>
         </div>
     </div>
-      
-    <!--Body-->
-
-    <!--Footer-->
-    <!--div class="footer-holder"></div>
-    <script src="./Views/footer/footerScript.js"></script-->
-    
     <?php require_once("./Views/footer/index.php");?>
-  <!--Footer-->
-  
     <script src="./Views/Cart/cart.js" type="text/javascript"></script>
   </body>
 </html>
