@@ -381,9 +381,10 @@ class Home extends Controller{
         
             $new_oid = $mem->reorder($id, $uid);
         
-            // 👉 Redirect về trang lịch sử giao dịch
-            header("Location: ?url=Home/member_page");
+            // 👉 Redirect về trang sản phẩm sau khi mua lại
+            header("Location: ?url=Home/Products");
         }
+        
         
         function add_item_comment($user, $array){
             $this->model($user)->add_item_comment($array[2], $array[3], $array[4], $_SESSION["id"]);

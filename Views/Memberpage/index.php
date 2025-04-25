@@ -200,7 +200,6 @@ if (!empty($data["orders"])) {
 
         echo "<div class=\"col-12 price\">Tổng cộng: " . number_format($total, 0, ',', '.') . "đ</div>";
 
-        // Nút xem chi tiết và mua lại nếu đơn đã xác nhận hoặc đã giao
         echo "<div class=\"col-12 text-end mt-2\">";
 echo "<a href='?url=Home/order_detail/" . $order_id . "' class='btn btn-sm btn-outline-primary me-2'>Xem chi tiết</a>";
 
