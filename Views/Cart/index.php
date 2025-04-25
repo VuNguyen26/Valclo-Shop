@@ -103,18 +103,18 @@ if (isset($_SESSION["id"])) {
                                                         <div class=\"col-12\">
                                                             <div class=\"row\">
                                                                 <div class=\"col-6\">Size: </div>
-                                                                <div class=\"col-6\"><select>
-                                                                        <option value=\"S\" selected>S</option>
-                                                                        <option value=\"M\">M</option>
-                                                                        <option value=\"L\">L</option>
-                                                                        <option value=\"X\">X</option>
-                                                                        <option value=\"XL\">XL</option>
-                                                                        <option value=\"XXL\">XXL</option>
-                                                                    </select>
+                                                                <div class=\"col-6\">
+                                                                  <select disabled>
+                                                                    <option value=\"S\" " . ($row["size"] == "S" ? "selected" : "") . ">S</option>
+                                                                    <option value=\"M\" " . ($row["size"] == "M" ? "selected" : "") . ">M</option>
+                                                                    <option value=\"L\" " . ($row["size"] == "L" ? "selected" : "") . ">L</option>
+                                                                    <option value=\"X\" " . ($row["size"] == "X" ? "selected" : "") . ">X</option>
+                                                                    <option value=\"XL\" " . ($row["size"] == "XL" ? "selected" : "") . ">XL</option>
+                                                                    <option value=\"XXL\" " . ($row["size"] == "XXL" ? "selected" : "") . ">XXL</option>
+                                                                  </select>
                                                                 </div>
                                                             </div>
-                                                        </div>
-            
+                                                        </div>           
                                                         <div class=\"col-12\">
                                                             <div class=\"row\">
                                                                 <div class=\"col-6\">Giá: </div>

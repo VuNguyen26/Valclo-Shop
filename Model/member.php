@@ -92,12 +92,20 @@ class member extends customer{
     }
     
     public function get_cart($id){
-        $query =    "SELECT `cart`.`ID` AS `id`
-                    FROM `cart`, `account`
-                    WHERE `cart`.`UID` = " . $id ."
-                    GROUP BY `cart`.`ID`";
-        return  mysqli_query($this->connect, $query);
+        $query = "SELECT 
+                    cart.ID AS id,
+                    cart.SIZE AS size,
+                    cart.QUANTITY AS num,
+                    product.ID AS pid,
+                    product.NAME AS name,
+                    product.PRICE AS price,
+                    product.IMG_URL AS img
+                  FROM cart
+                  INNER JOIN product ON product.ID = cart.PID
+                  WHERE cart.UID = $id";
+        return mysqli_query($this->connect, $query);
     }
+    
     public function update_profile_nope_img($id, $fname, $user, $cmnd, $phone, $add, $mail){
         $query =    "UPDATE `account`
                     SET `account`.`CMND` = \"" . $cmnd . "\",
@@ -113,19 +121,23 @@ class member extends customer{
         $query =    "SELECT MAX(`cart`.`ID`) AS `id` FROM `cart`" ;
         return mysqli_query($this->connect, $query);
     }
-    public function create_cart($id, $id_product, $quantity){
-        $result = mysqli_query($this->connect, "SELECT `ID` FROM `cart` WHERE `UID` = $id AND PID = $id_product");
-        $row = mysqli_fetch_assoc($result);
+    public function create_cart($id, $id_product, $quantity, $size) {
+        $stmt = $this->connect->prepare("SELECT `ID` FROM `cart` WHERE `UID` = ? AND `PID` = ? AND `SIZE` = ?");
+        $stmt->bind_param("iis", $id, $id_product, $size);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
         $check_exist_product = $row['ID'] ?? null;
     
-        if($check_exist_product) {
+        if ($check_exist_product) {
             $query = "UPDATE `cart` SET `QUANTITY` = `QUANTITY` + $quantity WHERE `ID` = $check_exist_product";
         } else {
-            $query = "INSERT INTO `cart` (`cart`.`UID`, `cart`.`PID`, `cart`.`QUANTITY`) VALUES($id, $id_product, $quantity)";
+            $query = "INSERT INTO `cart` (`UID`, `PID`, `QUANTITY`, `SIZE`) VALUES ($id, $id_product, $quantity, '$size')";
         }
     
         return mysqli_query($this->connect, $query);
     }
+    
     
     public function update_pic($id ,$path){
         $query =    "UPDATE `account`

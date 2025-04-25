@@ -44,7 +44,7 @@
 
       <?php require_once("./Views/Navbar/index.php"); ?>
 
-      <div class="header-product">
+      <div class="container-fluid">
           <?php
             if($data["user"] == "customer" || $data["user"] == "member"){
               (isset($_GET['sort-by']) && $_GET['sort-by'] === 'pname') ? $select_pname = 'selected' : $select_pname = '';
@@ -65,26 +65,24 @@
               } 
               echo 
               <<<HTML
-              <form class="container-fluid px-5 d-flex justify-content-between" action="/" method="GET">
+              <form class="bg-light border border-1 rounded rounded-5 p-3 my-3 d-flex flex-column flex-md-row justify-content-between" action="/" method="GET">
                 <input type="hidden" name="url" value="Home/Products">
                 <input type="hidden" name="search" value="">
-                <div class="col-6 p-0">
-                  <div class="w-50">
+                <div class="col-12 col-md-3 p-0">
                     <label for="sort-by">Danh mục</label>
                     <select class="w-100" name="category" id="sort-by">
                       {$render_option_category}
                     </select>
-                  </div>
                 </div>
-                <div class="col-6 p-0 d-flex justify-content-end gap-2">
-                  <div class="col-3">
+                <div class="col-12 col-md-6 p-0 d-flex flex-column flex-md-row gap-2">
+                  <div class="col-12 col-md-3">
                     <label for="sort-by">Sắp xếp theo</label>
                     <select class="w-100" name="sort-by" id="sort-by">
                       <option {$select_pname} value="pname">Tên sản phẩm</option>
                       <option {$select_price} value="price">Giá sản phẩm</option>
                     </select>
                   </div>
-                  <div class="col-3">
+                  <div class="col-12 col-md-3">
                     <label for="order-by">Thứ tự</label>
                     <select class="w-100" name="order-by" id="order-by">
                       <option {$select_asc} value="ASC">Tăng dần</option>
@@ -92,7 +90,7 @@
                     </select>
                   </div>
                   <input type="hidden" name="page" value="{$page}">
-                  <div class="col-3 d-flex flex-column">
+                  <div class="col-12 col-md-3 d-flex flex-column">
                     <label class="invisible" for="order-by">Action</label>
                     <button class="btn btn-warning" type="submit"><i class="fa-sm fas fa-search me-2"></i>Lọc</button>
                   </div>
@@ -102,10 +100,9 @@
           } 
           ?>
       </div>
-
       <div class="container-fluid"><span hidden><?php echo $data["user"]; ?></span>
         <div class="list-product">
-          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+          <div class="row">
               <?php
                   if(empty($data["product"]["list"])) echo "empty product";
                   else{
@@ -116,31 +113,23 @@
                       $name = $row['name'];
                       $price = number_format($row['price'],0,',','.');
                       echo <<<HTML
-                      <div class="col">
-                        <div class="card">
-                          <a href="?url=Home/Item/{$id}/"><img src="{$img}"class="card-img-top" alt="card-grid-image" /></a>
-                          <div class="card-body">
-                            <h5 class="card-title">{$name}</h5>
-                              <p class="card-text fw-bold fs-5">{$price} <sup>vnđ</sup></p>
-                              <div class="d-flex justify-content-between">
-                                <div style="text-align: left;" class="quantity-section">
-                                  <div class="plus-qty-btn">
-                                      <i class="fas fa-minus-circle" onclick="minus(this);"></i>
-                                  </div>
-                                  <input type="text" class="qty-buy" value="1" id="quantity-{$id}">
-                                  <div class="minus-qty-btn">
-                                      <i class="fas fa-plus-circle" onclick="plus(this);"></i>
-                                  </div>
-                                  <div style="text-align: right">
-                                      <button type="button" class="btn btn-primary addToCart" onclick="add_Product(this);">
-                                          <span hidden>{$id}</span>Thêm vào giỏ
-                                      </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                      <div class="col-6 col-md-4 col-lg-3 mb-5">
+                      <div class="border border-1 rounded rounded-5 bg-light p-1 shadow">
+                        <a href="?url=Home/Item/{$id}/">
+                          <img src="{$img}" class="d-block w-100" alt="card-grid-image" />
+                        </a>
+                        <div class="card-body px-3">
+                          <h5 class="card-title text-center">{$name}</h5>
+                          
+                          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                            <span class="card-text fw-bold fs-5">{$price} <sup>vnđ</sup></span>
+                            <a href="?url=Home/Item/{$id}" class="btn btn-warning">
+                              Mua ngay <i class="fas fa-angle-right"></i>
+                            </a>
                           </div>
                         </div>
+                      </div>
+                      </div>
                       HTML;
                     }
                   }

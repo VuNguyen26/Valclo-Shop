@@ -326,8 +326,6 @@ class Home extends Controller{
         function member_page($user){
             if ($user == "member") {
                 $mem = $this->model($user);
-        
-                // Lấy giỏ hàng
                 $cartid = $mem->get_cart($_SESSION["id"]);
         
                 if ($cartid && is_array($cartid)) {
@@ -393,18 +391,22 @@ class Home extends Controller{
         public function create_cart($user) {
             $productId = $_POST['product_id'] ?? null;
             $quantity = $_POST['quantity'] ?? null;
-            if (empty($productId) || empty($quantity) || $quantity <= 0) {
-                echo json_encode(["status" => "error", "message" => "ABC"]);
+            $size = $_POST['size'] ?? null;
+        
+            if (empty($productId) || empty($quantity) || $quantity <= 0 || empty($size)) {
+                echo json_encode(["status" => "error", "message" => "Thiếu thông tin sản phẩm"]);
                 return;
             }
+        
             if (!isset($_SESSION["id"])) {
-                echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập để sản phẩm thêm vào giỏ hàng"]);
+                echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập để thêm sản phẩm vào giỏ"]);
                 return;
             }
-            $this->model($user)->create_cart($_SESSION["id"], $productId, $quantity);
+        
+            $this->model($user)->create_cart($_SESSION["id"], $productId, $quantity, $size);
         
             echo json_encode(["status" => "success", "message" => "Thêm sản phẩm vào giỏ hàng thành công"]);
-        }                      
+        }               
         
         function sendmessage($user, $array){
             $to = explode("-", $array[2])[1];

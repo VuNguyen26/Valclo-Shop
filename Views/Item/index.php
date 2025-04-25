@@ -109,25 +109,43 @@
                     echo $sum . "/5 <i class=\"fas fa-star\"></i> <a href=\"#rate-cmt\"><span>(Xem " . count($data["comment"]) . " đánh giá)</span></a>";
                   }
                   echo "
-                  </p>
-                  <p class=\"item-price\">" . $row_product["price"] . "đ</p>";
-                  if($data["user"] == "customer" || $data["user"] == "member"){
-                  echo "<div class=\"select-quantity\">
-                    Chọn số lượng
-                    <div style=\"text-align: left;\" class=\"quantity-section\">
-                      <div class=\"minus-qty-btn\"><i class=\"fas fa-minus-circle\"></i></div>
-                      <input type=\"text\" class=\"qty-buy\" value=\"1\" disabled>
-                      <div class=\"plus-qty-btn\"><i class=\"fas fa-plus-circle\"></i></div>
-                    </div>
-                  </div>
-                  <div class=\"addtocart-btn\">
-                    <button type=\"button\" class=\"btn btn-primary\" onclick=\"add_Product(this);\" value=\"" . $row_product["id"] . "\">Add to cart <i class=\"fas fa-shopping-cart\"></i></button>
-                  </div>";
-                  echo "<div class=\"descript-item\">
+                        </p>
+                        <p class=\"item-price\">" . $row_product["price"] . "đ</p>";
+
+                      if ($data["user"] == "customer" || $data["user"] == "member") {
+                        echo "
+                        <div class=\"select-size mb-2\">
+                          <label for=\"size-select\">Chọn size:</label>
+                          <select id=\"size-select\" class=\"form-select\">
+                            <option value=\"S\">S</option>
+                            <option value=\"M\">M</option>
+                            <option value=\"L\">L</option>
+                            <option value=\"XL\">XL</option>
+                            <option value=\"XXL\">XXL</option>
+                          </select>
+                        </div>
+
+                        <div class=\"select-quantity\">
+                          Chọn số lượng
+                          <div style=\"text-align: left;\" class=\"quantity-section\">
+                            <div class=\"minus-qty-btn\"><i class=\"fas fa-minus-circle\"></i></div>
+                            <input type=\"text\" class=\"qty-buy\" value=\"1\" disabled>
+                            <div class=\"plus-qty-btn\"><i class=\"fas fa-plus-circle\"></i></div>
+                          </div>
+                        </div>
+
+                        <div class=\"addtocart-btn\">
+                          <button type=\"button\" class=\"btn btn-primary\" onclick=\"add_Product(this);\" value=\"" . $row_product["id"] . "\">
+                            Thêm vào giỏ <i class=\"fas fa-shopping-cart\"></i>
+                          </button>
+                        </div>
+
+                        <div class=\"descript-item\">
                           <h3>Chi tiết sản phẩm</h3>
                           <p>" . $row_product["decs"] . "</p>
                         </div>";
-                }
+                      }
+
               }
               ?>
             </div>

@@ -54,30 +54,32 @@
 
       if (!empty($data["product_in_cart"])) {
         foreach ($data["product_in_cart"] as $row) {
-          $count += 1;
-          $total += (int)$row["price"] * $row["num"];
-          echo "<div class=\"col-12\">
-          <div class=\"row node nonemg\">
-              <div class=\"col-4 d-flex flex-wrap align-content-center justify-content-center\">
-                  <img src=\"" . $row["img"] . "\" alt=\"item\">
-              </div>
-              <div class=\"col-8\">
-                  <div class=\"row\">
-                      <div class=\"col-12\">
-                          <h5>" . $row["name"] . "</h5>
-                      </div>
-                      <div class=\"col-12\">Size: <span>" . $row["size"] . "</span></div>
-                      <div class=\"col-12\">Số lượng: <span>" . $row["num"] . "</span></div>
-                      <div class=\"col-12\">Tổng cộng: <span class=\"price\">" . ($row["price"] * $row["num"]) . "(đ)</span></div>
-                  </div>
-              </div>
-          </div>
-        </div>";
+            $count += 1;
+            $price = (int) preg_replace('/[^0-9]/', '', $row["price"]);
+            $quantity = (int) $row["num"];
+            $item_total = $price * $quantity;
+            $total += $item_total;
+    
+            echo "<div class=\"col-12\">
+                    <div class=\"row node nonemg\">
+                        <div class=\"col-4 d-flex flex-wrap align-content-center justify-content-center\">
+                            <img src=\"" . $row["img"] . "\" alt=\"item\">
+                        </div>
+                        <div class=\"col-8\">
+                            <div class=\"row\">
+                                <div class=\"col-12\">
+                                    <h5>" . $row["name"] . "</h5>
+                                </div>
+                                <div class=\"col-12\">Size: <span>" . htmlspecialchars($row["size"]) . "</span></div>
+                                <div class=\"col-12\">Số lượng: <span>" . $quantity . "</span></div>
+                                <div class=\"col-12\">Tổng cộng: <span>" . number_format($item_total, 0, ',', '.') . "đ</span></div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>";
         }
-      }
-
+    }
       $tong_cong = $total;
-
       $_SESSION['total_amount'] = $tong_cong;
       ?>
     </div>

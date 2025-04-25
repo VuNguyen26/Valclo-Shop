@@ -259,3 +259,23 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+function add_Product(btn) {
+  const id = btn.value;
+  const size = document.getElementById("size-select").value;
+  const qty = document.querySelector(".qty-buy").value;
+  const formData = new URLSearchParams();
+  formData.append("product_id", id);
+  formData.append("quantity", qty);
+  formData.append("size", size);
+
+  fetch("?url=Home/create_cart", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+    });
+}
+
