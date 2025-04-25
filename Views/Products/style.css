@@ -307,3 +307,94 @@
     }
   }
   
+  .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .card-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  
+    height: 48px; /* Đảm bảo chiều cao đúng với 2 dòng */
+    line-height: 1.2; /* Đảm bảo text không quá cao dòng */
+  }
+  
+  .card-img-top {
+    height: 350px; /* hoặc 220px tùy layout bạn muốn */
+    object-fit: contain; /* hoặc cover nếu muốn ảnh lấp đầy */
+  }
+    
+  .addToCart {
+    margin-left: 20px; /* hoặc 12px nếu muốn cách xa hơn */
+  }
+  /* Container tổng form */
+form.container-fluid.px-5.d-flex.justify-content-between {
+  background-color: #fdfdfd;
+  border: 1px solid #ddd;
+  padding: 20px 32px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Label */
+form label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+  display: inline-block;
+  color: #333;
+}
+
+/* Select box */
+form select {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+form select:focus {
+  border-color: #ffa500;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(255, 165, 0, 0.25);
+}
+
+/* Nút lọc */
+form .btn-warning {
+  background-color: #ffc107;
+  border: none;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 8px 0;
+  transition: background-color 0.2s ease-in-out;
+}
+
+form .btn-warning:hover {
+  background-color: #e0a800;
+  color: white;
+}
+
+/* Giãn cách đều các khối */
+form .col-3,
+form .w-50 {
+  min-width: 150px;
+}
+
+/* Fix căn giữa nút lọc */
+form .d-flex.flex-column {
+  justify-content: end;
+}
