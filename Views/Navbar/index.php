@@ -31,49 +31,44 @@
     </div>
 
     <div class="login-button">
-      <?php if(!isset($_SESSION["user"]) || $_SESSION["user"] == "customer"){
-        echo "<button class=\"btn btn-primary\" type=\"button\"><a href=\"?url=Home/Login/\"><i class=\"fas fa-sign-in-alt\"></i> Login</a></button>";
-      }
-      else if(isset($_SESSION["user"])){
-        if($_SESSION["user"] == "member"){
-          echo "<div class=\"dropdown\">
-          <button type=\"button\" class=\"btn btn-primary dropdown-toggle\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">
-            <i class=\"fas fa-user\"></i>
-          </button>
-          <ul class=\"dropdown-menu\">
-            <li><a class=\"dropdown-item\" href=\"?url=/Home/member_page/\">Hồ sơ cá nhân</a></li>
-            <li><a class=\"dropdown-item\" href=\"?url=/Home/logout/\">Thoát <i class=\"fas fa-sign-out-alt\"></i></a></li>
-          </ul>
-        </div>";
-        }
-        if($_SESSION["user"] == "manager"){
-          echo "<div class=\"dropdown\">
-          <button type=\"button\" class=\"btn btn-primary dropdown-toggle\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\">
-            <i class=\"fas fa-user\"></i>
-          </button>
-          <ul class=\"dropdown-menu\">
-            <li><a class=\"dropdown-item\" href=\"?url=/Home/member_page/\">Thành viên</a></li>
-            <li><a class=\"dropdown-item\" href=\"?url=/Home/logout/\">Thoát <i class=\"fas fa-sign-out-alt\"></i></a></li>
-          </ul>
-        </div>";
-      }
-      }
-      ?>   
-    </div>
+  <?php
+  if (!isset($_SESSION["user"]) || $_SESSION["user"] == "customer") {
+    echo "<button class=\"btn btn-primary\" type=\"button\">
+            <a href=\"?url=Home/Login/\"><i class=\"fas fa-sign-in-alt\"></i> Login</a>
+          </button>";
+  } else if (isset($_SESSION["user"]) && $_SESSION["user"] == "member") {
+    echo "<div class=\"dropdown\" data-bs-auto-close=\"outside\">
+            <button type=\"button\" class=\"btn btn-primary\" id=\"userBtn\">
+              <i class=\"fas fa-user\"></i>
+            </button>
+            <ul class=\"dropdown-menu\" id=\"userDropdown\">
+              <li><a class=\"dropdown-item\" href=\"?url=/Home/member_page/\">Hồ sơ cá nhân</a></li>
+              <li><a class=\"dropdown-item\" href=\"?url=/Home/logout/\">Thoát <i class=\"fas fa-sign-out-alt\"></i></a></li>
+            </ul>
+          </div>";
+  }
+  ?>
+</div>
+
   </nav>
 </div>
 
-<script src="./Views/Navbar/navbarScript.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const dropdownButton = document.querySelector(".dropdown-toggle");
-    const dropdownMenu = document.querySelector(".dropdown-menu");
-
+    const dropdownButton = document.getElementById("userBtn");
+    const dropdownMenu = document.getElementById("userDropdown");
     if (dropdownButton && dropdownMenu) {
-      dropdownButton.addEventListener("click", function () {
+      dropdownButton.addEventListener("click", function (e) {
+        e.stopPropagation();
         dropdownMenu.classList.toggle("show");
+      });
+      document.addEventListener("click", function (e) {
+        if (!dropdownMenu.contains(e.target) && !dropdownButton.contains(e.target)) {
+          dropdownMenu.classList.remove("show");
+        }
       });
     }
   });
 </script>
+
 

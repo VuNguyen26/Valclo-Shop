@@ -297,15 +297,28 @@
     text-decoration: none;
     color: white;
   }
-  .login-button .dropdown-menu.show{
+  .login-button .dropdown-menu {
+    display: none;
+    position: fixed;          
+    top: 60px;               
+    right: 20px;              
+    z-index: 9999;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     width: 200px;
     height: 100px;
   }
-  .login-button .dropdown-menu a{
+  
+  .login-button .dropdown-menu.show {
+    display: block;
+  }
+  
+  .login-button .dropdown-menu a {
     color: black !important;
   }
   
-  .login-button .dropdown-menu .dropdown-item.active{
+  .login-button .dropdown-menu .dropdown-item.active {
     background-color: #f3c584;
   }
   
@@ -323,18 +336,12 @@
     margin-bottom: 15px;
     display: none;
   }
-  .success{
+  
+  .success {
     background-color: #04AA6D;
   }
-  .fail{
+  
+  .fail {
     background-color: rgb(251, 30, 30);
   }
-
-.login-button .dropdown-menu {
-  display: none;
-}
-
-.login-button .dropdown-menu.show {
-  display: block;
-  z-index: 9999;
-}
+  

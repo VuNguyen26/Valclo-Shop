@@ -141,24 +141,22 @@
                 if(empty($data["cate_product"])) echo "empty product";
                 else {
                   foreach ($data["cate_product"] as $row) {
-                    echo "<div class=\"col\">
-                      <div class=\"card\">
-                        <a href=\"?url=Home/Item/" . $row["id"] . "\">
-                          <img
-                            src=\"" . $row["img"] . "\"
-                            class=\"card-img-top\"
-                            alt=\"card-grid-image\"
-                          />
-                        </a>
-                        <div class=\"card-body\">
-                          <h5 class=\"card-title\">" . $row["name"] . "</h5>
-                          <p class=\"card-text related-item-price\">
-                            " . $row["price"] . "
-                          đ</p>
-                        </div>
-                      </div>
-                    </div>";
-                  }
+                    echo "<div class=\"col h-100 d-flex\">
+                            <div class=\"card h-100 w-100\">
+                              <a href=\"?url=Home/Item/" . $row["id"] . "\">
+                                <img
+                                  src=\"" . $row["img"] . "\"
+                                  class=\"card-img-top\"
+                                  alt=\"card-grid-image\" />
+                              </a>
+                              <div class=\"card-body d-flex flex-column\">
+                                <h5 class=\"card-title\">" . $row["name"] . "</h5>
+                                <p class=\"card-text related-item-price\">
+                                  " . $row["price"] . " đ</p>
+                              </div>
+                            </div>
+                          </div>";
+                  }                  
                 }
               ?>
             </div>
