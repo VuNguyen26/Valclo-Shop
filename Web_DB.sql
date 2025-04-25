@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2025 at 06:59 PM
+-- Generation Time: Apr 25, 2025 at 09:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -47,8 +47,9 @@ CREATE TABLE `account` (
 --
 
 INSERT INTO `account` (`ID`, `CMND`, `FNAME`, `PHONE`, `ADDRESS`, `USERNAME`, `EMAIL`, `PWD`, `IMG_URL`, `RANK`, `STATUS`, `REASON_BANNED`) VALUES
-(1, '0512040017', 'Nguyễn Minh Vũ', '0968830591', 'Quảng Ngãi', 'minhvu', 'nguyenminhvu591@gmail.com', 'valcloshop', './Views/images/mv.png', 100, 'Hoạt động', NULL),
-(2, '0512040017', 'Nguyễn Minh Hiếu', '0965279041', 'Quảng Ngãi', 'subway99', 'nguyenhieu3105@gmail.com', '12345678', './Views/images/mv.png', 1000, 'Hoạt động', NULL);
+(1, '0512040017', 'Nguyễn Minh Vũ', '0968830591', '20/2, Xã Đức Lân, Huyện Mộ Đức, Tỉnh Quảng Ngãi', 'minhvu', 'nguyenminhvu591@gmail.com', 'valcloshop', './Views/images/mv.png', 0, 'Hoạt động', NULL),
+(2, '0512040017', 'Nguyễn Minh Hiếu', '0965279041', 'Quảng Ngãi', 'subway99', 'nguyenhieu3105@gmail.com', '12345678', './Views/images/mv.png', 1000, 'Hoạt động', NULL),
+(3, '1234567899', 'vunguyen', '0123456789', '20/2, Phường Hiệp Bình Phước, Thành phố Thủ Đức, Thành phố Hồ Chí Minh', 'vu', 'vunguyen@gmail.com', '123456', './Views/images/np.png', 0, 'Hoạt động', NULL);
 
 -- --------------------------------------------------------
 
@@ -139,7 +140,12 @@ INSERT INTO `comment` (`ID`, `PID`, `UID`, `STAR`, `CONTENT`, `TIME`) VALUES
 (5, 2, 1, 3, 'Hơi tệ tí nhe', '2025-04-20'),
 (6, 3, 1, 4, 'Tạm ổn', '2025-04-19'),
 (7, 1, 1, 5, '', '2025-04-19'),
-(8, 1, 1, 5, 'đẹp', '2025-04-19');
+(8, 1, 1, 5, 'đẹp', '2025-04-19'),
+(9, 2, 1, 4, 'đẹp', '2025-04-25'),
+(10, 2, 1, 3, 'tạm ổn', '2025-04-25'),
+(11, 2, 1, 5, 'good', '2025-04-25'),
+(12, 3, 1, 5, 'good', '2025-04-25'),
+(13, 4, 1, 4, 'good', '2025-04-25');
 
 -- --------------------------------------------------------
 
@@ -160,7 +166,11 @@ CREATE TABLE `comment_news` (
 --
 
 INSERT INTO `comment_news` (`ID`, `NID`, `CID`, `CONTENT`, `TIME`) VALUES
-(1, 1, 1, 'Bài viết tuyệt vời!', '2025-05-01');
+(1, 1, 1, 'Bài viết tuyệt vời!', '2025-05-01'),
+(2, 5, 1, 'hay', '2025-04-25'),
+(3, 6, 1, 'tuyệt', '2025-04-25'),
+(4, 2, 1, 'đẹp', '2025-04-25'),
+(5, 2, 1, 'hay', '2025-04-25');
 
 -- --------------------------------------------------------
 
@@ -259,8 +269,10 @@ INSERT INTO `order` (`ID`, `UID`, `TIME`, `STATUS`, `TOTAL_PRICE`, `METHOD`) VAL
 (2, 2, '2025-04-11', 'Đã xác nhận', 1300000, 'Momo'),
 (3, 2, '2025-04-12', 'Đang giao', 1200000, 'COD'),
 (4, 1, '2025-04-13', 'Đã giao', 2200000, 'Paypal'),
-(35, 1, '2025-04-19', 'Chờ xác nhận', 2500000, 'COD'),
-(41, 1, '2025-04-19', 'Khách hàng hủy', 2450000, 'COD');
+(54, 1, '2025-04-25', 'Chờ xác nhận', 1100000, 'COD'),
+(55, 1, '2025-04-25', 'Chờ xác nhận', 1800000, 'COD'),
+(56, 3, '2025-04-25', 'Chờ xác nhận', 1100000, 'Momo'),
+(57, 3, '2025-04-25', 'Chờ xác nhận', 3900000, 'COD');
 
 -- --------------------------------------------------------
 
@@ -269,6 +281,7 @@ INSERT INTO `order` (`ID`, `UID`, `TIME`, `STATUS`, `TOTAL_PRICE`, `METHOD`) VAL
 --
 
 CREATE TABLE `order_detail` (
+  `ID` int(1) NOT NULL,
   `ORDER_ID` bigint(20) NOT NULL,
   `PID` bigint(20) NOT NULL,
   `SIZE` varchar(5) DEFAULT 'L',
@@ -279,13 +292,20 @@ CREATE TABLE `order_detail` (
 -- Dumping data for table `order_detail`
 --
 
-INSERT INTO `order_detail` (`ORDER_ID`, `PID`, `SIZE`, `QUANTITY`) VALUES
-(1, 1, 'M', 2),
-(1, 2, 'L', 1),
-(2, 1, 'S', 1),
-(2, 3, 'XL', 1),
-(35, 1, 'S', 1),
-(41, 10, 'S', 1);
+INSERT INTO `order_detail` (`ID`, `ORDER_ID`, `PID`, `SIZE`, `QUANTITY`) VALUES
+(1, 1, 1, 'M', 2),
+(2, 1, 2, 'L', 1),
+(3, 2, 1, 'S', 1),
+(4, 2, 3, 'XL', 1),
+(5, 54, 1, 'S', 1),
+(6, 54, 1, 'M', 1),
+(7, 55, 2, 'L', 1),
+(8, 55, 2, 'XXL', 1),
+(9, 55, 2, 'XL', 1),
+(10, 56, 1, 'XL', 1),
+(11, 56, 1, 'M', 1),
+(13, 57, 3, 'XXL', 3),
+(14, 57, 3, 'M', 3);
 
 -- --------------------------------------------------------
 
@@ -412,6 +432,7 @@ CREATE TABLE `sub_img_url` (
   `IMG_URL` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
 -- Indexes for dumped tables
 --
 
@@ -479,7 +500,7 @@ ALTER TABLE `order`
 -- Indexes for table `order_detail`
 --
 ALTER TABLE `order_detail`
-  ADD PRIMARY KEY (`ORDER_ID`,`PID`),
+  ADD PRIMARY KEY (`ID`),
   ADD KEY `PID` (`PID`);
 
 --
@@ -504,13 +525,13 @@ ALTER TABLE `sub_img_url`
 -- AUTO_INCREMENT for table `account`
 --
 ALTER TABLE `account`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -522,13 +543,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `comment_news`
 --
 ALTER TABLE `comment_news`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `employee_account`
@@ -552,7 +573,13 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT for table `order_detail`
+--
+ALTER TABLE `order_detail`
+  MODIFY `ID` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -597,16 +624,11 @@ ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Constraints for table `order_detail`
---
-ALTER TABLE `order_detail`
-  ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`ORDER_ID`) REFERENCES `order` (`ID`),
-  ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`);
---
 -- Constraints for table `product`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`CATEGORY`) REFERENCES `category` (`id`);
+
 --
 -- Constraints for table `sub_img_url`
 --
