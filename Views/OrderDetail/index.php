@@ -5,7 +5,6 @@
 $order = $data["order"];
 $user  = mysqli_fetch_array($data["user"], MYSQLI_ASSOC);
 
-// Tổng thanh toán lấy từ order table
 $total = $order['total'] ?? 0;
 ?>
 <!DOCTYPE html>

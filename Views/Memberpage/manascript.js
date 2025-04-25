@@ -94,14 +94,4 @@ function ban_account(element){
 function add_notice(alert, string){
     return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
 }
-/*
-button.onclick = function(){
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function(){
-    modal.style.display = "none";
-  };
-  xmlhttp.open("GET", "?url=Home/update_user/", true);
-  xmlhttp.send();
-  
-};*/
 

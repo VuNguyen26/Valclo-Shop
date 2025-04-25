@@ -32,13 +32,11 @@
       integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
       crossorigin="anonymous"
     ></script>
-    <!-- Latest compiled and minified CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
 
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body>
@@ -83,7 +81,6 @@
           <div class="col-xl-7">
             <div class="right-content">
               <?php
-              
               $sum = 0;
               $sum_1 = 0;
               $sum_2 = 0;
@@ -131,124 +128,9 @@
                           <p>" . $row_product["decs"] . "</p>
                         </div>";
                 }
-                  else if($data["user"] == "manager"){
-                    echo "<div class=\"descript-item\">
-                          <h3>Chi tiết sản phẩm</h3>
-                          <p>" . $row_product["decs"] . "</p>
-                        </div>";
-                    echo "<button type=\"button\" id=\"edit-itemBtn\">Chỉnh sửa</button>
-                    <span hidden id=\"get_name_val\">" . $row_product["name"] . "</span>
-                    <div id=\"editItem-modal\" class=\"edit-item-modal\">
-                      <div class=\"editItem-modal-content\">
-                        <div class=\"editItem-modal-header\">
-                          <span class=\"close-modal-edit\">&times;</span>
-                          <h2>Chỉnh sửa sản phẩm</h2>
-                        </div>
-                        <div class=\"editItem-modal-body\">
-                          <form action=\"?url=Home/update_item/" . $row_product["id"] . "/\" method=\"POST\" enctype=\"multipart/form-data\">
-                            <div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"name\">
-                                Tên sản phẩm:
-                              </label>
-                              <div class=\"col-lg-8\"><input type=\"text\" name=\"name\" value=\"\" placeholder=\"Nhập tên sản phẩm\" class=\"form-control is-valid\" id=\"validationSuccess\" required></div>
-                            </div>
-                            <div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"price\">
-                                Giá:
-                              </label>
-                              <div class=\"col-lg-8\"><input type=\"number\" name=\"price\" value=\"" . $row_product["price"] . "\" placeholder=\"Nhập giá của sản phẩm\" class=\"form-control is-valid\" id=\"validationSuccess\" required></div>
-                            </div>
-                            <div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"e-image-url\">
-                              <i class=\"far fa-image\"></i> Ảnh sản phẩm: 
-                              </label>
-                              <div class=\"col-lg-8\"><img src=\"" . $row_product["img"] . "\" alt=\"main_img\" style=\"width: 50%; margin-bottom: 1rem;\"><input type=\"file\" id=\"e-image-url\" name=\"e-image-url[]\" onchange=\"upload_pic(this)\" hidden></div>
-                            </div>";
-                            $count = 1;
-                            foreach($data["sub_img"] as $row){
-                              echo"<div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"e-image-url-" . $count . "\">
-                              <i class=\"far fa-image\"></i> Ảnh phụ thứ " . $count . ": 
-                              </label>
-                              <div class=\"col-lg-8\"><img src=\"" . $row["img"] . "\" alt=\"main_img\" style=\"width: 50%; margin-bottom: 1rem;\"><input type=\"file\" id=\"e-image-url-" . $count . "\" name=\"e-image-url[]\" onchange=\"upload_pic(this)\" hidden></div>
-                            </div>";
-                              $count += 1;
-                            }
-                            echo "<div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"description\">
-                                Mô tả:
-                              </label>
-                              <div class=\"col-lg-8\"><textarea rows=\"10\" name=\"description\" placeholder=\"Nhập mô tả sản phẩm\" class=\"form-control is-valid\" id=\"validationSuccess\" required>" . $row_product["decs"] . "</textarea></div>
-                            </div>
-                            <div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"remain\">
-                                Số lượng tồn kho:
-                              </label>
-                              <div class=\"col-lg-8\"><input type=\"number\" name=\"remain\" value=\"" . $row_product["num"] . "\" placeholder=\"Nhập số lượng sản phẩm\" class=\"form-control is-valid\" id=\"validationSuccess\" required></div>
-                            </div>
-                            <div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"featured_product\">
-                                Top sản phẩm:
-                              </label>
-                              <div class=\"col-lg-8\">
-                                <select id=\"featured_product\" name=\"featured_product\">
-                                  <option value=\"0\""; if ($row_product["top_item"] == 0) echo "selected"; 
-                                  echo">0</option>
-                                  <option value=\"1\""; if ($row_product["top_item"] == 1) echo "selected"; 
-                                  echo">1</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class=\"row\">
-                              <label class=\"col-lg-4\" for=\"category\">
-                                Loại:
-                              </label>
-                              <div class=\"col-lg-8\">
-                                <select id=\"category\" name=\"category\">
-                                  <option selected=\"\" disabled=\"\" value=\"Shirt\""; if ($row_product["cate"] == "Shirt") echo "selected"; 
-                                  echo">Áo</option>
-                                  <option value=\"Trousers\""; if ($row_product["cate"] == "Trousers") echo "selected"; 
-                                  echo">Quần</option>
-                                  <option value=\"Accessories\""; if ($row_product["cate"] == "Accessories") echo "selected"; 
-                                  echo">Phụ kiện</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class=\"btn-conf-edit\">
-                              <button type=\"submit\">Xác nhận</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>";
-                  }
-                  
-                }
+              }
               ?>
-              <!-- <h2 class="title-item">Mũ Bucket Hat thêu Be Cool!!!</h2>
-              <p class="rating-star">
-                5/5 <i class="fas fa-star"></i> <span>(Xem n đánh giá)</span>
-              </p>
-              <p class="item-price">169.000VND</p>
-              <div class="select-quantity">
-                Chọn số lượng
-                <div style="text-align: left;" class="quantity-section">
-                  <div class="plus-qty-btn"><i class="fas fa-minus-circle"></i></button></div>
-                  <input type="text" class="qty-buy" value="1" disabled>
-                  <div class="minus-qty-btn"><i class="fas fa-plus-circle"></i></div>
-                </div>
-              </div>
-              <div class="addtocart-btn">
-                <button type="button" class="btn btn-primary">Add to cart <i class="fas fa-shopping-cart"></i></button>
-              </div>
-              <div class="descript-item">
-                <h3>Chi tiết sản phẩm</h3>
-                <p>Nếu bạn đã sở hữu những chiếc mũ lưỡi trai thuần nam tính hoặc những dáng mũ fedora lịch lãm, kiểu dáng mũ cao bồi cách điệu bụi bặm, 
-                  và đang muốn tìm cho mình một chiếc mũ mang đến vẻ trẻ trung, năng động thì Bucket Hat chính là câu trả lời của bạn đây. Care & Share 
-                  ra mắt phiên bản mũ Bucket Hat cùng với nhiều thiết kế ấn tượng nhưng không hề mất đi vẻ nam tính, đơn giản của bạn khi mang chiếc mũ này nhé! </p>
-              </div> -->
             </div>
-            
           </div>
         </div>
         <div class="bottom">
@@ -357,27 +239,7 @@
                       <div class=\"script-cmt\">
                         <p>" . $row["content"] . "</p>
                       </div>";
-                    if($data["user"] == "manager"){
-                      echo "<div><i class=\"fas fa-trash-alt\" data-bs-toggle=\"modal\" data-bs-target=\"#delcmtModal-" .$count . "\"></i></div>";
-                      echo "<div class=\"modal fade\" id=\"delcmtModal-" .$count . "\" tabindex=\"-1\" aria-labelledby=\"delcmtModalLabel-" .$count . "\" aria-hidden=\"true\">
-                        <div class=\"modal-dialog modal-dialog-centered\">
-                          <div class=\"modal-content\">
-                            <div class=\"modal-header\">
-                              <h5 class=\"modal-title\" id=\"delcmtModalLabel-" .$count . "\">Bạn muốn xóa bình luận này</h5>
-                              <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
-                            </div>
-                            <div class=\"modal-body\">
-                              
-                            </div>
-                            <div class=\"modal-footer\">
-                              <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>
-                              <button type=\"button\" class=\"btn btn-primary\" data-bs-dismiss=\"modal\" onclick=\"delete_comment(" . $row["id"] . ", this)\">Xác nhận</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>";
-                      $count += 1;
-                    }
+                   
                 echo "</div>
                     </div>
                 </div>";
@@ -408,7 +270,6 @@
           ?>
           
         </div>
-        
       </div>
     <?php require_once("./Views/footer/index.php");?>
     </div>

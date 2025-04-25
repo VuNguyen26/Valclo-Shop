@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- setting page -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Payment page">
@@ -14,7 +13,6 @@
       href="./Views/images/avatar.png"
     />
 
-    <!-- link icon -->
     <script src="https://kit.fontawesome.com/320d0ac08e.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -41,11 +39,7 @@
     <link href="./Views/Navbar/navbar.css" rel="stylesheet">
   </head>
   <body>
-    <!--Nav-->
     <?php require_once("./Views/Navbar/index.php"); ?>
-    <!--Nav-->
-
-    <!--Body-->
     <div class="container-fuild payment">
     <div class="row nonemg d-flex justify-content-center">
   <div class="col-12 col-md-6 white nonepad">
@@ -55,7 +49,6 @@
       if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
-
       $count = 0;
       $total = 0;
 
@@ -83,10 +76,8 @@
         }
       }
 
-      // Tổng cộng chính là $total
       $tong_cong = $total;
 
-      // Lưu vào session
       $_SESSION['total_amount'] = $tong_cong;
       ?>
     </div>
@@ -146,7 +137,6 @@
 </div>
 
 <?php require_once("./Views/footer/index.php");?>
-<!--Footer-->
 <?php echo "<script src=\"./Views/Payment/myScript.js\"></script>"; ?>
 
 <script>

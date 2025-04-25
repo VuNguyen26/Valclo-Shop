@@ -16,14 +16,12 @@ function filterSelection(c) {
   let x;
   x = document.getElementsByClassName("filterDiv");
   if (c == "all") c = "";
-  // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
   for (let i = 0; i < x.length; i++) {
     removeClass(x[i], "show");
     if (x[i].className.indexOf(c) > -1) addClass(x[i], "show");
   }
 }
 
-// Show filtered elements
 function addClass(element, name) {
   let arr1, arr2;
   arr1 = element.className.split(" ");
@@ -35,7 +33,6 @@ function addClass(element, name) {
   }
 }
 
-// Hide elements that are not selected
 function removeClass(element, name) {
   var arr1, arr2;
   arr1 = element.className.split(" ");
@@ -48,7 +45,6 @@ function removeClass(element, name) {
   element.className = arr1.join(" ");
 }
 
-// Add active class to the current control button (highlight it)
 let btnContainer = document.getElementById("myBtnContainer");
 let tabs = btnContainer.getElementsByClassName("tab-filter");
 for (let i = 0; i < tabs.length; i++) {
@@ -59,7 +55,6 @@ for (let i = 0; i < tabs.length; i++) {
   });
 }
 
-//---------------------------------------------------------------------------------------------------------
 function minus(element){
   var input = element.parentNode.parentNode.getElementsByTagName("input")[0]
   input.value = Number(input.value) - 1;
@@ -70,7 +65,6 @@ function plus(element){
   input.value = Number(input.value) + 1;
 }
 
-
 var user = document.getElementsByClassName("container-fluid")[0].getElementsByTagName("span")[0].innerText;
 document.getElementsByClassName("container-fluid")[0].getElementsByTagName("span")[0].remove();
 
@@ -80,20 +74,14 @@ for (let index = 0; index < document.getElementsByClassName("addToCart").length;
 }
 
 function add_Product(element) {
-  // Lấy ID sản phẩm từ <span>
   var productId = element.querySelector('span').innerText; 
-
-  // Lấy phần tử số lượng sản phẩm
   var quantityElement = element.parentNode.previousElementSibling.previousElementSibling;
   var quantity = quantityElement ? parseInt(quantityElement.value) : 0;
-
-  // Kiểm tra xem người dùng đã đăng nhập chưa
   if (user == "customer") {
-      window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập
+      window.location.href = "?url=Home/Login/Products/";
       return;
   }
 
-  // Kiểm tra thông tin sản phẩm và số lượng
   if (!productId || isNaN(quantity) || quantity <= 0) {
       console.log("Thông tin sản phẩm không hợp lệ");
       document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin sản phẩm hoặc số lượng không hợp lệ");
@@ -125,7 +113,6 @@ function add_Product(element) {
       }
   };
 
-  // Gửi yêu cầu AJAX với phương thức POST
   xmlhttp.open("POST", "?url=Home/create_cart", true);
   xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xmlhttp.send("cart_date=" + encodeURIComponent(new Date().toISOString()) +
@@ -133,7 +120,6 @@ function add_Product(element) {
                "&quantity=" + encodeURIComponent(quantity));
 }
 
-// Thêm hàm thông báo (nếu chưa có)
 function add_notice(alert, string) {
   return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
 }
@@ -243,30 +229,4 @@ function Validate(){
 function add_notice(alert, string){
   return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
 }
-// function Validate(){
-//   var name =  document.getElementsByClassName("add_name").value;
-//   var price =  document.getElementsByClassName("add_price").value;
-//   var url =  document.getElementsByClassName("add_url").value;
-//   var description =  document.getElementsByClassName("add_description").value;
-//   var input =  document.getElementsByClassName("add_quantity").value;
-//   var input =  document.getElementsByClassName("add_type").value;
-// 	var xmlhttp = new XMLHttpRequest();
-// 	xmlhttp.onreadystatechange = function(){
-		
-// 		if (this.readyState == 4 && this.status == 200){
-// 			if(this.responseText != "null"){
-// 				document.getElementById("notice").innerHTML = add_notice("success", "Đăng nhập thành công" );
-// 				document.getElementsByClassName("alert")[0].style.display = "block";
-// 				setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);
-// 				window.location.href = this.responseText;
-// 			}
-// 			else{
-// 				document.getElementById("notice").innerHTML = add_notice("fail", "Tên đăng nhập hoặc mật khẩu không đúng" );
-// 				document.getElementsByClassName("alert")[0].style.display = "block";
-// 				setTimeout(function(){document.getElementsByClassName("alert")[0].style.opacity = 0;}, 1500);; // addcart -> login => item // nhấn cart => login => cart // nhấn login => home => login đổi logout
-// 			}
-// 		}
-// 	};
-// 	xmlhttp.open("GET", "?url=Home/check_login/" + input[0].value + "/" + input[1].value + "/" + history_str + "/", true);
-// 	xmlhttp.send();
-// }
+

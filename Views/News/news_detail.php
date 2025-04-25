@@ -152,7 +152,6 @@
 	</section>
 </div>
 
-
 <?php require_once("./Views/footer/index.php");?>
 </body>
 </html>

@@ -1,8 +1,6 @@
-
-
 <div id="notice"></div>
-
     <footer>
+
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-4 col-md-12 col-12">
@@ -22,7 +20,7 @@
           <div class="col-lg-4 col-md-6 col-12">
             <h4>Liên hệ</h4>
             <p><i class="fas fa-phone-alt"></i> +(84)123 456 789</p>
-            <p><i class="fas fa-map-marker-alt"></i> 273 Đ. An Dương Vương, Phường 2, Quận 5, TP.HCM, Việt Nam</p>
+            <p><i class="fas fa-map-marker-alt"></i> 273 Đ. An Dương Vương, Phường 3, Quận 5, TP.HCM, Việt Nam</p>
             <p><i class="far fa-envelope"></i> Support@Valcloshop.com</p>
           </div>
         </div>

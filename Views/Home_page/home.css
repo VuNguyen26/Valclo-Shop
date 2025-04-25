@@ -9,10 +9,7 @@
   .hero .row1 {
     width: 100%;
   }
-  /* .noneheight{
-    height: unset !important;
-  } */
-  
+
   .hero .row1 {
     position: relative;
   }
@@ -164,8 +161,7 @@
       padding: 0.3rem 1rem;
     }
   }
-  
-  /* Style shop collection */
+
   .shop-collection h2 {
     margin-top: 5rem;
     margin-bottom: 2rem;

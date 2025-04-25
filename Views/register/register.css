@@ -1,4 +1,3 @@
-/* Hiển thị thông báo alert */
 .alert {
   padding: 15px;
   border-radius: 6px;
@@ -6,12 +5,11 @@
   margin-top: 10px;
   text-align: center;
   animation: fadeIn 0.3s ease;
-  margin-bottom: 10px; /* Thêm khoảng cách dưới để dễ nhìn hơn */
+  margin-bottom: 10px;
   display: block !important;
   visibility: visible !important;
 }
 
-/* Thành công */
 .alert-success {
   background-color: #d4edda;
   color: #155724;
@@ -19,7 +17,6 @@
   font-weight: bold;
 }
 
-/* Lỗi */
 .alert-danger {
   background-color: #f8d7da;
   color: #721c24;
@@ -27,7 +24,6 @@
   font-weight: bold;
 }
 
-/* Hiệu ứng fade */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -39,7 +35,6 @@
   }
 }
 
-/* Cải thiện kiểu cho các button social login */
 .btn-block2 {
   display: flex;
   align-items: center;
@@ -53,7 +48,7 @@
 }
 
 .btn-facebook {
-  background-color: #F7931E; /* Màu cam */
+  background-color: #F7931E;
   color: white;
   border: none;
 }

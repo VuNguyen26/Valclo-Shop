@@ -1,4 +1,3 @@
-
 function add_notice(alert, string){
     return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
   }
@@ -31,5 +30,5 @@ function add_notice(alert, string){
         
       };
       xmlhttp.open("GET", "?url=Home/insert_message/" + input[0].value +"/" + input[1].value + "/" + input[2].value + "/" + input[3].value +"/" + text.value, true);
-      xmlhttp.send(); //$_get["url"]
+      xmlhttp.send();
   };

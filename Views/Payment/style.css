@@ -1,5 +1,3 @@
-
-/*------------------------------------------------*/
 body{
     background-color: #f4f4f4;
     font-family: "Montserrat", sans-serif;
@@ -148,7 +146,6 @@ button a:hover{
     animation-duration: 0.4s
 }
   
-/* Add Animation */
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0} 
     to {top:0; opacity:1}
@@ -158,8 +155,7 @@ button a:hover{
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}
 }
-  
-  /* The Close Button */
+
 .close {
     font-size: 28px;
     font-weight: bold;
@@ -200,9 +196,6 @@ button a:hover{
     margin: 10px auto;
 }
 
-/*--------------------------------------------*/
-
-
 @media screen and (max-width: 1000px) {
     .container-fuild{
         padding: 50px 0;
@@ -213,7 +206,7 @@ button a:hover{
         margin-top: 20px;
     }
 }
-/* --- Alert hủy đơn --- */
+
 .custom-alert {
     position: fixed;
     top: 80px;
@@ -228,8 +221,7 @@ button a:hover{
     z-index: 9999;
     transition: opacity 0.3s ease;
   }
-  
-  /* Ẩn alert */
+
   .d-none {
     display: none;
   }

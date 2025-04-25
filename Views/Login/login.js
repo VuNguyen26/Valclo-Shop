@@ -64,8 +64,7 @@ $(function () {
   function add_notice(alert, string) {
 	return '<div class="alert ' + alert + '" role="alert"><strong>' + string + '</strong></div>';
   }
-  
-  // ✅ Xử lý login an toàn
+
   window.addEventListener("DOMContentLoaded", function () {
 	const loginButton = document.querySelector("button[type='submit']");
 	const usernameInput = document.querySelector("input[name='user']");

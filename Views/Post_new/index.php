@@ -54,9 +54,6 @@
     background-color: #ffa62b !important;
   }
 
-  /* .form-control {
-    background-color: #f9fafb !important;
-  } */
   </style>
 </head>
 

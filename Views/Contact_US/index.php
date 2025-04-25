@@ -13,7 +13,6 @@
       type="image/x-icon"
       href="./Views/images/avatar.png"
     />
-
     <!-- link icon -->
     <script src="https://kit.fontawesome.com/320d0ac08e.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -43,13 +42,10 @@
     <link href="./Views/Navbar/navbar.css" rel="stylesheet">
   </head>
   <body>
-    
-    <!--Nav-->
+
     <?php require_once("./Views/Navbar/index.php"); ?>
     <script src="./Views/Navbar/navbarScript.js" index='5' type="text/javascript"></script>
-    <!--Nav-->
 
-    <!--Body-->
     <div class="body">
     <div class="container-fuild">
       <div class="row">
@@ -177,8 +173,7 @@
                           <button type=\"button\" class=\"btn btn-primary active mgl-12\" onclick=\"inform(this);\">Phản hồi</button>
                         </form>
                       </div>";
-
-                        
+                       
                       }
                     }
                     else{
@@ -200,15 +195,11 @@
       </div>
     </div>
     </div>
-    <!--Body-->
 
-    <!--Footer-->
-      <!--div class="footer-holder"></div>
-      <script src="../Views/footer/footerScript.js"></script-->
       <?php
         require_once "./Views/footer/index.php";
       ?>
-    <!--Footer-->
+
   <?php
       if($data["user"] == "manager"){
         echo "<div id=\"myModal\" class=\"modal\">

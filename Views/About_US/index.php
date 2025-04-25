@@ -139,7 +139,6 @@
 	</section>
 </div>
 
-<!-- Link footer -->
 <?php require_once("./Views/footer/index.php");?>
 
 </body>

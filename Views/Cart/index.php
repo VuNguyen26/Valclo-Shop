@@ -32,7 +32,6 @@ if (isset($_SESSION["id"])) {
 <!DOCTYPE html>
 <html lang="vi">
   <head>
-    <!-- setting page -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Cart page">
@@ -44,13 +43,11 @@ if (isset($_SESSION["id"])) {
       type="image/x-icon"
       href="./Views/images/avatar.png"
     />
-    <!-- link icon -->
     <script src="https://kit.fontawesome.com/320d0ac08e.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="./Views/Cart/style.css" rel="stylesheet">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <!---------------------->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       rel="stylesheet"
@@ -251,9 +248,7 @@ window.onload = function () {
   const savedWard = "<?php echo isset($ward) ? addslashes($ward) : ''; ?>";
   const savedDetail = "<?php echo isset($detail) ? addslashes($detail) : ''; ?>";
 
-  // Gán lại địa chỉ chi tiết nếu có
   document.getElementById("detail_address").value = savedDetail;
-
   fetch("https://provinces.open-api.vn/api/?depth=3")
     .then(res => res.json())
     .then(data => {
@@ -261,14 +256,12 @@ window.onload = function () {
       const districtSelect = document.getElementById("district");
       const wardSelect = document.getElementById("ward");
 
-      // Gán tỉnh
       data.forEach(province => {
         const opt = new Option(province.name, province.code);
         if (province.name === savedCity) opt.selected = true;
         provinceSelect.appendChild(opt);
       });
 
-      // Nếu có thành phố đã lưu, thì load quận/huyện
       const selectedProvince = data.find(p => p.name === savedCity);
       if (selectedProvince) {
         selectedProvince.districts.forEach(district => {
@@ -277,7 +270,6 @@ window.onload = function () {
           districtSelect.appendChild(opt);
         });
 
-        // Nếu có quận đã lưu, thì load phường/xã
         const selectedDistrict = selectedProvince.districts.find(d => d.name === savedDistrict);
         if (selectedDistrict) {
           selectedDistrict.wards.forEach(ward => {
@@ -288,7 +280,6 @@ window.onload = function () {
         }
       }
 
-      // Lắng nghe sự kiện chọn mới
       provinceSelect.addEventListener("change", function () {
         const province = data.find(p => p.code == this.value);
         districtSelect.innerHTML = '<option value="">-- Chọn Huyện --</option>';
@@ -309,7 +300,6 @@ window.onload = function () {
       });
     });
 
-  // Gửi địa chỉ khi nhấn nút xác nhận
   document.getElementById("confirmAddressBtn").onclick = function () {
   const id = document.getElementById("user_id")?.value?.trim();
   const name = document.querySelector('input[name="name"]').value.trim();
@@ -358,7 +348,6 @@ window.onload = function () {
 
 };
 </script>
-
 
 </body>
 </html>

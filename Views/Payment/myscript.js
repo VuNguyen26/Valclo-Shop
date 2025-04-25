@@ -38,7 +38,6 @@ document.getElementsByClassName("total")[0].getElementsByClassName("col-12")[3].
 document.getElementsByClassName("total")[0].getElementsByClassName("col-12")[0].getElementsByTagName("span")[0].innerText =
   enformat(document.getElementsByClassName("total")[0].getElementsByClassName("col-12")[0].getElementsByTagName("span")[0].innerText) + "(đ)";
 
-// Xử lý nút hủy đơn combo (giữ lại nếu bạn còn dùng)
 document.getElementsByClassName("btn btn-primary")[0].onclick = function(){
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function(){

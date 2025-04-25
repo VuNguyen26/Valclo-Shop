@@ -105,10 +105,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- ❌ Đã xóa <div class="demo"> vì không cần truyền history_str -->
-
-	<!--div class="footer-holder"></div>
-	<script src="./Views/footer/footerScript.js"></script-->
 	
     <?php require_once("./Views/footer/index.php");?>
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>

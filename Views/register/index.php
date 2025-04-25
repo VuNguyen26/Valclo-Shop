@@ -5,33 +5,20 @@
     <meta name="author" content="Dan" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Valcloshop - Đăng Ký</title>
-
-    <!-- favicon -->
     <link rel="icon" type="image/x-icon" href="./Views/images/avatar.png" />
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="./Views/register/register.css" />
     <link href="./Views/Navbar/navbar.css" rel="stylesheet" type="text/css" />
-
-    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/721412f694.js"></script>
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Montserrat&display=swap" rel="stylesheet" />
-
-    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
 
   <body>
-    <!-- Navbar -->
     <?php require_once("./Views/Navbar/index.php"); ?>
 
     <div class="login mb-5" style="min-height: 66vh;">
@@ -106,7 +93,6 @@
 
                 <div class="card mt-3">
                   <button type="button" class="btn btn-warning btn-block w-100 mybtn">Đăng kí</button>
-                  <!-- Hiển thị thông báo thành công/lỗi -->
                   <div id="notice" style="margin-top: 10px;"></div>
                 </div>
 
@@ -120,10 +106,8 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <?php require_once("./Views/footer/index.php"); ?>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="./Views/register/register.js"></script>
   </body>

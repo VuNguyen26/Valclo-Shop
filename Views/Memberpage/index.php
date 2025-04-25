@@ -3,7 +3,6 @@ require_once(__DIR__ . "/../../Function/DB.php");
 $db = new DB();
 $conn = $db->connect;
 
-// --- Thêm hàm ở đây ---
 function render_status($status) {
     return match($status) {
         "Chờ xác nhận"   => '<span class="badge bg-warning text-dark badge-status">Chờ xác nhận</span>',
@@ -20,7 +19,6 @@ function render_status($status) {
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- setting page -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Member page">
@@ -33,14 +31,12 @@ function render_status($status) {
       href="./Views/images/avatar.png"
     />
 
-    <!-- link icon -->
     <script src="https://kit.fontawesome.com/320d0ac08e.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href="./Views/Memberpage/style.css" rel="stylesheet">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    <!---------------------->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       rel="stylesheet"
@@ -62,13 +58,10 @@ function render_status($status) {
     <link href="./Views/Navbar/navbar.css" rel="stylesheet">
   </head>
   <body>
-    
-    <!--Nav-->
+
     <?php require_once("./Views/Navbar/index.php"); ?>
     <script src="./Views/Navbar/navbarScript.js"></script>
-    <!--Nav-->
 
-    <!--Body-->
     <div class="container-fuild member-info">
         <?php 
             if($data["state"] == "member"):
@@ -181,10 +174,8 @@ if (!empty($data["orders"])) {
         echo render_status($status);
         echo "</div></div>";
 
-        // Lấy chi tiết sản phẩm từ bảng order_detail và product
         if (!empty($row["details"])) {
             foreach ($row["details"] as $item) {
-                // Đảm bảo rằng IMG_URL có tồn tại
                 if (!empty($item["IMG_URL"])) {
                     echo "<div class='col-12 mt-2 d-flex align-items-center border_bot'>";
                     echo "<img src='{$item["IMG_URL"]}' alt='product' style='width: 70px; height: 70px; object-fit: cover; border-radius: 8px; margin-right: 15px;'>";
@@ -209,8 +200,7 @@ if ($status == "Đã giao" || $status == "Đã xác nhận") {
 
 echo "</div>";
 
-
-        echo "</div>"; // kết thúc node
+        echo "</div>";
     }
 } else {
     echo "<p>Chưa có đơn hàng nào.</p>";
@@ -243,7 +233,6 @@ echo "</div>";
         <?php endif;?>
     </div>
 
-    <!--Footer-->
     <?php require_once("./Views/footer/index.php");?>
     <?php if($data["state"] == "member") echo "<script src=\"./Views/Memberpage/myscript.js\"></script>"; 
     else if($data["state"] == "manager") echo "<script src=\"./Views/Memberpage/manascript.js\"></script>";

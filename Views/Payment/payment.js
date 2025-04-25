@@ -19,9 +19,7 @@ function deformat(element){
   for (var i = 0; i < list.length; i++) string += list[i];
   return string;
 }
-
 var node = document.getElementsByClassName("card");
-
 node[0].getElementsByTagName("h3")[0].innerText =
   enformat(node[0].getElementsByTagName("h3")[0].innerText.split("/")[0]) + "(đ)/" +
   node[0].getElementsByTagName("h3")[0].innerText.split("/")[1];
@@ -32,8 +30,6 @@ document.getElementsByClassName("total")[0].getElementsByClassName("col-12")[3].
 document.getElementsByClassName("total")[0].getElementsByClassName("col-12")[0].getElementsByTagName("span")[0].innerText =
   enformat(document.getElementsByClassName("total")[0].getElementsByClassName("col-12")[0].getElementsByTagName("span")[0].innerText) + "(đ)";
 
-// ----------------------------------------------------------
-// Hủy combo
 document.getElementsByClassName("btn btn-primary")[0].onclick = function(){
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function(){

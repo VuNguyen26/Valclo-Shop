@@ -10,12 +10,8 @@ if (!isset($_SESSION["id"])) {
 }
 
 $user_id = $_SESSION["id"];
-
-// ✅ Tạo đơn hàng từ giỏ hiện tại
 $mem = new Member();
 $mem->create_order_from_cart($user_id);
-
-// ✅ Xóa giỏ hàng
 $mem->clear_cart($user_id);
 unset($_SESSION["cart"]);
 ?>

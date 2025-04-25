@@ -56,7 +56,6 @@
       rel="stylesheet"
     />
 
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
@@ -64,9 +63,8 @@
       crossorigin="anonymous"
     ></script>
   </head>
+
   <body>
-    <!-- Navigation -->
-    <!--div class="navbar-holder sticky-top"></div-->
     <?php require_once __DIR__ . "/../Navbar/index.php"; ?>
     <script src="./Views/Navbar/navbarScript.js" index='0'></script>
 
@@ -129,7 +127,6 @@
           </div>
         </div>
 
-        <!-- Carousel Navigation -->
         <div class="arrows d-flex">
           <div class="swiper-prev d-flex">
             <i class="bx bx-chevrons-left swiper-icon"></i>
@@ -201,7 +198,6 @@
         </div>
       </div>
 
-      <!-- Featured -->
       <div class="featured">
         <h2><i class="far fa-hand-point-right"></i> Sản phẩm được ưa chuộng <i class="fas fa-chart-line"></i></h2>
 
@@ -233,7 +229,6 @@
           </div>
         </div>
 
-        <!-- Carousel Navigation -->
         <div class="arrows d-flex">
           <div class="custom-next d-flex">
             <i class="bx bx-chevrons-right swiper-icon"></i>
@@ -244,8 +239,6 @@
         </div>
       </div>
 
-      <!--div class="footer-holder"></div>
-      <script src="../Views/footer/footerScript.js"></script-->
     <?php require_once("./Views/footer/index.php");?>
     </div>
     <script src="./Views/Home_page/home.js"></script>

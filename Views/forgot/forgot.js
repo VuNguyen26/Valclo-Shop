@@ -3,7 +3,6 @@ function add_notice(string){
     return '<div class="alert alert-danger" role="alert"><strong>Email không chính xác!</strong></div>';
   }
 
-
 document.getElementsByClassName("card mt-3")[0].onclick = function(){
   var input = document.getElementsByClassName("card-wrapper col-md-8 border-warning")[0].getElementsByTagName("input")[0].value;
   if(input == ""){

@@ -118,10 +118,8 @@
 	</section>   
 </div>
 
-<!--div class="footer-holder"></div>
-<script src="../Views/footer/footerScript.js"></script-->
-
 <?php require_once ("./Views/footer/index.php");?>
+
 </body>
 </html>
 

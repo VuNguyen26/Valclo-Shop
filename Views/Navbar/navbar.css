@@ -13,7 +13,7 @@
     display: flex;
     min-height: 60px;
     background-color: #29a8e4;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Bóng mờ tinh tế */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 0 0 12px 12px;
     padding: 0 20px;
   }  
@@ -67,7 +67,7 @@
     align-items: center;
     gap: 8px;
     margin: 0 20px;
-    width: 250px; /* Hoặc responsive: min(100%, 250px) */
+    width: 250px;
   }
   
   nav form .form-group {
@@ -261,8 +261,6 @@
     transform: rotate(45deg) translate(-5px, -6px);
   }
   
-  /* Footer CSS */
-  
   footer {
     padding: 2rem 1rem;
     background-color: #061f24;
@@ -295,7 +293,6 @@
     margin-right: 2rem;
   }
   
-  /*----------------------------------------------------*/
   .cart *, .login-button  button *{
     text-decoration: none;
     color: white;
@@ -332,12 +329,11 @@
   .fail{
     background-color: rgb(251, 30, 30);
   }
-  /* Ẩn dropdown menu khi không có class 'show' */
+
 .login-button .dropdown-menu {
   display: none;
 }
 
-/* Hiển thị dropdown menu khi có class 'show' */
 .login-button .dropdown-menu.show {
   display: block;
   z-index: 9999;

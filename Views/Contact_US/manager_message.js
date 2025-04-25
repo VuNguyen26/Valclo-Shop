@@ -3,9 +3,6 @@ function inform(element){
     id_message = element.parentNode.parentNode.getElementsByTagName("h4")[0].innerText.split("#")[1];
     modal.style.display = "block";
 }
-
-/***********************************************************/
-
 var modal = document.getElementById("myModal");
 var span = document.getElementsByClassName("close")[0];
 var button = document.getElementsByClassName("btn btn-primary")[4];

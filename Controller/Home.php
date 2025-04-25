@@ -29,8 +29,6 @@ class Home extends Controller{
         }
         function Products($user, $sort_1 = "", $sort_2 = "") {
             $cus = $this->model($user);
-        
-            // Lấy từ khóa tìm kiếm nếu có
             $search = isset($_GET['search']) ? $_GET['search'] : null;
         
             $this->view("Products", [
@@ -61,6 +59,7 @@ class Home extends Controller{
                 "user" => $user
             ]);
         }
+
         function Contact_us($user){
             if($user == "manager"){
                 $this->view("Contact_US", [
@@ -74,6 +73,7 @@ class Home extends Controller{
                 ]);
             }
         }
+
         function News($user){
             $cus = $this->model($user);
             $news = $cus->get_news();
@@ -94,6 +94,7 @@ class Home extends Controller{
                 "user" => $user
             ]);
         }
+        
         function News_detail($user, $params){
             $cus = $this->model($user);
             $news = $cus->get_news();
@@ -253,14 +254,13 @@ class Home extends Controller{
             if($this->model($user)->delete_product_incart((int)$array[2])) echo "ok";
             else echo "null";
         }
+        
         function check_login($user, $array) {
-            // Tài khoản quản trị
             if (isset($array[2]) && isset($array[3]) && $array[2] == "admin" && $array[3] == "admin") {
                 $_SESSION["user"] = "manager";
                 $redirect = isset($array[4]) ? $array[4] : "Home_page";
                 echo "?url=/Home/" . $redirect . "/";
             } 
-            // Tài khoản thành viên
             else if (isset($array[2]) && isset($array[3])) {
                 $id = mysqli_fetch_array($this->model($user)->get_id_user($array[2], $array[3]), MYSQLI_NUM);
                 if ($id == null) {
@@ -272,7 +272,6 @@ class Home extends Controller{
                     echo "?url=/Home/" . $redirect . "/";
                 }
             } 
-            // Trường hợp thiếu thông tin đăng nhập
             else {
                 echo "null";
             }
@@ -295,8 +294,6 @@ class Home extends Controller{
         function order_detail($user, $params) {
             if ($user === "member") {
                 $mem = $this->model($user);
-        
-                // 1) Xác định $oid như trước
                 if (isset($params[2]) && ctype_digit($params[2])) {
                     $oid = (int)$params[2];
                 } elseif (isset($_GET['oids']) && ctype_digit($_GET['oids'])) {
@@ -304,16 +301,11 @@ class Home extends Controller{
                 } else {
                     die("Thiếu mã đơn hàng để hiển thị chi tiết.");
                 }
-        
-                // 2) Gọi đúng model để lấy chi tiết sản phẩm của đơn
                 $order_items = $mem->get_product_in_order_detail($oid);
-        
-                // 3) Gọi đúng model để lấy meta của đơn (state, time, total)
+
                 $order_meta = mysqli_fetch_assoc(
                     $mem->get_order_by_id($oid)
                 );
-        
-                // 4) Gói lại info để chuyển xuống view
                 $order_info = [
                     "id"     => $oid,
                     "items"  => $order_items,
@@ -322,8 +314,6 @@ class Home extends Controller{
                     "total"  => $order_meta["total"]  ?? 0,
                     "method"  => $order_meta["method"]  ?? 'Không có'
                 ];
-        
-                // 5) Render view
                 $this->view("OrderDetail", [
                     "order" => $order_info,
                     "user"  => $mem->get_user($_SESSION["id"])
@@ -351,15 +341,11 @@ class Home extends Controller{
                 } else {
                     $product_in_cart = [];
                 }
-        
-                // ✅ Thêm: lấy danh sách đơn hàng đã mua
-                $orders = $mem->get_orders($_SESSION["id"]); // viết thêm hàm này trong Model/member.php
-        
-                // Trả về view
+                $orders = $mem->get_orders($_SESSION["id"]);
                 $this->view("Memberpage", [
                     "user" => $mem->get_user($_SESSION["id"]),
                     "product_in_cart" => $product_in_cart,
-                    "orders" => $orders, // gửi sang view
+                    "orders" => $orders,
                     "state" => $user
                 ]);
             }
@@ -375,20 +361,16 @@ class Home extends Controller{
         
         public function reorder($id) {
             if (!isset($_SESSION["id"])) die("Vui lòng đăng nhập");
-            
             $uid = $_SESSION["id"];
             $mem = $this->model("member");
-        
             $new_oid = $mem->reorder($id, $uid);
-        
-            // 👉 Redirect về trang sản phẩm sau khi mua lại
             header("Location: ?url=Home/Products");
         }
         
-        
         function add_item_comment($user, $array){
             $this->model($user)->add_item_comment($array[2], $array[3], $array[4], $_SESSION["id"]);
-        }   
+        }
+
         function update_profile($user){
             if( isset($_POST["fname"]) && isset($_POST["mail"]) && isset($_POST["username"]) && isset($_POST["cmnd"]) && isset($_POST["phone"]) && isset($_POST["address"]))
             {
@@ -411,95 +393,19 @@ class Home extends Controller{
         public function create_cart($user) {
             $productId = $_POST['product_id'] ?? null;
             $quantity = $_POST['quantity'] ?? null;
-        
             if (empty($productId) || empty($quantity) || $quantity <= 0) {
                 echo json_encode(["status" => "error", "message" => "ABC"]);
                 return;
             }
-        
             if (!isset($_SESSION["id"])) {
                 echo json_encode(["status" => "error", "message" => "Vui lòng đăng nhập để sản phẩm thêm vào giỏ hàng"]);
                 return;
             }
-        
             $this->model($user)->create_cart($_SESSION["id"], $productId, $quantity);
         
             echo json_encode(["status" => "success", "message" => "Thêm sản phẩm vào giỏ hàng thành công"]);
         }                      
         
-        function add_new_item($user){
-            if(isset($_POST["iname"]) && isset($_POST["price"]) && isset($_FILES["image-url"]) && isset($_POST["description"]) && isset($_POST["remain"]) && isset($_POST["category"]))
-            {
-                if(!file_exists("./Views/images/" . $_FILES["image-url"]['name'][0])){
-                    move_uploaded_file($_FILES['image-url']['tmp_name'][0], './Views/images/' . $_FILES['image-url']['name'][0]);
-                }
-                if(!file_exists("./Views/images/" . $_FILES["image-url"]['name'][1])){
-                    move_uploaded_file($_FILES['image-url']['tmp_name'][1], './Views/images/' . $_FILES['image-url']['name'][1]);
-                }  
-                if(!file_exists("./Views/images/" . $_FILES["image-url"]['name'][2])){
-                    move_uploaded_file($_FILES['image-url']['tmp_name'][2], './Views/images/' . $_FILES['image-url']['name'][2]);
-                }    
-                if(!file_exists("./Views/images/" . $_FILES["image-url"]['name'][3])){
-                    move_uploaded_file($_FILES['image-url']['tmp_name'][3], './Views/images/' . $_FILES['image-url']['name'][3]);
-                }
-                if(!file_exists("./Views/images/" . $_FILES["image-url"]['name'][4])){
-                    move_uploaded_file($_FILES['image-url']['tmp_name'][4], './Views/images/' . $_FILES['image-url']['name'][4]);
-                }
-                $pid = $this->model($user)->add_new_item($_POST["iname"], $_POST["price"], $_POST["description"], $_POST["remain"], $_POST["category"], './Views/images/' . $_FILES['image-url']['name'][0]);
-                $this->model($user)->add_sub_img($pid, './Views/images/' . $_FILES['image-url']['name'][1]);
-                $this->model($user)->add_sub_img($pid, './Views/images/' . $_FILES['image-url']['name'][2]);
-                $this->model($user)->add_sub_img($pid, './Views/images/' . $_FILES['image-url']['name'][3]);
-                $this->model($user)->add_sub_img($pid, './Views/images/' . $_FILES['image-url']['name'][4]);
-            }
-            $this->Products($user);
-        }
-        function update_item($user, $pid){
-            if(isset($_POST["name"]) && isset($_POST["price"]) && isset($_POST["description"]) && isset($_POST["remain"]) && isset($_POST["category"]))
-            {
-                $sub_id = mysqli_fetch_all($this->model($user)->get_sub_img_id($pid[2]), MYSQLI_ASSOC);
-                if(isset($_FILES["e-image-url"])){
-                    if($_FILES['e-image-url']['name'][0] != ""){
-                        if(!file_exists("./Views/images/" . $_FILES["e-image-url"]['name'][0])){
-                            move_uploaded_file($_FILES['e-image-url']['tmp_name'][0], './Views/images/' . $_FILES['e-image-url']['name'][0]);
-                        }
-                        $this->model($user)->update_item_img($pid[2], './Views/images/' . $_FILES['e-image-url']['name'][0]);
-                    }
-                    if($_FILES['e-image-url']['name'][1] != ""){
-                        if(!file_exists("./Views/images/" . $_FILES["e-image-url"]['name'][1])){
-                            move_uploaded_file($_FILES['e-image-url']['tmp_name'][1], './Views/images/' . $_FILES['e-image-url']['name'][1]);
-                        }
-                        $this->model($user)->update_sub_img($sub_id[0]["id"], './Views/images/' . $_FILES['e-image-url']['name'][1]);
-                    }
-                    if($_FILES['e-image-url']['name'][2] != ""){
-                        if(!file_exists("./Views/images/" . $_FILES["e-image-url"]['name'][2])){
-                            move_uploaded_file($_FILES['e-image-url']['tmp_name'][2], './Views/images/' . $_FILES['e-image-url']['name'][2]);
-                        }
-                        $this->model($user)->update_sub_img($sub_id[1]["id"], './Views/images/' . $_FILES['e-image-url']['name'][2]);
-                    }
-                    if($_FILES['e-image-url']['name'][3] != ""){
-                        if(!file_exists("./Views/images/" . $_FILES["e-image-url"]['name'][3])){
-                            move_uploaded_file($_FILES['e-image-url']['tmp_name'][3], './Views/images/' . $_FILES['e-image-url']['name'][3]);
-                        }
-                        $this->model($user)->update_sub_img($sub_id[2]["id"], './Views/images/' . $_FILES['e-image-url']['name'][3]);
-                    }
-                    if($_FILES['e-image-url']['name'][4] != ""){
-                        if(!file_exists("./Views/images/" . $_FILES["e-image-url"]['name'][4])){
-                            move_uploaded_file($_FILES['e-image-url']['tmp_name'][4], './Views/images/' . $_FILES['e-image-url']['name'][4]);
-                        }
-                        $this->model($user)->update_sub_img($sub_id[3]["id"], './Views/images/' . $_FILES['e-image-url']['name'][4]);
-                    }
-                }
-                $this->model($user)->update_item_nope_img($pid[2], $_POST["name"], $_POST["price"], $_POST["description"], $_POST["remain"], $_POST["category"], $_POST["featured_product"]);  
-            }
-            $this->Item($user, $pid);
-        }
-        function delete_item($user, $array){
-            if($this->model($user)->delete_item((int)$array[2])){
-                echo "OK";
-            } else {
-                echo "Nope";
-            }
-        }
         function sendmessage($user, $array){
             $to = explode("-", $array[2])[1];
             $subject = explode("-", $array[3])[1];
@@ -509,79 +415,63 @@ class Home extends Controller{
             }
             else echo "null";
         }
-        function delete_comment($user, $array){
-            if($this->model($user)->delete_comment((int)$array[2])){
-                echo "OK";
-            } else {
-                echo "Nope";
-            }
-        }
+
         function sort_comment($user, $array){
-            $result = $this->model($user)->get_item_comment((int)$array[2], $array[3]);
-            $cmt_info = array();
-            foreach($result as $cmt){
-                array_push($cmt_info, (["id" => $cmt["id"], "pid" => $cmt["pid"], "uid" => $cmt["uid"], "uname" => $this->model($user)->get_cmt_user_name($cmt["uid"]), "star" => $cmt["star"], "content" => $cmt["content"], "time" => $cmt["time"]]));
-            }
-            echo "<div class=\"no-filter-cmt\"></div>";
-            if(empty($cmt_info)) echo "<div class=\"card\">
-                                                  <div class=\"card-body\" id=\"if-no-cmt\">No comment</div></div>";
-              else {
-                $count = 0;
-                foreach ($cmt_info as $row) {
-                  echo "<div class=\"card filterCmt " . $row["star"] . "-star-num\">
-                  <div class=\"card-body\">
-                    <div class=\"header-cmt\">
-                      <div>
-                        <i class=\"fas fa-user-circle\"></i>";
-                        foreach($row["uname"] as $name) {
-                          echo "<span> " . $name["uname"] . "</span>";
-                        }
-                        echo "
-                        <div class=\"star-cus-rate\">";
-                          for($i = 0; $i < $row["star"]; $i++) {
-                            echo "<i class=\"fas fa-star\"></i>";
-                          }
-                          for($i = 0; $i < 5 - $row["star"]; $i++) {
-                            echo "<i class=\"far fa-star\"></i>";
-                          }
-                        echo "  
+        $result = $this->model($user)->get_item_comment((int)$array[2], $array[3]);
+        $cmt_info = array();
+
+    foreach($result as $cmt){
+        array_push($cmt_info, [
+            "id" => $cmt["id"],
+            "pid" => $cmt["pid"],
+            "uid" => $cmt["uid"],
+            "uname" => $this->model($user)->get_cmt_user_name($cmt["uid"]),
+            "star" => $cmt["star"],
+            "content" => $cmt["content"],
+            "time" => $cmt["time"]
+        ]);
+    }
+
+    echo "<div class=\"no-filter-cmt\"></div>";
+
+    if (empty($cmt_info)) {
+        echo "<div class=\"card\">
+                <div class=\"card-body\" id=\"if-no-cmt\">No comment</div>
+              </div>";
+    } else {
+        foreach ($cmt_info as $row) {
+            echo "<div class=\"card filterCmt " . $row["star"] . "-star-num\">
+                    <div class=\"card-body\">
+                        <div class=\"header-cmt\">
+                            <div>
+                                <i class=\"fas fa-user-circle\"></i>";
+                                foreach($row["uname"] as $name) {
+                                    echo "<span> " . $name["uname"] . "</span>";
+                                }
+                                echo "<div class=\"star-cus-rate\">";
+                                    for ($i = 0; $i < $row["star"]; $i++) {
+                                        echo "<i class=\"fas fa-star\"></i>";
+                                    }
+                                    for ($i = 0; $i < 5 - $row["star"]; $i++) {
+                                        echo "<i class=\"far fa-star\"></i>";
+                                    }
+                                echo "</div>
+                            </div>
+                            <div>
+                                <p>" . $row["time"] . "</p>
+                            </div>
                         </div>
-                      </div>
-                      <div>
-                        <p>" . $row["time"] . "</p>
-                      </div>
-                    </div>
-                    <div class=\"comment-content\">
-                      <div class=\"script-cmt\">
-                        <p>" . $row["content"] . "</p>
-                      </div>";
-                    if($user == "manager"){
-                      echo "<div><i class=\"fas fa-trash-alt\" data-bs-toggle=\"modal\" data-bs-target=\"#delcmtModal-" .$count . "\"></i></div>";
-                      echo "<div class=\"modal fade\" id=\"delcmtModal-" .$count . "\" tabindex=\"-1\" aria-labelledby=\"delcmtModalLabel-" .$count . "\" aria-hidden=\"true\">
-                        <div class=\"modal-dialog modal-dialog-centered\">
-                          <div class=\"modal-content\">
-                            <div class=\"modal-header\">
-                              <h5 class=\"modal-title\" id=\"delcmtModalLabel-" .$count . "\">Bạn muốn xóa bình luận này</h5>
-                              <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>
+                        <div class=\"comment-content\">
+                            <div class=\"script-cmt\">
+                                <p>" . $row["content"] . "</p>
                             </div>
-                            <div class=\"modal-body\">
-                              
-                            </div>
-                            <div class=\"modal-footer\">
-                              <button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Đóng</button>
-                              <button type=\"button\" class=\"btn btn-primary\" data-bs-dismiss=\"modal\" onclick=\"delete_comment(" . $row["id"] . ", this)\">Xác nhận</button>
-                            </div>
-                          </div>
                         </div>
-                      </div>";
-                      $count += 1;
-                    }
-                echo "</div>
                     </div>
                 </div>";
-                }
-              }
         }
+    }
+}
+
         function logout($user){
             if ($user == "member") {
                 $cart_result = $this->model($user)->get_sum_cart($_SESSION["id"]);
@@ -612,6 +502,7 @@ class Home extends Controller{
             }
             else{ echo "null";}
         }
+
         function get_user($user, $array){
             $data = $this->model($user)->get_user((int)$array[2]);
             if(!empty($data)){
@@ -658,70 +549,52 @@ class Home extends Controller{
             else echo "null";
         }
 
-function create_account($user, $array) {
-    // Kiểm tra xem người dùng có bị cấm không
-    // Bỏ kiểm tra tài khoản bị cấm vì không có bảng hoặc cột liên quan
-    // $ban_check = $this->model($user)->check_account_ban($array[3]);
-    // if (mysqli_num_rows($ban_check) > 0) {
-    //     echo json_encode(['status' => 'error', 'message' => 'Tài khoản bị cấm!']);
-    //     return;
-    // }
-
-    // Kiểm tra tài khoản đã tồn tại chưa
-    $exist_check = $this->model($user)->check_account_inside($array[3], $array[4]);
-    if (mysqli_num_rows($exist_check) > 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Tài khoản hoặc email đã tồn tại!']);
-        return;
-    }
-
-    // Tạo tài khoản
-    $success = $this->model($user)->create_account(
-        $array[2], // fname
-        $array[3], // cmnd
-        $array[4], // email
-        $array[5], // username
-        $array[6]  // password
-    );
-
-    if ($success) {
-        echo json_encode(['status' => 'success', 'message' => 'Tạo tài khoản thành công!']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Lỗi khi tạo tài khoản!']);
-    }
-}
-
+        function create_account($user, $array) {
+            $exist_check = $this->model($user)->check_account_inside($array[3], $array[4]);
+            if (mysqli_num_rows($exist_check) > 0) {
+                echo json_encode(['status' => 'error', 'message' => 'Tài khoản hoặc email đã tồn tại!']);
+                return;
+            }
+            $success = $this->model($user)->create_account(
+                $array[2],
+                $array[3],
+                $array[4],
+                $array[5],
+                $array[6]
+            );
         
-function cancel($user) {
-    if (!isset($_SESSION['id']) || $user !== "member") {
-        die("Bạn chưa đăng nhập.");
-    }
+            if ($success) {
+                echo json_encode(['status' => 'success', 'message' => 'Tạo tài khoản thành công!']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Lỗi khi tạo tài khoản!']);
+            }
+        }
 
-    if (!isset($_POST['order_id'])) {
-        die("Thiếu mã đơn hàng.");
-    }
-
-    $order_id = (int)$_POST['order_id'];
-    $model = $this->model($user);
-
-    // 🔧 FIX lỗi ở đây: convert mysqli_result -> array
-    $order = mysqli_fetch_assoc($model->get_order_by_id($order_id));
-
-    if (!$order || $order['uid'] != $_SESSION['id']) {
-        die("Đơn hàng không tồn tại hoặc bạn không có quyền hủy.");
-    }
-
-    if ((int)$order['state'] !== 0) {
-        die("Chỉ đơn hàng đang chờ xác nhận mới được hủy.");
-    }
-
-    if ($model->cancel_order($order_id)) {
-        header("Location: ?url=OrderDetail/index&id=$order_id");
-        exit();
-    } else {
-        die("Hủy đơn hàng thất bại.");
-    }
-}
-
+        function cancel($user) {
+            if (!isset($_SESSION['id']) || $user !== "member") {
+                die("Bạn chưa đăng nhập.");
+            }
+            if (!isset($_POST['order_id'])) {
+                die("Thiếu mã đơn hàng.");
+            }
+            $order_id = (int)$_POST['order_id'];
+            $model = $this->model($user);
         
+            // 🔧 FIX lỗi ở đây: convert mysqli_result -> array
+            $order = mysqli_fetch_assoc($model->get_order_by_id($order_id));
+        
+            if (!$order || $order['uid'] != $_SESSION['id']) {
+                die("Đơn hàng không tồn tại hoặc bạn không có quyền hủy.");
+            }
+            if ((int)$order['state'] !== 0) {
+                die("Chỉ đơn hàng đang chờ xác nhận mới được hủy.");
+            }
+            if ($model->cancel_order($order_id)) {
+                header("Location: ?url=OrderDetail/index&id=$order_id");
+                exit();
+            } else {
+                die("Hủy đơn hàng thất bại.");
+            }
+        }     
     }
 ?>

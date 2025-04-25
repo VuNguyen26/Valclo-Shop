@@ -64,7 +64,6 @@
                         value= "<?php $news = $data["news"][0]; echo $news["title"]?>">
                   </div>
                   <div class="text-center mt-3">
-                      <!-- <div class="col-4 d-flex justify-content-center"><img src="./Views/images/news_5.jpg" alt="profile"></div> -->
                       <label for="img" style="cursor: pointer;">
                         <img alt="Chọn hình ảnh" class="profile"  style="width:300px;" src="<?php $news = $data["news"][0]; echo $news["imgurl"]?>">
                       </label>

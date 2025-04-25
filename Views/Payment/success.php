@@ -8,8 +8,6 @@ require_once("./Model/member.php");
 
 $displayMessage = "Thanh toán thất bại hoặc bị hủy.";
 $success = false;
-
-// MoMo trả về resultCode = 0 là thanh toán thành công
 $result = $_GET['resultCode'] ?? null;
 
 if ($result === "0" && !empty($_SESSION["id"])) {
@@ -17,12 +15,8 @@ if ($result === "0" && !empty($_SESSION["id"])) {
     $db = new DB();
     $conn = $db->connect;
     $mem = new Member();
-
-    // 1. Lấy sản phẩm trong giỏ
     $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
     $res = mysqli_query($conn, $query);
-
-    // 2. Kiểm tra giỏ có dữ liệu không
     if ($res && mysqli_num_rows($res) > 0) {
         $total = 0;
         while ($row = mysqli_fetch_assoc($res)) {
@@ -30,7 +24,6 @@ if ($result === "0" && !empty($_SESSION["id"])) {
         }
 
         if ($total > 0) {
-            // 3. Tạo đơn hàng
             $today = date("Y-m-d");
             $status = "Chờ xác nhận";
             $method = "Momo";
@@ -39,15 +32,11 @@ if ($result === "0" && !empty($_SESSION["id"])) {
             $stmt->bind_param("issds", $uid, $today, $status, $total, $method);
             $stmt->execute();
             $oid = $conn->insert_id;
-
-            // 4. Ghi chi tiết đơn hàng
             $mem->insert_order_detail($oid, $uid);
 
-            // 5. Xóa giỏ hàng
             $mem->clear_cart($uid);
             unset($_SESSION["cart"]);
 
-            // 6. Thành công
             $success = true;
             $displayMessage = "Thanh toán MoMo thành công!";
         } else {
@@ -120,12 +109,9 @@ if ($result === "0" && !empty($_SESSION["id"])) {
     </h3>
     <p><strong>Phương thức:</strong> Thanh toán qua ví MoMo.</p>
     <p>Cảm ơn bạn đã mua sắm tại <strong>Valclo Shop</strong>.</p>
-
-    <!-- Nút hiển thị khi thanh toán thành công -->
     <?php if ($success): ?>
       <a href="?url=Home/order_detail&oids=<?= $oid ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
     <?php else: ?>
-      <!-- Nút hiển thị khi thanh toán thất bại -->
       <a href="?url=Home/Home_page" class="btn btn-secondary mt-3">Quay lại trang chủ</a>
     <?php endif; ?>
   </div>

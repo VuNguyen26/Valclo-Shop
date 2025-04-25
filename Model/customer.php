@@ -17,80 +17,53 @@ class customer extends DB {
 
     public function get_products($sort_1, $sort_2, $page, $search = null, $category) {
 
-        # variable
-        $query = ""; // câu truy vấn tổng
-        $query_paginate = ""; // câu truy vấn phân trang LIMIT, OFFSET
-        $limit_record = 12; // giới hạn số sản phẩm trên 1 trang
+        $query = "";
+        $query_paginate = "";
+        $limit_record = 12;
     
-        # sort
         if(!in_array($sort_1,['collection','featured','pname','price'])) $sort_1 = null;
         if(!in_array($sort_2,['ASC','DESC'])) $sort_2 = null;
-    
-        # điều kiện tìm kiếm
+
         $search_condition = " 1";
         if ($search !== null && $search !== "") {
-            $search = mysqli_real_escape_string($this->connect, $search); // tránh SQL injection
+            $search = mysqli_real_escape_string($this->connect, $search);
             $search_condition = " WHERE `p`.`name` LIKE '%$search%' ";
         }
 
-        # cateories query
-        
-        //empty
         if(!$category) $category = 'all';
 
-        // default
         if($category === 'all') $query_category = '';
-        // validate
         else {
-            // check
             $id_category = $this->check_exist_cate($category);
-            if(!$id_category) die('404 Not Found'); // nếu không tồn tại danh mục đang tìm, n
+            if(!$id_category) die('404 Not Found');
             else $query_category = ' AND `p`.`CATEGORY` = '.$id_category['id'];
         }
 
-    
-        # pagination
-        // lấy tổng sản phẩm có áp dụng tìm kiếm
-        
+        if (strpos($search_condition, 'WHERE') !== false) {
+                $search_condition = substr($search_condition, strpos($search_condition, 'WHERE') + 5);
+        }
 
-// Remove redundant WHERE clauses
-if (strpos($search_condition, 'WHERE') !== false) {
-    $search_condition = substr($search_condition, strpos($search_condition, 'WHERE') + 5); // Remove first WHERE
-}
+        if (strpos($query_category, 'WHERE') !== false) {
+                $query_category = substr($query_category, strpos($query_category, 'WHERE') + 5);
+        }
 
-if (strpos($query_category, 'WHERE') !== false) {
-    $query_category = substr($query_category, strpos($query_category, 'WHERE') + 5); // Remove first WHERE
-}
+        $count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE" . $search_condition . $query_category;
 
-// Construct the final query
-$count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE" . $search_condition . $query_category;
-
-if (strpos($count_query, 'WHERE WHERE') !== false) {
-    die('Lỗi SQL: Câu truy vấn chứa 2 từ khóa WHERE');
-}
+        if (strpos($count_query, 'WHERE WHERE') !== false) {
+                die('Lỗi SQL: Câu truy vấn chứa 2 từ khóa WHERE');
+        }
 
         
         
-$result = mysqli_query($this->connect, $count_query);
-if (!$result) {
-    die('Lỗi truy vấn SQL: ' . mysqli_error($this->connect) . '<br>Câu truy vấn: ' . $count_query);
-}
-$total_record = mysqli_fetch_assoc($result)['total'];
-
-
-        // null
+        $result = mysqli_query($this->connect, $count_query);
+        if (!$result) {
+                die('Lỗi truy vấn SQL: ' . mysqli_error($this->connect) . '<br>Câu truy vấn: ' . $count_query);
+        }
+        $total_record = mysqli_fetch_assoc($result)['total'];
         if(!$total_record) die('Sản phẩm không có');
-    
-        // tính tổng trang
         $total_page = ceil($total_record / $limit_record);
-    
-        // validate
         if ($page > $total_page || !is_numeric($page) || $page < 1) $page = 1;
-    
-        // tạo truy vấn phân trang
         $query_paginate = " LIMIT " . (($page - 1) * $limit_record) . ", " . $limit_record;
-    
-        # main query
         $query = "SELECT 
         `p`.`ID` AS 'id',
         `p`.`name` AS 'name',
@@ -210,7 +183,6 @@ $total_record = mysqli_fetch_assoc($result)['total'];
     }
 
     public function get_sum_cart($id) {
-        // Tính tổng giá trị giỏ hàng cho người dùng với ID = $id
         $query = "SELECT SUM(`cart`.`quantity` * `product`.`price`) 
                   FROM `cart`
                   JOIN `product` ON `cart`.`product_id` = `product`.`id`
@@ -220,7 +192,6 @@ $total_record = mysqli_fetch_assoc($result)['total'];
     }
     
     public function create_product_incart($productId, $userId, $quantity) {
-        // Kiểm tra xem sản phẩm đã có trong giỏ chưa
         $query = "SELECT `ID`, `QUANTITY` FROM `cart` WHERE `UID` = ? AND `PID` = ?";
         $stmt = $this->connect->prepare($query);
         $stmt->bind_param("ii", $userId, $productId);
@@ -228,15 +199,13 @@ $total_record = mysqli_fetch_assoc($result)['total'];
         $result = $stmt->get_result();
     
         if ($result->num_rows > 0) {
-            // Nếu sản phẩm đã có trong giỏ, cập nhật số lượng
             $row = $result->fetch_assoc();
-            $newQuantity = $row['QUANTITY'] + $quantity; // Cộng thêm số lượng
+            $newQuantity = $row['QUANTITY'] + $quantity;
             $updateQuery = "UPDATE `cart` SET `QUANTITY` = ? WHERE `ID` = ?";
             $updateStmt = $this->connect->prepare($updateQuery);
             $updateStmt->bind_param("ii", $newQuantity, $row['ID']);
             return $updateStmt->execute();
         } else {
-            // Nếu sản phẩm chưa có trong giỏ, thêm mới
             $insertQuery = "INSERT INTO `cart` (`UID`, `PID`, `QUANTITY`, `SIZE`) VALUES (?, ?, ?, 'L')";
             $insertStmt = $this->connect->prepare($insertQuery);
             $insertStmt->bind_param("iii", $userId, $productId, $quantity);
@@ -244,23 +213,12 @@ $total_record = mysqli_fetch_assoc($result)['total'];
         }
     }
     
-    // public function check_account_ban($cmnd) {
-    //     $query = "SELECT `ID` as `id` FROM `ban_account` WHERE `CMND` = '$cmnd';";
-    //     $result = mysqli_query($this->connect, $query);
-    
-    //     if (!$result) {
-    //         die("Error in query: " . mysqli_error($this->connect)); // Debug error if query fails
-    //     }
-    
-    //     return $result;
-    // }
-    
     public function check_account_inside($cmnd, $mail) {
         $query = "SELECT `ID` as `id` FROM `account` WHERE `EMAIL` = '$mail' OR `CMND` = '$cmnd';";
         $result = mysqli_query($this->connect, $query);
     
         if (!$result) {
-            die("Error in query: " . mysqli_error($this->connect)); // Debug error if query fails
+            die("Error in query: " . mysqli_error($this->connect));
         }
     
         return $result;

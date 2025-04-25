@@ -75,46 +75,6 @@
 								</div>	
 							</div>";
 
-							if($data["user"] == "manager"){
-								echo "<div class=\"text-end\">
-									<input type=\"text\" value=\"" .($news["id"]). "\" name =\"new_id\" hidden>
-									<button type=\"button\" class=\"btn  btn-block\" data-bs-toggle=\"modal\"
-										data-bs-target=\"#myModal_del\">
-										<i class=\"fas fa-trash\"></i> Xóa
-									</button>
-									<a href=\"?url=Home/Post_news/". ($news["id"]) . "\">
-									<button type=\"button\" class=\"btn btn-block\" data-bs-toggle=\"modal\"
-										data-bs-target=\"#myModal\">
-										<i class=\"fas fa-edit\"></i> Chỉnh sửa </button>
-									</a>
-								</div>
-
-								<div class=\"modal fade\" id=\"myModal_del\">
-									<div class=\"modal-dialog\">
-										<div class=\"modal-content\">
-
-											<!-- Modal Header -->
-											<div class=\"modal-header\">
-												<h4 class=\"modal-title\">Xác nhận</h4>
-											</div>
-											<!-- Modal body -->
-											<div class=\"modal-body container text-start\">
-												Bạn có chắc chắn muốn xóa gói hàng này
-											</div>
-
-											<!-- Modal footer -->
-											<div class=\"modal-footer\">
-												<button type=\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\">Hủy</button>
-												<a href=\"?url=Home/News/\">
-													<button id=\"delete_news\" type=\"submit\" class=\"btn btn-success\">Xóa</button>
-												</a>";
-											echo"</div>
-
-										</div>
-									</div>
-								</div>";
-							}
-
 							echo "<hr>
 
 							<div class=\"mb-3\">

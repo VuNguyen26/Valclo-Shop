@@ -180,16 +180,14 @@ function remove_product_incart(element){
 }
 
 function add_Product(element) {
-  var productId = element.value; // Lấy ID sản phẩm
-  var quantityElement = element.parentNode.parentNode.getElementsByClassName("value_click")[0]; // Lấy phần tử số lượng sản phẩm
-  var quantity = quantityElement ? parseInt(quantityElement.innerText) : 0; // Lấy giá trị số lượng, nếu không có thì gán = 0
-
-  // Kiểm tra xem người dùng đã đăng nhập chưa
+  var productId = element.value;
+  var quantityElement = element.parentNode.parentNode.getElementsByClassName("value_click")[0];
+  var quantity = quantityElement ? parseInt(quantityElement.innerText) : 0;
   if (user == "customer") {
-    window.location.href = "?url=Home/Login/Products/"; // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
+    window.location.href = "?url=Home/Login/Products/";
     return;
   } 
-  // Kiểm tra thông tin sản phẩm và số lượng
+
   if (!productId || isNaN(quantity) || quantity <= 0) {
     console.log("Thông tin sản phẩm không hợp lệ");
     document.getElementById("notice").innerHTML = add_notice("fail", "Thông tin sản phẩm hoặc số lượng không hợp lệ");
@@ -199,11 +197,12 @@ function add_Product(element) {
     }, 1500);
     return;
   }
+
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       try {
-        var response = JSON.parse(this.responseText); // Xử lý phản hồi dưới dạng JSON
+        var response = JSON.parse(this.responseText);
         if (response.status === "success") {
           document.getElementById("notice").innerHTML = add_notice("success", "Thêm sản phẩm vào giỏ hàng thành công");
         } else {
@@ -218,7 +217,7 @@ function add_Product(element) {
       }
     }
   };
-  // Gửi yêu cầu AJAX với phương thức POST
+
   xmlhttp.open("POST", "?url=Home/create_cart", true);
   xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xmlhttp.send("cart_date=" + encodeURIComponent(new Date().toISOString()) +

@@ -177,28 +177,6 @@ class manager extends customer{
                     WHERE   `account`.`ID` = " . $id;
         return mysqli_query($this->connect, $query);
     }
-    public function remove_user($id){
-        $query =    "DELETE FROM `comment_news` WHERE `comment_news`.`CID` = " . $id;
-        echo $query;
-        mysqli_query($this->connect, $query);
-        $query =    "DELETE FROM `comment` WHERE `comment`.`UID` = " . $id;
-        mysqli_query($this->connect, $query);
-        $query =    "DELETE FROM `product_in_cart` WHERE `product_in_cart`.`OID` IN (SELECT `cart`.`ID` FROM `cart` WHERE `cart`.`UID` = " . $id . ")";
-        echo $query;
-        mysqli_query($this->connect, $query);
-        $query =    "DELETE FROM `cart` WHERE `cart`.`UID` = " . $id;
-        echo $query;
-        mysqli_query($this->connect, $query);
-        $query =    "DELETE FROM `order_combo` WHERE `order_combo`.`UID` = " . $id;
-        echo $query;
-        mysqli_query($this->connect, $query);
-        $query =    "DELETE FROM `account` WHERE `account`.`ID` = " . $id;
-        echo $query;
-        return mysqli_query($this->connect, $query);
-    }
-    public function ban_user($id){
-        $query =    "INSERT INTO `ban_account`(`ban_account`.`CMND`) VALUES ((SELECT `account`.`CMND` FROM `account` WHERE `account`.`ID` = " . $id ."));";
-        return mysqli_query($this->connect, $query);
-    }
+    
 }
 ?>

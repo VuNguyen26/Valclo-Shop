@@ -11,13 +11,10 @@ $oids = $_GET['oids'] ?? '';
 $success = false;
 $displayMessage = "❌ Thanh toán thất bại hoặc bị hủy.";
 
-// Nếu thanh toán thành công
 if ($result === "1" && !empty($uid)) {
     $db = new DB();
     $conn = $db->connect;
     $mem = new Member();
-
-    // Lấy sản phẩm từ giỏ hàng để tính tổng
     $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
     $result = mysqli_query($conn, $query);
     $total = 0;
@@ -25,7 +22,6 @@ if ($result === "1" && !empty($uid)) {
         $total += $row["PRICE"] * $row["QUANTITY"];
     }
 
-    // ✅ Thêm vào bảng order với METHOD = 'Paypal'
     $today = date("Y-m-d");
     $status = "Chờ xác nhận";
     $method = "Paypal";
@@ -33,15 +29,9 @@ if ($result === "1" && !empty($uid)) {
     $stmt->bind_param("issds", $uid, $today, $status, $total, $method);
     $stmt->execute();
     $order_id = $conn->insert_id;
-
-    // ✅ Ghi chi tiết đơn hàng từ giỏ vào order_detail
     $mem->insert_order_detail($order_id, $uid);
-
-    // ✅ Xoá giỏ hàng
     $mem->clear_cart($uid);
     unset($_SESSION["cart"]);
-
-    // ✅ Hiển thị thông báo thành công
     $success = true;
     $displayMessage = "✅ Bạn đã thanh toán PayPal thành công!";
 }

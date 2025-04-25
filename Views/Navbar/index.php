@@ -63,15 +63,12 @@
   </nav>
 </div>
 
-<!-- Add the JavaScript for dropdown toggle -->
- <!-- Import script tìm kiếm -->
 <script src="./Views/Navbar/navbarScript.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const dropdownButton = document.querySelector(".dropdown-toggle");
     const dropdownMenu = document.querySelector(".dropdown-menu");
 
-    // ✅ Kiểm tra tồn tại trước khi gán sự kiện
     if (dropdownButton && dropdownMenu) {
       dropdownButton.addEventListener("click", function () {
         dropdownMenu.classList.toggle("show");

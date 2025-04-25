@@ -1,4 +1,3 @@
-
 const swiper1 = new Swiper(".slider-1", {
   autoplay: {
     delay: 3500,
