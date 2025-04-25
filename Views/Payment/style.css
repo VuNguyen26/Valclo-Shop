@@ -213,3 +213,24 @@ button a:hover{
         margin-top: 20px;
     }
 }
+/* --- Alert hủy đơn --- */
+.custom-alert {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #f5222d;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Ẩn alert */
+  .d-none {
+    display: none;
+  }
+  

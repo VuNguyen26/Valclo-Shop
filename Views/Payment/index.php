@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Payment page">
-    <meta name="author" content="Phạm Khánh Huy">
+    <meta name="author" content="Nguyễn Minh Vũ">
 
     <title>Valcloshop - Thanh Toán</title>
     <link
@@ -117,74 +117,45 @@
         </div>
       </div>
     </div>
-
     <div class="row nonemg flex-wrap total">
-      <h4>Tổng kết hóa đơn</h4>
-      <div class="col-12">
-        <div class="d-flex justify-content-between">
-          <h6>Tổng phụ (<?php echo $count; ?> sản phẩm)</h6><span><?php echo number_format($total); ?>(đ)</span>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="d-flex justify-content-between line-top">
-          <h6>Tổng cộng: </h6><span><strong><?php echo number_format($tong_cong); ?>(đ)</strong></span>
-        </div>
-      </div>
-      <div class="col-12">
-        <div class="d-flex flex-wrap justify-content-end">
-          <button id="myBtn" type="button" class="btn btn-primary">Hủy đơn</button>
-          <button id="payButton" type="button" class="btn btn-primary">Đặt Hàng</button>
-        </div>
-      </div>
+  <h4>Tổng kết hóa đơn</h4>
+  <div class="col-12">
+    <div class="d-flex justify-content-between">
+      <h6>Tổng phụ (<?php echo $count; ?> sản phẩm)</h6>
+      <span><?php echo number_format($total); ?>(đ)</span>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="d-flex justify-content-between line-top">
+      <h6>Tổng cộng: </h6>
+      <span><strong><?php echo number_format($tong_cong); ?>(đ)</strong></span>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="d-flex flex-wrap justify-content-end">
+      <button id="myBtn" type="button" class="btn btn-primary">Hủy đơn</button>
+      <button id="payButton" type="button" class="btn btn-primary">Đặt Hàng</button>
     </div>
   </div>
 </div>
+</div>
+</div>
 
-    </div>
+<div id="cancelAlert" class="custom-alert d-none">
+  🛑 Đơn hàng đã bị hủy
+</div>
 
-    <div id="myModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Credit Card <i class="fab fa-cc-visa"></i></h2>
-          <span class="close">&times;</span>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-              <div class="col-12"><div class="row">
-                  <div class="col-4">Số card:  </div>
-                  <div class="col-8"><input type="number" name="number" placeholder="Credit card number">
-              </div></div></div>
-              <div class="col-12"><div class="row">
-                  <div class="col-4">Hiệu lực thẻ: </div>
-                  <div class="col-8"><input type="text" name="date" placeholder="mm/yyyy">
-              </div></div></div>
-               <div class="col-12"><div class="row">
-                  <div class="col-4">CVV: </div>
-                  <div class="col-8"><input type="number" name="cvv">
-              </div></div></div>
-              <button type="button" class="btn btn-primary">Hoàn tất</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--Body-->
+<?php require_once("./Views/footer/index.php");?>
+<!--Footer-->
+<?php echo "<script src=\"./Views/Payment/myScript.js\"></script>"; ?>
 
-    <!--Footer-->
-    <!--div class="footer-holder"></div>
-    <script src="./Views/footer/footerScript.js"></script-->
-    
-    <?php require_once("./Views/footer/index.php");?>
-    <!--Footer-->
-  <?php
-        echo "<script src=\"./Views/Payment/myScript.js\"></script>";
-  ?>
 <script>
   document.getElementById("payButton").addEventListener("click", function () {
     const momo = document.getElementById("momo").checked;
     const paypal = document.getElementById("paypal").checked;
     const cod = document.getElementById("cod").checked;
 
-    var string = list_oid.join("/"); // danh sách id sản phẩm trong giỏ hàng
+    var string = list_oid.join("/");
 
     if (momo) {
       window.location.href = "./Views/Payment/momo_payment.php?oids=" + string;
@@ -196,8 +167,16 @@
       alert("❌ Vui lòng chọn phương thức thanh toán");
     }
   });
+  document.getElementById("myBtn").addEventListener("click", function () {
+    const alertBox = document.getElementById("cancelAlert");
+    alertBox.classList.remove("d-none");
+
+    setTimeout(() => {
+      alertBox.classList.add("d-none");
+      window.location.href = "/";
+    }, 2000);
+  });
 </script>
 
-
-  </body>
+</body>
 </html>
