@@ -38,18 +38,14 @@
       integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
       crossorigin="anonymous"
     ></script>
-    <!-- Latest compiled and minified CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
-    <!-- ======== Swiper Js ======= -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.css"
     />
-    <!-- ======== SwiperJS ======= -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.7.5/swiper-bundle.min.js"></script>
     <link
       href="https://unpkg.com/boxicons@2.0.8/css/boxicons.min.css"
@@ -67,7 +63,6 @@
   <body>
     <?php require_once __DIR__ . "/../Navbar/index.php"; ?>
     <script src="./Views/Navbar/navbarScript.js" index='0'></script>
-
     <div class="homepage">
       <div class="hero">
         <div class="row1">
@@ -197,50 +192,70 @@
         ?>
         </div>
       </div>
+              <div class="featured">
+            <h2><i class="far fa-hand-point-right"></i> Sản phẩm được ưa chuộng <i class="fas fa-chart-line"></i></h2>
 
-      <div class="featured">
-        <h2><i class="far fa-hand-point-right"></i> Sản phẩm được ưa chuộng <i class="fas fa-chart-line"></i></h2>
-
-        <div class="row1 container">
-          <div class="swiper-container slider-2">
-            <div class="swiper-wrapper noneheight">
-              <?php
-                    if(empty($data["featured"])) echo "featured empty";
-                    else{
-                      if($data["user"] != "manager"){
-                        echo "<span hidden>" . $data["user"] . "</span>";
-                        foreach($data["featured"] as $row){ // "
-                          echo "<div class=\"swiper-slide\"><div class=\"product\"><div class=\"img-container\"><img src=\"" . $row["img"] ."\" alt=\"\"/>";
-                          echo "<div class=\"addToCart\" onclick=\"add_Product(this);\"><i class=\"fas fa-shopping-cart\"></i><span hidden>" . $row["id"] . "</span></div></div><div class=\"bottom\"><a href=\"?url=Home/Item/" . $row["id"] . "\">";
-                          echo $row["name"] . "</a><div class=\"price\"><span class=\"feature-item-price\">" . $row["price"] . "đ</span></div></div></div></div>";
+            <div class="row1 container">
+                <div class="swiper-container slider-2">
+                    <div class="swiper-wrapper noneheight">
+                        <?php
+                        if (empty($data["featured"])) {
+                            echo "featured empty";
+                        } else {
+                            if ($data["user"] != "manager") {
+                                echo "<span hidden>" . $data["user"] . "</span>";
+                                foreach ($data["featured"] as $row) {
+                                    echo "<div class=\"swiper-slide\">
+                                            <div class=\"product\">
+                                                <div class=\"img-container\">
+                                                    <img src=\"" . $row["img"] . "\" alt=\"\"/>
+                                                    <div class=\"addToCart\" onclick=\"goToDetail(" . $row["id"] . ")\">
+                                                        <i class=\"fas fa-shopping-cart\"></i>
+                                                    </div>
+                                                </div>
+                                                <div class=\"bottom\">
+                                                    <a href=\"?url=Home/Item/" . $row["id"] . "\">" . htmlspecialchars($row["name"], ENT_QUOTES) . "</a>
+                                                    <div class=\"price\">
+                                                        <span class=\"feature-item-price\">" . number_format($row["price"], 0, ',', '.') . "đ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>";
+                                }
+                            } else if ($data["user"] == "manager") {
+                                foreach ($data["featured"] as $row) {
+                                    echo "<div class=\"swiper-slide\">
+                                            <span></span>
+                                            <div class=\"product\">
+                                                <div class=\"img-container\">
+                                                    <img src=\"" . $row["img"] . "\" alt=\"\"/>
+                                                </div>
+                                                <div class=\"bottom\">
+                                                    <a href=\"?url=Home/Item/" . $row["id"] . "\">" . htmlspecialchars($row["name"], ENT_QUOTES) . "</a>
+                                                    <div class=\"price\">
+                                                        <span class=\"feature-item-price\">" . number_format($row["price"], 0, ',', '.') . "đ</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          </div>";
+                                }
+                            }
                         }
-                      }
-                      else if($data["user"] == "manager"){
-                        foreach($data["featured"] as $row){ // manager
-                          echo "<div class=\"swiper-slide\"><span></span>
-                                  <div class=\"product\"><div class=\"img-container\"><img src=\"" . $row["img"] ."\" alt=\"\"/>";
-                          echo "</div><div class=\"bottom\"><a href=\"?url=Home/Item/" . $row["id"] . "\">";
-                          echo $row["name"] . "</a><div class=\"price\"><span class=\"feature-item-price\">" . $row["price"] . "đ</span></div></div></div></div>";
-                        }
-                      }
-                    }
-              ?>
+                        ?>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="arrows d-flex">
+                <div class="custom-next d-flex">
+                    <i class="bx bx-chevrons-right swiper-icon"></i>
+                </div>
+                <div class="custom-prev d-flex">
+                    <i class="bx bx-chevrons-left swiper-icon"></i>
+                </div>
+            </div>
         </div>
-
-        <div class="arrows d-flex">
-          <div class="custom-next d-flex">
-            <i class="bx bx-chevrons-right swiper-icon"></i>
-          </div>
-          <div class="custom-prev d-flex">
-            <i class="bx bx-chevrons-left swiper-icon"></i>
-          </div>
+        <?php require_once("./Views/footer/index.php"); ?>
         </div>
-      </div>
-
-    <?php require_once("./Views/footer/index.php");?>
-    </div>
     <script src="./Views/Home_page/home.js"></script>
   </body>
 </html>
