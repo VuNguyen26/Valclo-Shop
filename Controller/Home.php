@@ -29,20 +29,38 @@ class Home extends Controller{
         }
         function Products($user, $sort_1 = "", $sort_2 = "") {
             $cus = $this->model($user);
-            $search = isset($_GET['search']) ? $_GET['search'] : null;
+        
+            $sort_by = $_GET['sort-by'] ?? null;
+            $order_by = $_GET['order-by'] ?? null;
+            $page = $_GET['page'] ?? 1;
+            $search = $_GET['search'] ?? '';
+            $category = $_GET['category'] ?? 'all';
+        
+            // ✅ Tách giá trị từ dropdown "price-range"
+            $price_min = 0;
+            $price_max = 999999999;
+            if (isset($_GET['price-range']) && $_GET['price-range'] !== '') {
+                $range = explode('-', $_GET['price-range']);
+                $price_min = isset($range[0]) ? intval($range[0]) : 0;
+                $price_max = (isset($range[1]) && $range[1] !== '') ? intval($range[1]) : 999999999;
+            }
         
             $this->view("Products", [
                 "cate" => $cus->get_product_cates(),
                 "product" => $cus->get_products(
-                    isset($_GET['sort-by']) ? $_GET['sort-by'] : null,
-                    isset($_GET['order-by']) ? $_GET['order-by'] : null,
-                    isset($_GET['page']) ? $_GET['page'] : 1,
-                    isset($_GET['search']) ? $_GET['search'] : '',
-                    isset($_GET['category']) ? $_GET['category'] : 'all',
+                    $sort_by,
+                    $order_by,
+                    $page,
+                    $search,
+                    $category,
+                    $price_min,
+                    $price_max
                 ),
                 "user" => $user
             ]);
-        }        
+        }
+        
+                
         
         function Item($user, $pid){
             $cus = $this->model($user);

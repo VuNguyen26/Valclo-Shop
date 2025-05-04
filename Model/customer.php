@@ -15,74 +15,77 @@ class customer extends DB {
         return mysqli_fetch_assoc(mysqli_query($this->connect, $query));
     }
 
-    public function get_products($sort_1, $sort_2, $page, $search = null, $category) {
-
+    public function get_products($sort_1, $sort_2, $page, $search = null, $category, $price_min = 0, $price_max = 999999999) {
         $query = "";
         $query_paginate = "";
         $limit_record = 12;
     
-        if(!in_array($sort_1,['collection','featured','pname','price'])) $sort_1 = null;
-        if(!in_array($sort_2,['ASC','DESC'])) $sort_2 = null;
-
-        $search_condition = " 1";
+        if (!in_array($sort_1, ['collection', 'featured', 'pname', 'price'])) $sort_1 = null;
+        if (!in_array($sort_2, ['ASC', 'DESC'])) $sort_2 = null;
+    
+        $conditions = [];
+    
+        // Tìm kiếm tên sản phẩm
         if ($search !== null && $search !== "") {
             $search = mysqli_real_escape_string($this->connect, $search);
-            $search_condition = " WHERE `p`.`name` LIKE '%$search%' ";
+            $conditions[] = "`p`.`name` LIKE '%$search%'";
         }
-
-        if(!$category) $category = 'all';
-
-        if($category === 'all') $query_category = '';
-        else {
+    
+        // Lọc theo danh mục
+        if (!$category) $category = 'all';
+        if ($category !== 'all') {
             $id_category = $this->check_exist_cate($category);
-            if(!$id_category) die('404 Not Found');
-            else $query_category = ' AND `p`.`CATEGORY` = '.$id_category['id'];
+            if (!$id_category) die('404 Not Found');
+            $conditions[] = "`p`.`CATEGORY` = " . $id_category['id'];
         }
-
-        if (strpos($search_condition, 'WHERE') !== false) {
-                $search_condition = substr($search_condition, strpos($search_condition, 'WHERE') + 5);
-        }
-
-        if (strpos($query_category, 'WHERE') !== false) {
-                $query_category = substr($query_category, strpos($query_category, 'WHERE') + 5);
-        }
-
-        $count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE" . $search_condition . $query_category;
-
-        if (strpos($count_query, 'WHERE WHERE') !== false) {
-                die('Lỗi SQL: Câu truy vấn chứa 2 từ khóa WHERE');
-        }
-
-        
-        
+    
+        // Lọc theo khoảng giá
+        $conditions[] = "`p`.`price` >= " . intval($price_min);
+        $conditions[] = "`p`.`price` <= " . intval($price_max);
+    
+        // Gộp các điều kiện bằng AND
+        $where_clause = implode(' AND ', $conditions);
+    
+        // Truy vấn đếm tổng sản phẩm
+        $count_query = "SELECT COUNT(*) AS total FROM `product` `p` WHERE $where_clause";
         $result = mysqli_query($this->connect, $count_query);
         if (!$result) {
-                die('Lỗi truy vấn SQL: ' . mysqli_error($this->connect) . '<br>Câu truy vấn: ' . $count_query);
+            die('Lỗi truy vấn SQL: ' . mysqli_error($this->connect) . '<br>Câu truy vấn: ' . $count_query);
         }
+    
         $total_record = mysqli_fetch_assoc($result)['total'];
-        if(!$total_record) die('Sản phẩm không có');
+        if (!$total_record) die('Sản phẩm không có');
+    
         $total_page = ceil($total_record / $limit_record);
         if ($page > $total_page || !is_numeric($page) || $page < 1) $page = 1;
         $query_paginate = " LIMIT " . (($page - 1) * $limit_record) . ", " . $limit_record;
+    
+        // Truy vấn lấy sản phẩm
         $query = "SELECT 
-        `p`.`ID` AS 'id',
-        `p`.`name` AS 'name',
-        `p`.`price` AS 'price',
-        `p`.`IMG_URL` AS 'img',
-        `p`.`TOP_PRODUCT` as 'top_seller',
-        `c`.`name_category` 
-        FROM `product` `p`
-        JOIN `category` `c`
-        ON `p`.`CATEGORY` = `c`.`ID`
-        WHERE ";
-
-        if ($sort_1 == "" && $sort_2 == "") $query .=  $search_condition . $query_category;
-        else if ($sort_1 == "featured") $query .= "`p`.`TOP_PRODUCT` = 1 ORDER BY `p`.`TOP_PRODUCT` ASC";
-        else if ($sort_1 == "collection") $query .= "1 GROUP BY `p`.`CATEGORY` ORDER BY `p`.`TOP_PRODUCT` ASC";
-        else if ($sort_1 == "pname") $query .= $search_condition . $query_category ." ORDER BY `p`.`NAME` ". $sort_2;
-        else if ($sort_1 == "price") $query .= $search_condition . $query_category ." ORDER BY `p`.`PRICE` ". $sort_2;
-        else die('404 Not Found');
-
+            `p`.`ID` AS 'id',
+            `p`.`name` AS 'name',
+            `p`.`price` AS 'price',
+            `p`.`IMG_URL` AS 'img',
+            `p`.`TOP_PRODUCT` as 'top_seller',
+            `c`.`name_category`
+            FROM `product` `p`
+            JOIN `category` `c` ON `p`.`CATEGORY` = `c`.`ID`
+            WHERE $where_clause";
+    
+        if ($sort_1 == "" && $sort_2 == "") {
+            // Không sắp xếp
+        } else if ($sort_1 == "featured") {
+            $query .= " AND `p`.`TOP_PRODUCT` = 1 ORDER BY `p`.`TOP_PRODUCT` ASC";
+        } else if ($sort_1 == "collection") {
+            $query .= " GROUP BY `p`.`CATEGORY` ORDER BY `p`.`TOP_PRODUCT` ASC";
+        } else if ($sort_1 == "pname") {
+            $query .= " ORDER BY `p`.`NAME` $sort_2";
+        } else if ($sort_1 == "price") {
+            $query .= " ORDER BY `p`.`PRICE` $sort_2";
+        } else {
+            die('404 Not Found');
+        }
+    
         return [
             'active_category' => $category,
             'active_search' => $search,
@@ -93,6 +96,7 @@ class customer extends DB {
             'list' => mysqli_query($this->connect, $query . $query_paginate)
         ];
     }
+    
     
 
     public function get_product_in_combo($id) {
