@@ -6,7 +6,7 @@ include 'connect.php';
 $messages = []; // Mảng lưu trữ thông báo
 if (isset($_GET['action']) && $_GET['action'] == 'ban') {
     $id = intval($_GET['id']);
-    if ($conn->query("UPDATE account SET STATUS='Bị ban' WHERE ID=$id")) {
+    if ($conn->query("UPDATE account SET STATUS='Bị Khóa' WHERE ID=$id")) {
         $messages[] = ['text' => 'Khóa tài khoản thành công!', 'type' => 'success'];
     } else {
         $messages[] = ['text' => 'Lỗi khi khóa tài khoản: ' . $conn->error, 'type' => 'danger'];

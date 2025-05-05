@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 25, 2025 at 09:58 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 06, 2025 lúc 01:02 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `web_db`
+-- Cơ sở dữ liệu: `web_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `account`
+-- Cấu trúc bảng cho bảng `account`
 --
 
 CREATE TABLE `account` (
@@ -43,27 +43,29 @@ CREATE TABLE `account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `account`
+-- Đang đổ dữ liệu cho bảng `account`
 --
 
 INSERT INTO `account` (`ID`, `CMND`, `FNAME`, `PHONE`, `ADDRESS`, `USERNAME`, `EMAIL`, `PWD`, `IMG_URL`, `RANK`, `STATUS`, `REASON_BANNED`) VALUES
-(1, '0512040017', 'Nguyễn Minh Vũ', '0968830591', '20/2, Xã Đức Lân, Huyện Mộ Đức, Tỉnh Quảng Ngãi', 'minhvu', 'nguyenminhvu591@gmail.com', 'valcloshop', './Views/images/mv.png', 0, 'Hoạt động', NULL),
+(1, '0512040017', 'Nguyễn Minh Vũ', '0968830591', '20/2, Xã Đức Lân, Huyện Mộ Đức, Tỉnh Quảng Ngãi', 'minhvu', 'nguyenminhvu591@gmail.com', 'valcloshop', 'uploads/1746484663_306455029_850032736381078_5398904611315439507_n.jpg', 0, 'Hoạt động', NULL),
 (2, '0512040017', 'Nguyễn Minh Hiếu', '0965279041', 'Quảng Ngãi', 'subway99', 'nguyenhieu3105@gmail.com', '12345678', './Views/images/mv.png', 1000, 'Hoạt động', NULL),
-(3, '1234567899', 'vunguyen', '0123456789', '20/2, Phường Hiệp Bình Phước, Thành phố Thủ Đức, Thành phố Hồ Chí Minh', 'vu', 'vunguyen@gmail.com', '123456', './Views/images/np.png', 0, 'Hoạt động', NULL);
+(3, '1234567899', 'vunguyen', '0123456789', '20/2, Phường Hiệp Bình Phước, Thành phố Thủ Đức, Thành phố Hồ Chí Minh', 'vu', 'vunguyen@gmail.com', '123456', 'uploads/1746484680_Screenshot 2024-12-04 191956.png', 0, 'Hoạt động', NULL),
+(4, NULL, 'Trịnh Quang Trường', '0387517727', '119/30 Nguyễn Văn Cừ', 'trinhtruongdeptrai', 'trinhtruong25303@gmail.com', '12345', 'uploads/1746482923_IMG_1762-scaled-642x336.jpg', 0, 'Hoạt động', NULL),
+(5, NULL, 'Trường', '0123456789', '20/2, Phường Hiệp Bình Phước, Thành phố Thủ Đức, Thành phố Hồ Chí Minh', 'sssssf', 'trinhtruongmeo@gmail.com', '123', 'uploads/1746484723_Screenshot 2024-11-16 150557.png', 0, 'Hoạt động', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Cấu trúc bảng cho bảng `admin`
 --
 
 CREATE TABLE `admin` (
-  `USERNAME` varchar(15) DEFAULT NULL,
+  `USERNAME` varchar(15) NOT NULL,
   `PASSWORD` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admin`
+-- Đang đổ dữ liệu cho bảng `admin`
 --
 
 INSERT INTO `admin` (`USERNAME`, `PASSWORD`) VALUES
@@ -72,7 +74,7 @@ INSERT INTO `admin` (`USERNAME`, `PASSWORD`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cart`
+-- Cấu trúc bảng cho bảng `cart`
 --
 
 CREATE TABLE `cart` (
@@ -87,7 +89,7 @@ CREATE TABLE `cart` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `category`
+-- Cấu trúc bảng cho bảng `category`
 --
 
 CREATE TABLE `category` (
@@ -97,7 +99,7 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `category`
+-- Đang đổ dữ liệu cho bảng `category`
 --
 
 INSERT INTO `category` (`id`, `name_category`, `state`) VALUES
@@ -116,7 +118,7 @@ INSERT INTO `category` (`id`, `name_category`, `state`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comment`
+-- Cấu trúc bảng cho bảng `comment`
 --
 
 CREATE TABLE `comment` (
@@ -129,7 +131,7 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `comment`
+-- Đang đổ dữ liệu cho bảng `comment`
 --
 
 INSERT INTO `comment` (`ID`, `PID`, `UID`, `STAR`, `CONTENT`, `TIME`) VALUES
@@ -150,7 +152,7 @@ INSERT INTO `comment` (`ID`, `PID`, `UID`, `STAR`, `CONTENT`, `TIME`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comment_news`
+-- Cấu trúc bảng cho bảng `comment_news`
 --
 
 CREATE TABLE `comment_news` (
@@ -162,7 +164,7 @@ CREATE TABLE `comment_news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `comment_news`
+-- Đang đổ dữ liệu cho bảng `comment_news`
 --
 
 INSERT INTO `comment_news` (`ID`, `NID`, `CID`, `CONTENT`, `TIME`) VALUES
@@ -175,28 +177,113 @@ INSERT INTO `comment_news` (`ID`, `NID`, `CID`, `CONTENT`, `TIME`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employee_account`
+-- Cấu trúc bảng cho bảng `import`
 --
 
-CREATE TABLE `employee_account` (
+CREATE TABLE `import` (
   `ID` bigint(20) NOT NULL,
-  `NAME` varchar(50) DEFAULT NULL,
-  `USERNAME` varchar(15) DEFAULT NULL,
-  `PASSWORD` varchar(15) DEFAULT NULL
+  `SUPPLIER_ID` bigint(20) DEFAULT NULL,
+  `ADMIN_USERNAME` varchar(15) DEFAULT NULL,
+  `IMPORT_DATE` date NOT NULL,
+  `TOTAL_COST` int(11) DEFAULT 0,
+  `NOTE` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `employee_account`
+-- Đang đổ dữ liệu cho bảng `import`
 --
 
-INSERT INTO `employee_account` (`ID`, `NAME`, `USERNAME`, `PASSWORD`) VALUES
-(1, 'Nguyễn Văn A', 'nva', '123'),
-(2, 'Nguyễn Văn B', 'nvb', '123');
+INSERT INTO `import` (`ID`, `SUPPLIER_ID`, `ADMIN_USERNAME`, `IMPORT_DATE`, `TOTAL_COST`, `NOTE`) VALUES
+(2, 1, 'admin', '2025-05-08', 3600000, 'nhập hàng mới về áo real'),
+(3, 2, 'admin', '2025-05-01', 1000, ''),
+(4, 1, 'admin', '2025-05-05', 10000000, 'nhập hàng'),
+(5, 1, 'admin', '2025-05-05', 0, 'nhập hàng'),
+(6, 2, 'admin', '2025-05-05', 0, 'haha\r\n'),
+(7, 2, 'admin', '2025-05-05', 0, 'haha\r\n'),
+(8, 2, 'admin', '2025-05-06', 0, 'tôi'),
+(9, 1, 'admin', '2025-05-05', 0, 'ahaha'),
+(10, 1, 'admin', '2025-05-05', 0, 'ahaha'),
+(11, 1, 'admin', '2025-05-05', 0, 's'),
+(12, 3, 'admin', '2025-05-07', 0, 'đợt nhập hàng taobao'),
+(13, 3, 'admin', '2025-05-07', 0, 'đợt nhập hàng taobao'),
+(14, 3, 'admin', '2025-05-07', 4200000, 'đợt nhập hàng taobao'),
+(15, 3, 'admin', '2025-05-01', 0, ''),
+(16, 1, 'admin', '2025-05-05', 0, 'ss'),
+(17, 1, 'admin', '2025-05-05', 0, 'â'),
+(18, 1, 'admin', '2025-05-05', 0, 'â'),
+(19, 1, 'admin', '2025-05-07', 0, 'a'),
+(20, 1, 'admin', '2025-05-07', 0, 'a'),
+(21, 1, 'admin', '2025-05-07', 0, 'a');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `message`
+-- Cấu trúc bảng cho bảng `import_detail`
+--
+
+CREATE TABLE `import_detail` (
+  `ID` bigint(20) NOT NULL,
+  `IMPORT_ID` bigint(20) NOT NULL,
+  `PID` bigint(20) NOT NULL,
+  `QUANTITY` int(11) NOT NULL,
+  `IMPORT_PRICE` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `import_detail`
+--
+
+INSERT INTO `import_detail` (`ID`, `IMPORT_ID`, `PID`, `QUANTITY`, `IMPORT_PRICE`) VALUES
+(3, 2, 1, 60, 60000),
+(4, 3, 1, 10, 100),
+(5, 4, 5, 20, 50000),
+(6, 4, 5, 20, 50000),
+(7, 4, 5, 20, 50000),
+(8, 4, 5, 20, 50000),
+(9, 4, 5, 20, 50000),
+(10, 4, 5, 20, 50000),
+(11, 4, 5, 20, 50000),
+(12, 4, 5, 20, 50000),
+(13, 4, 5, 20, 50000),
+(14, 4, 5, 20, 50000),
+(15, 14, 106, 60, 70000);
+
+--
+-- Bẫy `import_detail`
+--
+DELIMITER $$
+CREATE TRIGGER `after_import_detail_delete` AFTER DELETE ON `import_detail` FOR EACH ROW BEGIN
+    UPDATE product
+    SET NUMBER = NUMBER - OLD.QUANTITY
+    WHERE ID = OLD.PID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_import_detail_insert` AFTER INSERT ON `import_detail` FOR EACH ROW BEGIN
+    UPDATE product
+    SET NUMBER = NUMBER + NEW.QUANTITY
+    WHERE ID = NEW.PID;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_import_detail_update_total_cost` AFTER INSERT ON `import_detail` FOR EACH ROW BEGIN
+    UPDATE `import`
+    SET TOTAL_COST = (
+        SELECT SUM(QUANTITY * IMPORT_PRICE)
+        FROM import_detail
+        WHERE IMPORT_ID = NEW.IMPORT_ID
+    )
+    WHERE ID = NEW.IMPORT_ID;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `message`
 --
 
 CREATE TABLE `message` (
@@ -210,7 +297,7 @@ CREATE TABLE `message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `message`
+-- Đang đổ dữ liệu cho bảng `message`
 --
 
 INSERT INTO `message` (`ID`, `FNAME`, `EMAIL`, `PHONE`, `SUBJECT`, `CONTENT`, `CHECK`) VALUES
@@ -219,7 +306,7 @@ INSERT INTO `message` (`ID`, `FNAME`, `EMAIL`, `PHONE`, `SUBJECT`, `CONTENT`, `C
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news`
+-- Cấu trúc bảng cho bảng `news`
 --
 
 CREATE TABLE `news` (
@@ -234,7 +321,7 @@ CREATE TABLE `news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `news`
+-- Đang đổ dữ liệu cho bảng `news`
 --
 
 INSERT INTO `news` (`ID`, `CID`, `KEY`, `TIME`, `TITLE`, `CONTENT`, `IMG_URL`, `SHORT_CONTENT`) VALUES
@@ -248,7 +335,7 @@ INSERT INTO `news` (`ID`, `CID`, `KEY`, `TIME`, `TITLE`, `CONTENT`, `IMG_URL`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order`
+-- Cấu trúc bảng cho bảng `order`
 --
 
 CREATE TABLE `order` (
@@ -261,23 +348,23 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `order`
+-- Đang đổ dữ liệu cho bảng `order`
 --
 
 INSERT INTO `order` (`ID`, `UID`, `TIME`, `STATUS`, `TOTAL_PRICE`, `METHOD`) VALUES
-(1, 1, '2025-04-10', 'Chờ xác nhận', 1700000, 'COD'),
+(1, 1, '2024-04-02', 'Đã giao', 1700000, 'COD'),
 (2, 2, '2025-04-11', 'Đã xác nhận', 1300000, 'Momo'),
 (3, 2, '2025-04-12', 'Đang giao', 1200000, 'COD'),
 (4, 1, '2025-04-13', 'Đã giao', 2200000, 'Paypal'),
 (54, 1, '2025-04-25', 'Chờ xác nhận', 1100000, 'COD'),
 (55, 1, '2025-04-25', 'Chờ xác nhận', 1800000, 'COD'),
 (56, 3, '2025-04-25', 'Chờ xác nhận', 1100000, 'Momo'),
-(57, 3, '2025-04-25', 'Chờ xác nhận', 3900000, 'COD');
+(57, 3, '2025-04-25', 'Đã giao', 3900000, 'COD');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order_detail`
+-- Cấu trúc bảng cho bảng `order_detail`
 --
 
 CREATE TABLE `order_detail` (
@@ -289,7 +376,7 @@ CREATE TABLE `order_detail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `order_detail`
+-- Đang đổ dữ liệu cho bảng `order_detail`
 --
 
 INSERT INTO `order_detail` (`ID`, `ORDER_ID`, `PID`, `SIZE`, `QUANTITY`) VALUES
@@ -310,7 +397,7 @@ INSERT INTO `order_detail` (`ID`, `ORDER_ID`, `PID`, `SIZE`, `QUANTITY`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product`
+-- Cấu trúc bảng cho bảng `product`
 --
 
 CREATE TABLE `product` (
@@ -325,15 +412,15 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `product`
+-- Đang đổ dữ liệu cho bảng `product`
 --
 
 INSERT INTO `product` (`ID`, `NAME`, `PRICE`, `IMG_URL`, `NUMBER`, `DECS`, `CATEGORY`, `TOP_PRODUCT`) VALUES
-(1, 'Áo Real Madrid chính hãng', 1000000, 'https://i.pinimg.com/736x/c2/bd/3a/c2bd3a8e1f97a51c41f20b202e6336d0.jpg', 20, 'Áo có công nghệ làm mát tiên tiến, giữ cơ thể luôn khô thoáng.', 1, 1),
+(1, 'Áo Real Madrid chính hãng', 1000000, 'https://i.pinimg.com/736x/c2/bd/3a/c2bd3a8e1f97a51c41f20b202e6336d0.jpg', 210, 'Áo có công nghệ làm mát tiên tiến, giữ cơ thể luôn khô thoáng.', 4, 1),
 (2, 'Áo Real Madrid chính hãng', 120000, 'https://i.pinimg.com/736x/d4/0d/2f/d40d2f4b8d4bdf0948f7cff5e284d35a.jpg', 20, 'Phiên bản áo đấu mùa giải mới, hỗ trợ vận động tối đa.', 1, 2),
 (3, 'Áo Inter Milan chính hãng', 130000, 'https://i.pinimg.com/736x/53/1c/86/531c8616986b2d981bfbe5455f7dbb5e.jpg', 20, 'Phiên bản áo đấu mùa giải mới, hỗ trợ vận động tối đa.', 1, 3),
 (4, 'Áo Liverpool chính hãng', 300000, 'https://i.pinimg.com/736x/3d/fb/db/3dfbdba09aa66c0454ccd698e33db1fa.jpg', 20, 'Chất vải thoáng khí, thích hợp sử dụng trong thi đấu và luyện tập.', 1, 0),
-(5, 'Áo Bayern Munich chính hãng', 100000, 'https://i.pinimg.com/736x/f1/48/7c/f1487c1fdb83dd11691518987824f68c.jpg', 20, 'Phiên bản áo đấu mùa giải mới, hỗ trợ vận động tối đa.', 1, 1),
+(5, 'Áo Bayern Munich chính hãng', 100000, 'https://i.pinimg.com/736x/f1/48/7c/f1487c1fdb83dd11691518987824f68c.jpg', 220, 'Phiên bản áo đấu mùa giải mới, hỗ trợ vận động tối đa.', 1, 1),
 (6, 'Áo Inter Milan chính hãng', 140000, 'https://i.pinimg.com/736x/df/70/77/df7077297911b48d911023306f579858.jpg', 20, 'Thiết kế chuẩn form châu Âu, logo thêu sắc nét.', 1, 2),
 (7, 'Áo Arsenal chính hãng', 150000, 'https://i.pinimg.com/736x/f2/e0/7f/f2e07f4ff543f1e60c47cd5d333e506f.jpg', 20, 'Chất vải thoáng khí, thích hợp sử dụng trong thi đấu và luyện tập.', 1, 3),
 (8, 'Áo AC Milan chính hãng', 160000, 'https://i.pinimg.com/736x/6e/c1/0f/6ec10f477867bc83ccffdffac5e5e550.jpg', 20, 'Áo có công nghệ làm mát tiên tiến, giữ cơ thể luôn khô thoáng.', 1, 0),
@@ -433,11 +520,13 @@ INSERT INTO `product` (`ID`, `NAME`, `PRICE`, `IMG_URL`, `NUMBER`, `DECS`, `CATE
 (102, 'Quần jogger 2 lớp thể thao', 500000, 'https://pos.nvncdn.com/822bfa-13829/ps/20190723_DsFf7VQnxcamQFMMrblF3gQi.jpg', 20, 'Lớp trong thoáng khí, lớp ngoài chắn gió nhẹ.', 2, 3),
 (103, 'Quần thể thao bo gấu nam', 600000, 'https://cbu01.alicdn.com/img/ibank/O1CN01E80MF12Luvj5ihJbo_!!2209125889753-0-cib.jpg', 20, 'Dễ di chuyển, phong cách thể thao trẻ trung.', 2, 0),
 (104, 'Quần thể thao unisex vải co giãn', 700000, 'https://product.hstatic.net/1000369857/product/fp02_xam_3_3c3f9c059763477c87b1a1c54b4eb0a1.jpg', 20, 'Dùng được cho cả nam và nữ, co giãn bốn chiều.', 2, 1),
-(105, 'Quần short đá banh 2 lớp nam', 800000, 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lpfy5fna9jymee', 20, 'Lót trong giúp cố định vị trí, không bị xô lệch.', 2, 2);
+(105, 'Quần short đá banh 2 lớp nam', 800000, 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lpfy5fna9jymee', 20, 'Lót trong giúp cố định vị trí, không bị xô lệch.', 2, 2),
+(106, 'áo thun 3 lỗ', 80000, 'uploads/1746477351_306253451_411284347783313_6136284257574936849_n.jpg', 60, 'áo đẹp', 1, NULL);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sub_img_url`
+-- Cấu trúc bảng cho bảng `sub_img_url`
 --
 
 CREATE TABLE `sub_img_url` (
@@ -446,18 +535,48 @@ CREATE TABLE `sub_img_url` (
   `IMG_URL` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Indexes for dumped tables
+-- Cấu trúc bảng cho bảng `supplier`
+--
+
+CREATE TABLE `supplier` (
+  `ID` bigint(20) NOT NULL,
+  `NAME` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `PHONE` varchar(10) DEFAULT NULL,
+  `EMAIL` varchar(250) DEFAULT NULL,
+  `ADDRESS` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `NOTE` text CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `supplier`
+--
+
+INSERT INTO `supplier` (`ID`, `NAME`, `PHONE`, `EMAIL`, `ADDRESS`, `NOTE`) VALUES
+(1, 'Công ty Adidas Việt Nam', '0901234567', 'contact@adidas.vn', 'Quận 7, TP.HCM', 'Nhà cung cấp áo đấu chính hãng'),
+(2, 'Công ty Nike Việt Nam', '0907654321', 'contact@nike.vn', 'Quận 1, TP.HCM', 'Nhà cung cấp giày và phụ kiện'),
+(3, 'Tập đoàn thời trang taobao', '0387517727', 'trinhtruong2502@gmail.com', '119/30 Nguyễn Văn Cừ', 'cung cấp các loại áo taobao');
+
+--
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `account`
+-- Chỉ mục cho bảng `account`
 --
 ALTER TABLE `account`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `cart`
+-- Chỉ mục cho bảng `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`USERNAME`);
+
+--
+-- Chỉ mục cho bảng `cart`
 --
 ALTER TABLE `cart`
   ADD PRIMARY KEY (`ID`),
@@ -465,20 +584,20 @@ ALTER TABLE `cart`
   ADD KEY `UID` (`UID`);
 
 --
--- Indexes for table `category`
+-- Chỉ mục cho bảng `category`
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `comment`
+-- Chỉ mục cho bảng `comment`
 --
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `UID` (`UID`);
 
 --
--- Indexes for table `comment_news`
+-- Chỉ mục cho bảng `comment_news`
 --
 ALTER TABLE `comment_news`
   ADD PRIMARY KEY (`ID`),
@@ -486,165 +605,207 @@ ALTER TABLE `comment_news`
   ADD KEY `NID` (`NID`);
 
 --
--- Indexes for table `employee_account`
+-- Chỉ mục cho bảng `import`
 --
-ALTER TABLE `employee_account`
-  ADD PRIMARY KEY (`ID`);
+ALTER TABLE `import`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ADMIN_USERNAME` (`ADMIN_USERNAME`),
+  ADD KEY `SUPPLIER_ID` (`SUPPLIER_ID`);
 
 --
--- Indexes for table `message`
+-- Chỉ mục cho bảng `import_detail`
+--
+ALTER TABLE `import_detail`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `IMPORT_ID` (`IMPORT_ID`),
+  ADD KEY `PID` (`PID`);
+
+--
+-- Chỉ mục cho bảng `message`
 --
 ALTER TABLE `message`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `news`
+-- Chỉ mục cho bảng `news`
 --
 ALTER TABLE `news`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Indexes for table `order`
+-- Chỉ mục cho bảng `order`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `UID` (`UID`);
 
 --
--- Indexes for table `order_detail`
+-- Chỉ mục cho bảng `order_detail`
 --
 ALTER TABLE `order_detail`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `PID` (`PID`);
 
 --
--- Indexes for table `product`
+-- Chỉ mục cho bảng `product`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `fk_category_product` (`CATEGORY`);
 
 --
--- Indexes for table `sub_img_url`
+-- Chỉ mục cho bảng `sub_img_url`
 --
 ALTER TABLE `sub_img_url`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `PID` (`PID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Chỉ mục cho bảng `supplier`
+--
+ALTER TABLE `supplier`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `account`
+-- AUTO_INCREMENT cho bảng `account`
 --
 ALTER TABLE `account`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `cart`
+-- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
--- AUTO_INCREMENT for table `category`
+-- AUTO_INCREMENT cho bảng `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `comment`
+-- AUTO_INCREMENT cho bảng `comment`
 --
 ALTER TABLE `comment`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `comment_news`
+-- AUTO_INCREMENT cho bảng `comment_news`
 --
 ALTER TABLE `comment_news`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `employee_account`
+-- AUTO_INCREMENT cho bảng `import`
 --
-ALTER TABLE `employee_account`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `import`
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT for table `message`
+-- AUTO_INCREMENT cho bảng `import_detail`
+--
+ALTER TABLE `import_detail`
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT cho bảng `message`
 --
 ALTER TABLE `message`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `news`
+-- AUTO_INCREMENT cho bảng `news`
 --
 ALTER TABLE `news`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `order`
+-- AUTO_INCREMENT cho bảng `order`
 --
 ALTER TABLE `order`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
--- AUTO_INCREMENT for table `order_detail`
+-- AUTO_INCREMENT cho bảng `order_detail`
 --
 ALTER TABLE `order_detail`
   MODIFY `ID` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `product`
+-- AUTO_INCREMENT cho bảng `product`
 --
 ALTER TABLE `product`
-  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
--- AUTO_INCREMENT for table `sub_img_url`
+-- AUTO_INCREMENT cho bảng `sub_img_url`
 --
 ALTER TABLE `sub_img_url`
   MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT cho bảng `supplier`
+--
+ALTER TABLE `supplier`
+  MODIFY `ID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `cart`
+-- Các ràng buộc cho bảng `cart`
 --
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`),
   ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Constraints for table `comment`
+-- Các ràng buộc cho bảng `comment`
 --
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Constraints for table `comment_news`
+-- Các ràng buộc cho bảng `comment_news`
 --
 ALTER TABLE `comment_news`
   ADD CONSTRAINT `comment_news_ibfk_1` FOREIGN KEY (`CID`) REFERENCES `account` (`ID`) ON DELETE CASCADE,
   ADD CONSTRAINT `comment_news_ibfk_2` FOREIGN KEY (`NID`) REFERENCES `news` (`ID`) ON DELETE CASCADE;
 
 --
--- Constraints for table `order`
+-- Các ràng buộc cho bảng `import`
+--
+ALTER TABLE `import`
+  ADD CONSTRAINT `import_ibfk_1` FOREIGN KEY (`ADMIN_USERNAME`) REFERENCES `admin` (`USERNAME`) ON DELETE SET NULL,
+  ADD CONSTRAINT `import_ibfk_2` FOREIGN KEY (`SUPPLIER_ID`) REFERENCES `supplier` (`ID`) ON DELETE SET NULL;
+
+--
+-- Các ràng buộc cho bảng `import_detail`
+--
+ALTER TABLE `import_detail`
+  ADD CONSTRAINT `import_detail_ibfk_1` FOREIGN KEY (`IMPORT_ID`) REFERENCES `import` (`ID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `import_detail_ibfk_2` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`) ON DELETE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `order`
 --
 ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`UID`) REFERENCES `account` (`ID`);
 
 --
--- Constraints for table `product`
+-- Các ràng buộc cho bảng `product`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `fk_category_product` FOREIGN KEY (`CATEGORY`) REFERENCES `category` (`id`);
 
 --
--- Constraints for table `sub_img_url`
+-- Các ràng buộc cho bảng `sub_img_url`
 --
 ALTER TABLE `sub_img_url`
   ADD CONSTRAINT `sub_img_url_ibfk_1` FOREIGN KEY (`PID`) REFERENCES `product` (`ID`);
