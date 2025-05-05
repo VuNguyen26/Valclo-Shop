@@ -8,6 +8,7 @@ require_once("./Model/member.php");
 
 $displayMessage = "Thanh toán thất bại hoặc bị hủy.";
 $success = false;
+$oid = null;
 $result = $_GET['resultCode'] ?? null;
 
 if ($result === "0" && !empty($_SESSION["id"])) {
@@ -15,6 +16,7 @@ if ($result === "0" && !empty($_SESSION["id"])) {
     $db = new DB();
     $conn = $db->connect;
     $mem = new Member();
+
     $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
     $res = mysqli_query($conn, $query);
     if ($res && mysqli_num_rows($res) > 0) {
@@ -38,7 +40,7 @@ if ($result === "0" && !empty($_SESSION["id"])) {
             unset($_SESSION["cart"]);
 
             $success = true;
-            $displayMessage = "Thanh toán MoMo thành công!";
+            $displayMessage = "Bạn đã thanh toán MoMo thành công!";
         } else {
             $displayMessage = "Không thể tính tổng giá trị đơn hàng.";
         }
@@ -51,84 +53,74 @@ if ($result === "0" && !empty($_SESSION["id"])) {
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Thanh toán MoMo</title>
+  <title>Kết Quả Thanh Toán MoMo</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #f7f7f7;
+      background-color: #f3f3f3;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       font-family: 'Segoe UI', sans-serif;
     }
-    .result-box {
+    .card-box {
       background: #fff;
       padding: 40px;
       border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       text-align: center;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-      position: relative;
-      width: 420px;
+      animation: fadeIn 1s ease-in-out;
     }
-    .result-box.success {
-      border-top: 6px solid #28a745;
-    }
-    .result-box .icon {
-      font-size: 50px;
-      margin-bottom: 20px;
+    .icon-success {
+      font-size: 60px;
       color: #28a745;
+      margin-bottom: 20px;
     }
-    .result-box h3 {
-      font-weight: bold;
-      margin-bottom: 10px;
+    .icon-fail {
+      font-size: 60px;
+      color: #dc3545;
+      margin-bottom: 20px;
     }
-    .result-box p {
-      margin-bottom: 10px;
+    .btn-back {
+      margin-top: 20px;
     }
-    .btn-primary {
-      background-color: #198754;
-      border-color: #198754;
-    }
-    .confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="result-box <?= $success ? 'success' : '' ?>">
-    <div class="icon"><?= $success ? "✅" : "❌" ?></div>
-    <h3 style="color: <?= $success ? '#198754' : '#dc3545' ?>;">
+  <div class="card-box">
+    <div class="<?= $success ? 'icon-success' : 'icon-fail' ?>">
+      <?= $success ? '&#10004;' : '&#10060;' ?>
+    </div>
+    <h3 class="<?= $success ? 'text-success' : 'text-danger' ?>">
       <?= $displayMessage ?>
     </h3>
-    <p><strong>Phương thức:</strong> Thanh toán qua ví MoMo.</p>
-    <p>Cảm ơn bạn đã mua sắm tại <strong>Valclo Shop</strong>.</p>
+    <p class="mt-3">
+      <strong>Phương thức:</strong> Thanh toán qua ví MoMo.<br>
+      Cảm ơn bạn đã mua sắm tại <strong>Valclo Shop</strong>.
+    </p>
     <?php if ($success): ?>
-      <a href="?url=Home/order_detail&oids=<?= $oid ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
+      <a href="?url=Home/order_detail&oids=<?= $oid ?>" class="btn btn-success btn-back">📦 Xem chi tiết đơn hàng</a>
     <?php else: ?>
-      <a href="?url=Home/Home_page" class="btn btn-secondary mt-3">Quay lại trang chủ</a>
+      <a href="?url=Home/Home_page/" class="btn btn-secondary btn-back">↩ Quay về trang chủ</a>
     <?php endif; ?>
   </div>
 
-  <canvas class="confetti-canvas" id="confetti"></canvas>
-
+  <?php if ($success): ?>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
   <script>
-    if (<?= json_encode($success) ?>) {
-      confetti({
-        particleCount: 120,
-        spread: 120,
-        origin: { y: 0.6 }
-      });
-      const audio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c6abdb845.mp3");
-      audio.play();
-    }
+    confetti({
+      particleCount: 120,
+      spread: 100,
+      origin: { y: 0.6 }
+    });
+    const audio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c6abdb845.mp3");
+    audio.play();
   </script>
+  <?php endif; ?>
 </body>
 </html>

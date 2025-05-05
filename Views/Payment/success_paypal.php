@@ -9,7 +9,7 @@ $uid = $_SESSION["id"] ?? null;
 $result = $_GET['result'] ?? '0';
 $oids = $_GET['oids'] ?? '';
 $success = false;
-$displayMessage = "❌ Thanh toán thất bại hoặc bị hủy.";
+$displayMessage = "Thanh toán thất bại hoặc bị hủy.";
 
 if ($result === "1" && !empty($uid)) {
     $db = new DB();
@@ -33,7 +33,7 @@ if ($result === "1" && !empty($uid)) {
     $mem->clear_cart($uid);
     unset($_SESSION["cart"]);
     $success = true;
-    $displayMessage = "✅ Bạn đã thanh toán PayPal thành công!";
+    $displayMessage = "Bạn đã thanh toán PayPal thành công!";
 }
 ?>
 

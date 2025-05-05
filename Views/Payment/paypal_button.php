@@ -7,7 +7,6 @@ if (!isset($_SESSION['total_amount'])) {
     die("Không có tổng tiền thanh toán trong session!");
 }
 $totalAmount = $_SESSION['total_amount'];
-
 $usdAmount = round($totalAmount / 25000, 2);
 ?>
 <!DOCTYPE html>
@@ -59,15 +58,25 @@ $usdAmount = round($totalAmount / 25000, 2);
       },
       onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
+          console.log("PayPal payment approved:", details);
+
+          const redirectUrl = orderIds !== ''
+            ? "?url=Payment/success_paypal&result=1&oids=" + orderIds
+            : "?url=Payment/success_paypal&result=1";
+
           if (orderIds !== '') {
             fetch("?url=Home/update_cart_combo/" + orderIds)
               .then(() => {
-                window.location.href = "?url=Payment/success_paypal&result=1&oids=" + orderIds;
+                window.location.href = redirectUrl;
               });
           } else {
-            window.location.href = "?url=Payment/success_paypal&result=0";
+            window.location.href = redirectUrl;
           }
         });
+      },
+      onCancel: function(data) {
+        console.log("PayPal payment cancelled:", data);
+        window.location.href = "?url=Payment/success_paypal&result=0";
       }
     }).render('#paypal-button-container');
   </script>
