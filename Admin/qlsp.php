@@ -3,54 +3,33 @@ session_start();
 include 'connect.php';
 
 // Xử lý xóa sản phẩm (GET request)
+$messages = []; // Mảng lưu trữ thông báo
 if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     $id = intval($_GET['id']);
-    $conn->query("DELETE FROM PRODUCT WHERE ID=$id");
-    header("Location: qlsp.php");
-    exit;
+    if ($conn->query("DELETE FROM PRODUCT WHERE ID=$id")) {
+        $messages[] = ['text' => 'Xóa sản phẩm thành công!', 'type' => 'success'];
+    } else {
+        $messages[] = ['text' => 'Lỗi khi xóa sản phẩm: ' . $conn->error, 'type' => 'danger'];
+    }
 }
 
-// Khai báo biến để lưu lỗi và dữ liệu cũ (để giữ giá trị form)
+// Khai báo biến để lưu lỗi
 $errorMessages = [];
-$oldData = [];
-$modalType = ''; // 'add' hoặc 'edit'
 
-// Lấy danh sách danh mục từ bảng CATEGORY
-$categories = $conn->query("SELECT id, name_category FROM CATEGORY WHERE state = 1");
-
-// Xử lý submit form thêm/sửa (dựa vào method POST)
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Lấy dữ liệu chung từ form
+// Xử lý submit form sửa sản phẩm (dựa vào method POST)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_product'])) {
+    // Lấy dữ liệu từ form
+    $id          = intval($_POST['id']);
     $name        = trim($_POST['name']);
     $price       = intval($_POST['price']);
-    $img_url     = trim($_POST['img_url']);
-    $number      = intval($_POST['number']);
     $decs        = trim($_POST['decs']);
     $category    = intval($_POST['category']);
     $top_product = intval($_POST['top_product']);
-
-    // Lưu lại dữ liệu cũ để tái hiện lên form nếu có lỗi
-    $oldData = [
-        'name'        => $name,
-        'price'       => $price,
-        'img_url'     => $img_url,
-        'number'      => $number,
-        'decs'        => $decs,
-        'category'    => $category,
-        'top_product' => $top_product
-    ];
+    $img_url     = '';
 
     // Ràng buộc: Giá phải là số nguyên dương
     if ($price <= 0) {
         $errorMessages[] = "Giá phải là số nguyên dương.";
-    }
-    // Ràng buộc: Số lượng phải là số nguyên dương
-    if ($number <= 0) {
-        $errorMessages[] = "Số lượng phải là số nguyên dương.";
-    }
-    // Ràng buộc: Nếu đường dẫn ảnh không rỗng, phải là URL hợp lệ
-    if (!empty($img_url) && !filter_var($img_url, FILTER_VALIDATE_URL)) {
-        $errorMessages[] = "Đường dẫn ảnh không hợp lệ.";
     }
     // Ràng buộc: Danh mục phải tồn tại trong bảng CATEGORY
     $validCategory = $conn->query("SELECT id FROM CATEGORY WHERE id = $category AND state = 1");
@@ -58,241 +37,502 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errorMessages[] = "Danh mục không hợp lệ.";
     }
 
-    // Nếu không có lỗi, tiến hành xử lý thêm hoặc sửa
+    // Xử lý upload hình ảnh
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+        $upload_dir = 'uploads/';
+        $file_name = time() . '_' . basename($_FILES['image']['name']);
+        $upload_path = $upload_dir . $file_name;
+
+        // Kiểm tra loại file (chỉ cho phép hình ảnh)
+        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        $file_type = mime_content_type($_FILES['image']['tmp_name']);
+        if (!in_array($file_type, $allowed_types)) {
+            $errorMessages[] = 'Chỉ được upload file hình ảnh (JPEG, PNG, GIF)!';
+        } elseif ($_FILES['image']['size'] > 5 * 1024 * 1024) { // Giới hạn 5MB
+            $errorMessages[] = 'Hình ảnh không được lớn hơn 5MB!';
+        } else {
+            // Upload file
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
+                $img_url = $upload_path;
+            } else {
+                $errorMessages[] = 'Lỗi khi upload hình ảnh!';
+            }
+        }
+    }
+
+    // Nếu không có lỗi, tiến hành sửa sản phẩm
     if (empty($errorMessages)) {
         // Escape dữ liệu trước khi đưa vào query
         $name     = $conn->real_escape_string($name);
-        $img_url  = $conn->real_escape_string($img_url);
         $decs     = $conn->real_escape_string($decs);
 
-        if (isset($_GET['action']) && $_GET['action'] == 'add') {
-            $query = "INSERT INTO PRODUCT (NAME, PRICE, IMG_URL, NUMBER, DECS, CATEGORY, TOP_PRODUCT) 
-                      VALUES ('$name', $price, '$img_url', $number, '$decs', $category, $top_product)";
-            $conn->query($query);
-            header("Location: qlsp.php");
-            exit;
-        }
-        if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-            $id = intval($_GET['id']);
-            $query = "UPDATE PRODUCT SET 
-                          NAME='$name', 
-                          PRICE=$price, 
-                          IMG_URL='$img_url', 
-                          NUMBER=$number, 
-                          DECS='$decs', 
-                          CATEGORY=$category, 
-                          TOP_PRODUCT=$top_product 
-                      WHERE ID=$id";
-            $conn->query($query);
-            header("Location: qlsp.php");
-            exit;
-        }
-    } else {
-        // Nếu có lỗi, xác định modal cần hiển thị
-        if (isset($_GET['action']) && $_GET['action'] == 'add') {
-            $modalType = 'add';
-        }
-        if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-            $modalType = 'edit';
+        // Nếu có ảnh mới, cập nhật IMG_URL, nếu không giữ nguyên
+        $img_query = $img_url ? "IMG_URL='$img_url'," : '';
+        $query = "UPDATE PRODUCT SET 
+                      NAME='$name', 
+                      PRICE=$price, 
+                      $img_query
+                      DECS='$decs', 
+                      CATEGORY=$category, 
+                      TOP_PRODUCT=$top_product 
+                  WHERE ID=$id";
+        if ($conn->query($query)) {
+            $messages[] = ['text' => 'Cập nhật sản phẩm thành công!', 'type' => 'success'];
+        } else {
+            $messages[] = ['text' => 'Lỗi khi cập nhật sản phẩm: ' . $conn->error, 'type' => 'danger'];
+            // Xóa ảnh nếu cập nhật thất bại
+            if ($img_url && file_exists($img_url)) {
+                unlink($img_url);
+            }
         }
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Sản phẩm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=default" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        #page {
-            transition: filter 0.3s ease;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f4f9;
         }
-        #addModal:target ~ #page,
-        #editModal:target ~ #page,
-        .modal.show ~ #page {
-            filter: blur(4px);
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            min-height: calc(100vh - 100px);
         }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            text-align: center; 
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
         }
-        th, td { 
-            padding: 8px 12px;
-            border: 1px solid #ccc; 
+        .card:hover {
+            transform: translateY(-5px);
         }
-        th { 
-            background-color: #f4f4f4; 
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger, .btn-warning {
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+        .table {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table thead {
+            background-color: #f8f9fa;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f4f9;
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            padding: 10px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+        .toast {
+            min-width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .modal-content {
+            border-radius: 15px;
+        }
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+            .table-responsive {
+                font-size: 14px;
+            }
+            .toast-container {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="toggle-btn btn btn-dark d-md-none" onclick="toggleSidebar()">☰</button>
+    <?php include 'admin_header.php'; ?>
 
-    <?php
-    // Nếu có lỗi, hiển thị alert bằng JavaScript
-    if (!empty($errorMessages)) {
-        $alertMsg = implode(" ", $errorMessages);
-        echo "<script>alert('" . addslashes($alertMsg) . "');</script>";
-    }
-    ?>
-    <!-- Modal cho Thêm Sản Phẩm -->
-    <div id="addModal" class="modal" <?php if($modalType=='add' && !empty($errorMessages)) echo 'style="display:block;"'; ?>>
-        <div class="modal-content">
-            <a href="qlsp.php" class="close">&times;</a>
-            <h2 style="margin-bottom: 13px;">Thêm Sản Phẩm</h2>
-            <form method="post" action="qlsp.php?action=add">
-                <label>Tên sản phẩm:</label><br>
-                <input type="text" name="name" required value="<?php echo isset($oldData['name']) ? htmlspecialchars($oldData['name']) : ''; ?>"><br><br>
-                
-                <label>Giá:</label><br>
-                <input type="number" name="price" required value="<?php echo isset($oldData['price']) ? htmlspecialchars($oldData['price']) : ''; ?>"><br><br>
-                
-                <label>Đường dẫn ảnh:</label><br>
-                <input type="text" name="img_url" value="<?php echo isset($oldData['img_url']) ? htmlspecialchars($oldData['img_url']) : ''; ?>"><br><br>
-                
-                <label>Số lượng:</label><br>
-                <input type="number" name="number" required value="<?php echo isset($oldData['number']) ? htmlspecialchars($oldData['number']) : ''; ?>"><br><br>
-                
-                <label>Mô tả:</label><br>
-                <textarea name="decs"><?php echo isset($oldData['decs']) ? htmlspecialchars($oldData['decs']) : ''; ?></textarea><br><br>
-                
-                <label>Danh mục:</label><br>
-                <select name="category" required>
-                    <option value="">--Chọn danh mục--</option>
-                    <?php while ($category = $categories->fetch_assoc()): ?>
-                        <option value="<?php echo $category['id']; ?>" 
-                            <?php if (isset($oldData['category']) && $oldData['category'] == $category['id']) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($category['name_category']); ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-                <br><br>
-                
-                <label>Top sản phẩm:</label><br>
-                <input type="number" name="top_product" value="<?php echo isset($oldData['top_product']) ? htmlspecialchars($oldData['top_product']) : ''; ?>"><br><br>
-                
-                <input type="submit" name="submit" value="Thêm sản phẩm" class="btn2">
-            </form>
-        </div>
-    </div>
+    <main class="main-content">
+        <div class="container-fluid">
+            <h2 class="mb-4 text-primary"><i class="fas fa-box-open me-2"></i>Quản lý Sản phẩm</h2>
 
-    <!-- Modal cho Sửa Sản Phẩm -->
-    <?php
-    // Nếu là edit, lấy dữ liệu sản phẩm cần sửa nếu không có lỗi, hoặc dùng dữ liệu cũ nếu có lỗi
-    $editProduct = null;
-    if (isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['id'])) {
-        if(empty($errorMessages) || $modalType != 'edit'){
-            $id = intval($_GET['id']);
-            $resultEdit = $conn->query("SELECT * FROM PRODUCT WHERE ID=$id");
-            $editProduct = $resultEdit->fetch_assoc();
-        } else {
-            // Nếu có lỗi trong quá trình sửa, $oldData đã được lưu
-            $editProduct = $oldData;
-            $editProduct['ID'] = intval($_GET['id']);
-        }
-    }
-    ?>
-    <div id="editModal" class="modal" <?php if($modalType=='edit' && !empty($errorMessages)) echo 'style="display:block;"'; ?>>
-        <div class="modal-content">
-            <a href="qlsp.php" class="close">&times;</a>
-            <h2>Sửa Sản Phẩm</h2>
-            <?php if ($editProduct): ?>
-            <form method="post" action="qlsp.php?action=edit&id=<?php echo isset($editProduct['ID']) ? $editProduct['ID'] : ''; ?>">
-                <label>Tên sản phẩm:</label><br>
-                <input type="text" name="name" required value="<?php echo isset($oldData['name']) ? htmlspecialchars($oldData['name']) : htmlspecialchars($editProduct['NAME']); ?>"><br><br>
-                
-                <label>Giá:</label><br>
-                <input type="number" name="price" required value="<?php echo isset($oldData['price']) ? htmlspecialchars($oldData['price']) : htmlspecialchars($editProduct['PRICE']); ?>"><br><br>
-                
-                <label>Đường dẫn ảnh:</label><br>
-                <input type="text" name="img_url" value="<?php echo isset($oldData['img_url']) ? htmlspecialchars($oldData['img_url']) : htmlspecialchars($editProduct['IMG_URL']); ?>"><br><br>
-                
-                <label>Số lượng:</label><br>
-                <input type="number" name="number" required value="<?php echo isset($oldData['number']) ? htmlspecialchars($oldData['number']) : htmlspecialchars($editProduct['NUMBER']); ?>"><br><br>
-                
-                <label>Mô tả:</label><br>
-                <textarea name="decs"><?php echo isset($oldData['decs']) ? htmlspecialchars($oldData['decs']) : htmlspecialchars($editProduct['DECS']); ?></textarea><br><br>
-                
-                <label>Danh mục:</label><br>
-                <select name="category" required>
-                    <option value="">--Chọn danh mục--</option>
-                    <?php
-                    $categories = $conn->query("SELECT id, name_category FROM CATEGORY WHERE state = 1");
-                    while ($category = $categories->fetch_assoc()): ?>
-                        <option value="<?php echo $category['id']; ?>" 
-                            <?php if ((isset($oldData['category']) && $oldData['category'] == $category['id']) || 
-                                      (!isset($oldData['category']) && $editProduct['CATEGORY'] == $category['id'])) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($category['name_category']); ?>
-                        </option>
-                    <?php endwhile; ?>
-                </select>
-                <br><br>
-                
-                <label>Top sản phẩm:</label><br>
-                <input type="number" name="top_product" value="<?php echo isset($oldData['top_product']) ? htmlspecialchars($oldData['top_product']) : htmlspecialchars($editProduct['TOP_PRODUCT']); ?>"><br><br>
-                
-                <input type="submit" name="submit" value="Cập nhật sản phẩm" class="btn2">
-            </form>
-            <?php else: ?>
-                <p>Sản phẩm không tồn tại.</p>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <?php include 'employee_header.php'; ?>
-
-    <!-- Nội dung trang chính -->
-    <div id="page">
-        <h1 class="title">Quản Lý Sản Phẩm</h1>
-        <!-- Nút mở modal Thêm Sản Phẩm -->
-        <a href="qlsp.php?action=add#addModal"><button class="btn_add">Thêm Sản Phẩm Mới</button></a>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Tên sản phẩm</th>
-                <th>Giá</th>
-                <th>Ảnh</th>
-                <th>Số lượng</th>
-                <th>Mô tả</th>
-                <th>Danh mục</th>
-                <th>Top sản phẩm</th>
-                <th width="7.5%">Hành động</th>
-            </tr>
-            <?php 
-            $result = $conn->query("
-                SELECT p.ID, p.NAME, p.PRICE, p.IMG_URL, p.NUMBER, p.DECS, c.name_category AS CATEGORY, p.TOP_PRODUCT 
-                FROM PRODUCT p
-                LEFT JOIN CATEGORY c ON p.CATEGORY = c.id
-                ORDER BY p.ID ASC
-            ");
-            while($row = $result->fetch_assoc()): ?>
-            <tr>
-                <td><?php echo $row['ID']; ?></td>
-                <td><?php echo $row['NAME']; ?></td>
-                <td><?php echo $row['PRICE']; ?></td>
-                <td>
-                    <?php if($row['IMG_URL'] != ""): ?>
-                        <img src="<?php echo $row['IMG_URL']; ?>" alt="<?php echo $row['NAME']; ?>" width="50" height="50">
+            <!-- Danh sách sản phẩm -->
+            <div class="card">
+                <div class="card-header"><i class="fas fa-table me-2"></i>Danh sách sản phẩm</div>
+                <div class="card-body">
+                    <?php if (!empty($errorMessages)): ?>
+                        <div class="alert alert-danger">
+                            <?php foreach ($errorMessages as $error): ?>
+                                <p><?php echo htmlspecialchars($error); ?></p>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
-                </td>
-                <td><?php echo $row['NUMBER']; ?></td>
-                <td><?php echo $row['DECS']; ?></td>
-                <td><?php echo $row['CATEGORY']; ?></td>
-                <td><?php echo $row['TOP_PRODUCT']; ?></td>
-                <td>
-                    <!-- Nút mở modal Sửa Sản Phẩm -->
-                    <a href="qlsp.php?action=edit&id=<?php echo $row['ID']; ?>#editModal"><button class="btn_edit">Sửa</button></a>
-                    <a href="qlsp.php?action=delete&id=<?php echo $row['ID']; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');"><button class="btn_delete">Xóa</button></a>
-                </td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
-    </div>
-    <link rel="stylesheet" href="./assets/css/admin_style.css">
-    <?php
-    include 'admin_footer.php';
-    ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Ảnh</th>
+                                    <th>Số lượng</th>
+                                    <th style="width: 200px;">Mô tả</th>
+                                    <th>Danh mục</th>
+                                    <th>Top sản phẩm</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="product-table">
+                                <!-- Dữ liệu sẽ được tải qua AJAX -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="pagination-container" class="mt-4"></div>
+                    <div id="error-message" class="error-message"></div>
+                </div>
+            </div>
+
+            <!-- Modal sửa sản phẩm -->
+            <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editProductModalLabel"><i class="fas fa-edit me-2"></i>Sửa sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" id="editProductForm" enctype="multipart/form-data">
+                                <input type="hidden" name="id" id="edit_id">
+                                <input type="hidden" name="edit_product" value="1">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="edit_name" class="form-control" placeholder="Nhập tên sản phẩm" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Giá (VND) <span class="text-danger">*</span></label>
+                                    <input type="number" name="price" id="edit_price" class="form-control" min="1" placeholder="Nhập giá" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Hình ảnh sản phẩm</label>
+                                    <input type="file" name="image" id="edit_image" class="form-control" accept="image/*">
+                                    <img id="edit_imagePreview" class="image-preview" src="" alt="Preview">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="decs" class="form-label">Mô tả</label>
+                                    <textarea name="decs" id="edit_decs" class="form-control" placeholder="Nhập mô tả sản phẩm" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="category" class="form-label">Danh mục <span class="text-danger">*</span></label>
+                                    <select name="category" id="edit_category" class="form-select" required>
+                                        <option value="">Chọn danh mục</option>
+                                        <?php
+                                        $categories = $conn->query("SELECT id, name_category FROM CATEGORY WHERE state = 1");
+                                        while ($category = $categories->fetch_assoc()): ?>
+                                            <option value="<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['name_category']); ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="top_product" class="form-label">Top sản phẩm</label>
+                                    <input type="number" name="top_product" id="edit_top_product" class="form-control" min="0" placeholder="Nhập thứ tự top">
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Cập nhật sản phẩm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toast container -->
+            <div class="toast-container">
+                <div id="toast" class="toast align-items-center text-white" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                    <div class="d-flex">
+                        <div class="toast-body"><i class="fas me-2"></i><span></span></div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <?php include 'admin_footer.php'; ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        function showToast(message, type) {
+            let toast = document.getElementById('toast');
+            toast.className = `toast align-items-center text-white bg-${type} border-0`;
+            let toastBody = toast.querySelector('.toast-body');
+            toastBody.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} me-2"></i>${message}`;
+            let bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        // Hàm tải dữ liệu sản phẩm qua AJAX
+        function loadProducts(page) {
+            fetch('fetch_products.php?page=' + page)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Lỗi mạng: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Xóa thông báo lỗi nếu có
+                    document.getElementById('error-message').innerHTML = '';
+
+                    // Kiểm tra nếu có lỗi
+                    if (data.error) {
+                        document.getElementById('error-message').innerHTML = data.error;
+                        return;
+                    }
+
+                    // Cập nhật nội dung bảng
+                    const tbody = document.querySelector('#product-table');
+                    tbody.innerHTML = ''; // Xóa nội dung cũ
+
+                    if (data.products.length > 0) {
+                        data.products.forEach(product => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${product.ID}</td>
+                                <td>${product.NAME}</td>
+                                <td>${new Intl.NumberFormat('vi-VN').format(product.PRICE)} VND</td>
+                                <td>
+                                    ${product.IMG_URL ? `<img src="${product.IMG_URL}" alt="${product.NAME}" width="50" height="50" onerror="this.src='https://via.placeholder.com/50';">` : 'N/A'}
+                                </td>
+                                <td>${product.NUMBER}</td>
+                                <td style="width: 200px;">${product.DECS}</td>
+                                <td>${product.CATEGORY_NAME || product.CATEGORY}</td>
+                                <td>${product.TOP_PRODUCT}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm edit-product" data-id="${product.ID}"><i class="fas fa-edit me-1"></i>Sửa</button>
+                                    <a href="qlsp.php?action=delete&id=${product.ID}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');"><i class="fas fa-trash me-1"></i>Xóa</a>
+                                </td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="9" class="text-center">Không có sản phẩm nào để hiển thị.</td></tr>';
+                    }
+
+                    // Cập nhật phân trang
+                    const paginationContainer = document.querySelector('#pagination-container');
+                    paginationContainer.innerHTML = ''; // Xóa nội dung cũ
+                    const pagination = document.createElement('nav');
+                    pagination.setAttribute('aria-label', 'Page navigation');
+                    let paginationHTML = '<ul class="pagination">';
+                    
+                    // Nút Trang trước
+                    paginationHTML += `
+                        <li class="page-item ${data.currentPage <= 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="#" data-page="${data.currentPage - 1}" aria-label="Previous">
+                                <span aria-hidden="true">«</span>
+                            </a>
+                        </li>
+                    `;
+
+                    // Các số trang
+                    for (let i = 1; i <= data.totalPages; i++) {
+                        paginationHTML += `
+                            <li class="page-item ${i === data.currentPage ? 'active' : ''}">
+                                <a class="page-link" href="#" data-page="${i}">${i}</a>
+                            </li>
+                        `;
+                    }
+
+                    // Nút Trang sau
+                    paginationHTML += `
+                        <li class="page-item ${data.currentPage >= data.totalPages ? 'disabled' : ''}">
+                            <a class="page-link" href="#" data-page="${data.currentPage + 1}" aria-label="Next">
+                                <span aria-hidden="true">»</span>
+                            </a>
+                        </li>
+                    `;
+
+                    paginationHTML += '</ul>';
+                    pagination.innerHTML = paginationHTML;
+                    paginationContainer.appendChild(pagination);
+
+                    // Thêm sự kiện cho các liên kết phân trang mới
+                    attachPaginationEvents();
+
+                    // Thêm sự kiện cho nút Sửa
+                    attachEditEvents();
+                })
+                .catch(error => {
+                    document.getElementById('error-message').innerHTML = 'Lỗi khi tải dữ liệu: ' + error.message;
+                    showToast('Lỗi khi tải dữ liệu sản phẩm!', 'danger');
+                });
+        }
+
+        // Hàm gắn sự kiện cho các liên kết phân trang
+        function attachPaginationEvents() {
+            const links = document.querySelectorAll('.pagination .page-link');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    if (page && !this.parentElement.classList.contains('disabled')) {
+                        loadProducts(page);
+                    }
+                });
+            });
+        }
+
+        // Hàm gắn sự kiện cho các nút Sửa
+        function attachEditEvents() {
+            const editButtons = document.querySelectorAll('.edit-product');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    fetch(`get_product.php?id=${id}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Lỗi mạng: ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.error) {
+                                showToast(data.error, 'danger');
+                                return;
+                            }
+                            // Điền dữ liệu vào form
+                            document.getElementById('edit_id').value = data.ID;
+                            document.getElementById('edit_name').value = data.NAME;
+                            document.getElementById('edit_price').value = data.PRICE;
+                            document.getElementById('edit_decs').value = data.DECS || '';
+                            document.getElementById('edit_category').value = data.CATEGORY;
+                            document.getElementById('edit_top_product').value = data.TOP_PRODUCT || 0;
+                            const imagePreview = document.getElementById('edit_imagePreview');
+                            if (data.IMG_URL) {
+                                imagePreview.src = data.IMG_URL;
+                                imagePreview.style.display = 'block';
+                            } else {
+                                imagePreview.style.display = 'none';
+                            }
+                            // Hiển thị modal
+                            const editModal = new bootstrap.Modal(document.getElementById('editProductModal'));
+                            editModal.show();
+                        })
+                        .catch(error => {
+                            showToast('Lỗi khi lấy dữ liệu sản phẩm: ' + error.message, 'danger');
+                        });
+                });
+            });
+        }
+
+        // Client-side form validation và xử lý preview ảnh
+        document.addEventListener('DOMContentLoaded', function() {
+            const editForm = document.getElementById('editProductForm');
+
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    let name = document.getElementById('edit_name').value.trim();
+                    let price = document.getElementById('edit_price').value;
+                    let category = document.getElementById('edit_category').value;
+
+                    if (!name) {
+                        e.preventDefault();
+                        showToast('Tên sản phẩm không được để trống!', 'danger');
+                    } else if (price <= 0) {
+                        e.preventDefault();
+                        showToast('Giá phải là số nguyên dương!', 'danger');
+                    } else if (!category) {
+                        e.preventDefault();
+                        showToast('Vui lòng chọn danh mục sản phẩm!', 'danger');
+                    }
+                });
+            }
+
+            // Preview hình ảnh trước khi upload
+            const imageInput = document.getElementById('edit_image');
+            const imagePreview = document.getElementById('edit_imagePreview');
+            if (imageInput) {
+                imageInput.addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        imagePreview.src = URL.createObjectURL(e.target.files[0]);
+                        imagePreview.style.display = 'block';
+                    } else {
+                        imagePreview.style.display = 'none';
+                    }
+                });
+            }
+
+            // Tải dữ liệu trang đầu tiên
+            loadProducts(1);
+
+            // Hiển thị thông báo từ PHP
+            <?php
+            foreach ($messages as $msg) {
+                echo "showToast('{$msg['text']}', '{$msg['type']}');";
+            }
+            ?>
+        });
+    </script>
 </body>
 </html>
 <?php

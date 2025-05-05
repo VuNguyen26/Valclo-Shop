@@ -37,7 +37,6 @@
         <input type="password" id="password" name="password" placeholder="default password = 123" required>
 
         <button type="submit" name="Login">Login</button>
-        <p>Login as <a href="employee_login.php" style="color: rgb(215, 65, 93); text-decoration: none; font-style: oblique">Employee</a></p>
     </form>
 </body>
 
