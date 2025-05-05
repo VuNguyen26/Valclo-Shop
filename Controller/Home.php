@@ -280,11 +280,12 @@ class Home extends Controller{
                 echo "?url=/Home/" . $redirect . "/";
             } 
             else if (isset($array[2]) && isset($array[3])) {
-                $id = mysqli_fetch_array($this->model($user)->get_id_user($array[2], $array[3]), MYSQLI_NUM);
-                if ($id == null) {
-                    echo "null";
+                $loginResult = $this->model("member")->login($array[2], $array[3]);
+        
+                if (!$loginResult['success']) {
+                    echo "error:" . $loginResult['message'];
                 } else {
-                    $_SESSION["id"] = (int)$id[0];
+                    $_SESSION["id"] = $loginResult["user"]["ID"];
                     $_SESSION["user"] = "member";
                     $redirect = isset($array[4]) ? $array[4] : "Home_page";
                     echo "?url=/Home/" . $redirect . "/";
@@ -293,7 +294,7 @@ class Home extends Controller{
             else {
                 echo "null";
             }
-        }
+        }        
         
         function update_product_in_cart($user, $array){
             $action = $this->model($user);
