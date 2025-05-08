@@ -416,7 +416,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`ID`, `NAME`, `PRICE`, `IMG_URL`, `NUMBER`, `DECS`, `CATEGORY`, `TOP_PRODUCT`) VALUES
-(1, 'Áo Real Madrid chính hãng', 1050000, 'https://i.pinimg.com/736x/c2/bd/3a/c2bd3a8e1f97a51c41f20b202e6336d0.jpg', 20, 'Áo có công nghệ làm mát tiên tiến, giữ cơ thể luôn khô thoáng.', 4, 1),
+(1, 'Áo Real Madrid chính hãng', 1050000, 'https://i.pinimg.com/736x/c2/bd/3a/c2bd3a8e1f97a51c41f20b202e6336d0.jpg', 20, 'Áo có công nghệ làm mát tiên tiến, giữ cơ thể luôn khô thoáng.', 1, 1),
 (2, 'Áo Real Madrid chính hãng', 120000, 'https://i.pinimg.com/736x/d4/0d/2f/d40d2f4b8d4bdf0948f7cff5e284d35a.jpg', 20, 'Phiên bản áo đấu mùa giải mới, hỗ trợ vận động tối đa.', 1, 2),
 (3, 'Áo Inter Milan chính hãng', 130000, 'https://i.pinimg.com/736x/53/1c/86/531c8616986b2d981bfbe5455f7dbb5e.jpg', 20, 'Phiên bản áo đấu mùa giải mới, hỗ trợ vận động tối đa.', 1, 3),
 (4, 'Áo Liverpool chính hãng', 1200000, 'https://i.pinimg.com/736x/3d/fb/db/3dfbdba09aa66c0454ccd698e33db1fa.jpg', 20, 'Chất vải thoáng khí, thích hợp sử dụng trong thi đấu và luyện tập.', 1, 0),
