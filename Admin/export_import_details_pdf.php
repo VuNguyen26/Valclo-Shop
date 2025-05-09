@@ -1,6 +1,8 @@
-<?php
-require_once 'C:/xampp1/htdocs/Valclo-Shop/vendor/autoload.php'; // Sử dụng đường dẫn tuyệt đối
+<?php 
+// Đảm bảo lấy đúng đường dẫn đến thư viện vendor
+require_once __DIR__ . '/../vendor/autoload.php';
 include 'connect.php';
+
 
 // Kiểm tra xem có import_id được truyền qua không
 if (!isset($_GET['import_id']) || empty($_GET['import_id'])) {
