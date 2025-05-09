@@ -37,28 +37,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_product'])) {
         $errorMessages[] = "Danh mục không hợp lệ.";
     }
 
-    // Xử lý upload hình ảnh
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $upload_dir = 'uploads/';
-        $file_name = time() . '_' . basename($_FILES['image']['name']);
-        $upload_path = $upload_dir . $file_name;
+// Xử lý upload hình ảnh
+if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    $admin_upload_dir = 'uploads/';
+    $user_upload_dir = '../Views/images/';
 
-        // Kiểm tra loại file (chỉ cho phép hình ảnh)
-        $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-        $file_type = mime_content_type($_FILES['image']['tmp_name']);
-        if (!in_array($file_type, $allowed_types)) {
-            $errorMessages[] = 'Chỉ được upload file hình ảnh (JPEG, PNG, GIF)!';
-        } elseif ($_FILES['image']['size'] > 5 * 1024 * 1024) { // Giới hạn 5MB
-            $errorMessages[] = 'Hình ảnh không được lớn hơn 5MB!';
-        } else {
-            // Upload file
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $upload_path)) {
-                $img_url = $upload_path;
+    if (!is_dir($admin_upload_dir)) {
+        mkdir($admin_upload_dir, 0777, true);
+    }
+
+    if (!is_dir($user_upload_dir)) {
+        mkdir($user_upload_dir, 0777, true);
+    }
+
+    // Tạo tên file duy nhất để tránh trùng
+    $file_name = time() . '_' . basename($_FILES['image']['name']);
+    $admin_upload_path = $admin_upload_dir . $file_name;
+    $user_upload_path = $user_upload_dir . $file_name;
+
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+    $file_type = mime_content_type($_FILES['image']['tmp_name']);
+    
+    if (!in_array($file_type, $allowed_types)) {
+        $errorMessages[] = 'Chỉ được upload file hình ảnh (JPEG, PNG, GIF)!';
+    } elseif ($_FILES['image']['size'] > 5 * 1024 * 1024) {
+        $errorMessages[] = 'Hình ảnh không được lớn hơn 5MB!';
+    } else {
+        
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $admin_upload_path)) {
+            // Sao chép file sang thư mục user (Views/images/)
+            if (copy($admin_upload_path, $user_upload_path)) {
+                
+                $img_url = 'Views/images/' . $file_name;
             } else {
-                $errorMessages[] = 'Lỗi khi upload hình ảnh!';
+                $errorMessages[] = 'Lỗi khi sao chép hình ảnh sang thư mục user!';
             }
+        } else {
+            $errorMessages[] = 'Lỗi khi upload hình ảnh vào thư mục admin!';
         }
     }
+}
 
     // Nếu không có lỗi, tiến hành sửa sản phẩm
     if (empty($errorMessages)) {
@@ -361,7 +379,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_product'])) {
                                 <td>${product.NAME}</td>
                                 <td>${new Intl.NumberFormat('vi-VN').format(product.PRICE)} VND</td>
                                 <td>
-                                    ${product.IMG_URL ? `<img src="${product.IMG_URL}" alt="${product.NAME}" width="50" height="50" onerror="this.src='https://via.placeholder.com/50';">` : 'N/A'}
+                                    ${product.IMG_URL ? 
+                                        (product.IMG_URL.startsWith('http') ? 
+                                            `<img src="${product.IMG_URL}" alt="${product.NAME}" width="50" height="50" onerror="this.src='https://via.placeholder.com/50';">` 
+                                            : 
+                                            `<img src="${product.IMG_URL.replace('Views/images/', 'uploads/')}" alt="${product.NAME}" width="50" height="50" onerror="this.src='https://via.placeholder.com/50';">`
+                                        ) 
+                                        : 'N/A'}
                                 </td>
                                 <td>${product.NUMBER}</td>
                                 <td style="width: 200px;">${product.DECS}</td>
