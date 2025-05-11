@@ -52,7 +52,7 @@ $total = $order['total'] ?? 0;
           <p>Size: <?= htmlspecialchars($product['size']) ?> | SL: <?= htmlspecialchars($product['num']) ?></p>
         </div>
         <div class="col-4 text-end">
-          <strong><?= number_format($product['price'], 0, ',', '.') ?>đ</strong>
+          <strong><?= number_format($product['price'] * $product['num'], 0, ',', '.') ?>đ</strong>
         </div>
       </div>
     <?php endwhile; ?>
