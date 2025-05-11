@@ -104,14 +104,7 @@ if (isset($_SESSION["id"])) {
                                                             <div class=\"row\">
                                                                 <div class=\"col-6\">Size: </div>
                                                                 <div class=\"col-6\">
-                                                                  <select disabled>
-                                                                    <option value=\"S\" " . ($row["size"] == "S" ? "selected" : "") . ">S</option>
-                                                                    <option value=\"M\" " . ($row["size"] == "M" ? "selected" : "") . ">M</option>
-                                                                    <option value=\"L\" " . ($row["size"] == "L" ? "selected" : "") . ">L</option>
-                                                                    <option value=\"X\" " . ($row["size"] == "X" ? "selected" : "") . ">X</option>
-                                                                    <option value=\"XL\" " . ($row["size"] == "XL" ? "selected" : "") . ">XL</option>
-                                                                    <option value=\"XXL\" " . ($row["size"] == "XXL" ? "selected" : "") . ">XXL</option>
-                                                                  </select>
+                                                                  <div class=\"col-6\">" . htmlspecialchars($row["size"]) . "</div>
                                                                 </div>
                                                             </div>
                                                         </div>           

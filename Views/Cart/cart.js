@@ -72,7 +72,7 @@ document.getElementsByClassName("btn btn-primary")[3].onclick = function(){
   if(children.length > 0 || document.getElementsByClassName("card").length > 0){
     var string = children.length;
       for(var i = 0; i < children.length; i++){
-            string += "/" + children[i].parentNode.value + "/" + children[i].getElementsByClassName("value_click")[0].innerText + "/" + children[i].getElementsByTagName("select")[0].value;
+            string += "/" + children[i].parentNode.value + "/" + children[i].getElementsByClassName("value_click")[0].innerText + "/" + children[i].getElementsByClassName("col-6")[1].innerText;
       }
       var xmlhttp = new XMLHttpRequest();
       xmlhttp.onreadystatechange = function(){
