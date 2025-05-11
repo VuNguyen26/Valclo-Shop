@@ -155,6 +155,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         .btn-danger, .btn-warning {
             border-radius: 8px;
             padding: 6px 12px;
+            margin-top: 5px;
         }
         .table {
             background-color: white;

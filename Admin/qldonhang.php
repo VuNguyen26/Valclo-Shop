@@ -141,6 +141,7 @@ if ($resultOrders) {
             border-radius: 8px;
             border: 1px solid #ced4da;
             padding: 10px;
+            padding-right: 30px;
         }
         .form-control:focus, .form-select:focus {
             border-color: #007bff;
