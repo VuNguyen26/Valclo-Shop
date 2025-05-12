@@ -1,0 +1,35 @@
+hiển thị phân trang động (tiến, lùi):
+<?php if ($data['product']['total_page'] > 1) : ?>
+  <?php
+    $active_page = $data['product']['active_page'];
+    $total_page = $data['product']['total_page'];
+    $max_visible = 5;
+    $start_page = max(1, $active_page - floor($max_visible / 2));
+    $end_page = min($total_page, $start_page + $max_visible - 1);
+    $start_page = max(1, $end_page - $max_visible + 1);
+
+    $query_base = "/?url=Home/Products&search={$data['product']['active_search']}&category={$data['product']['active_category']}&sort-by={$data['product']['sort_1']}&order-by={$data['product']['sort_2']}&price-range=" . ($_GET['price-range'] ?? '');
+  ?>
+
+  <div class="my-3 d-flex align-items-center justify-content-center gap-2">
+
+    <!-- Nút lùi -->
+    <?php if ($active_page > 1): ?>
+      <a href="<?= $query_base ?>&page=<?= $active_page - 1 ?>" class="btn btn-outline-warning">«</a>
+    <?php endif ?>
+
+    <!-- Các nút trang -->
+    <?php for ($i = $start_page; $i <= $end_page; $i++) : ?>
+      <a href="<?= $query_base ?>&page=<?= $i ?>"
+         class="btn btn-outline-warning <?= $i == $active_page ? 'active' : '' ?>">
+        <?= $i ?>
+      </a>
+    <?php endfor ?>
+
+    <!-- Nút tiến -->
+    <?php if ($active_page < $total_page): ?>
+      <a href="<?= $query_base ?>&page=<?= $active_page + 1 ?>" class="btn btn-outline-warning">»</a>
+    <?php endif ?>
+
+  </div>
+<?php endif ?>

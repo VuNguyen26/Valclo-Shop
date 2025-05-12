@@ -1,12 +1,12 @@
 
 function minus(element){
     var a = Number(element.innerText) - 1;
-    if(a <= 0) element.innerText = 0;
+    if(a <= 0) element.innerText = 1;
     else  element.innerText = a;
 }
 function plus(element){
     var a = Number(element.innerText) + 1;
-    if(a <= 0) element.innerText = 0;
+    if(a <= 0) element.innerText = 1;
     else  element.innerText = a;
 }
 function display_total(element1, element2, element3){
