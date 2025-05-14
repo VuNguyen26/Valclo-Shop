@@ -388,7 +388,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
                                         ) 
                                         : 'N/A'}
                                 </td>
-                                <td>${product.NUMBER}</td>
+                                <td>${product.NUMBER < 0 ? 0 : product.NUMBER}</td>
                                 <td style="width: 200px;">${product.DECS}</td>
                                 <td>${product.CATEGORY_NAME || product.CATEGORY}</td>
                                 <td>${product.TOP_PRODUCT}</td>

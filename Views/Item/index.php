@@ -112,39 +112,51 @@
                         </p>
                         <p class=\"item-price\">" . $row_product["price"] . "đ</p>";
 
-                      if ($data["user"] == "customer" || $data["user"] == "member") {
-                        echo "
-                        <div class=\"select-size mb-2\">
-                          <label for=\"size-select\">Chọn size:</label>
-                          <select id=\"size-select\" class=\"form-select\">
-                            <option value=\"S\">S</option>
-                            <option value=\"M\">M</option>
-                            <option value=\"L\">L</option>
-                            <option value=\"XL\">XL</option>
-                            <option value=\"XXL\">XXL</option>
-                          </select>
-                        </div>
+                      if (($data["user"] == "customer" || $data["user"] == "member")) {
+    if ($row_product["num"] > 0) {
+        echo "
+        <div class=\"select-size mb-2\">
+          <label for=\"size-select\">Chọn size:</label>
+          <select id=\"size-select\" class=\"form-select\">
+            <option value=\"S\">S</option>
+            <option value=\"M\">M</option>
+            <option value=\"L\">L</option>
+            <option value=\"XL\">XL</option>
+            <option value=\"XXL\">XXL</option>
+          </select>
+        </div>
 
-                        <div class=\"select-quantity\">
-                          Chọn số lượng
-                          <div style=\"text-align: left;\" class=\"quantity-section\">
-                            <div class=\"minus-qty-btn\"><i class=\"fas fa-minus-circle\"></i></div>
-                            <input type=\"text\" class=\"qty-buy\" value=\"1\" disabled>
-                            <div class=\"plus-qty-btn\"><i class=\"fas fa-plus-circle\"></i></div>
-                          </div>
-                        </div>
+        <div class=\"select-quantity\">
+  Chọn số lượng
+  <div style=\"text-align: left;\" class=\"quantity-section\">
+    <div class=\"minus-qty-btn\"><i class=\"fas fa-minus-circle\"></i></div>
+    <input type=\"text\" class=\"qty-buy\" value=\"1\" readonly>
+    <div class=\"plus-qty-btn\"><i class=\"fas fa-plus-circle\"></i></div>
+  </div>
+</div>
+        <div class=\"addtocart-btn\">
+          <button type=\"button\" class=\"btn btn-primary\" onclick=\"add_Product(this);\" value=\"" . $row_product["id"] . "\">
+            Thêm vào giỏ <i class=\"fas fa-shopping-cart\"></i>
+          </button>
+        </div>";
+    } else {
+        echo "
+        <div class=\"alert alert-danger fw-bold\">Sản phẩm đã hết hàng</div>
+        <div class=\"addtocart-btn\">
+          <button type=\"button\" class=\"btn btn-secondary\" disabled>
+            Hết hàng <i class=\"fas fa-shopping-cart\"></i>
+          </button>
+        </div>";
+    }
 
-                        <div class=\"addtocart-btn\">
-                          <button type=\"button\" class=\"btn btn-primary\" onclick=\"add_Product(this);\" value=\"" . $row_product["id"] . "\">
-                            Thêm vào giỏ <i class=\"fas fa-shopping-cart\"></i>
-                          </button>
-                        </div>
+    // Hiển thị mô tả vẫn giữ nguyên
+    echo "
+    <div class=\"descript-item\">
+      <h3>Chi tiết sản phẩm</h3>
+      <p>" . $row_product["decs"] . "</p>
+    </div>";
+}
 
-                        <div class=\"descript-item\">
-                          <h3>Chi tiết sản phẩm</h3>
-                          <p>" . $row_product["decs"] . "</p>
-                        </div>";
-                      }
 
               }
               ?>
@@ -289,7 +301,33 @@
       </div>
     <?php require_once("./Views/footer/index.php");?>
     </div>
-    
+    <script>
+  const maxQty = <?php echo $row_product["num"]; ?>;
+
+  function minus(element){
+    var a = Number(element.value) - 1;
+    if(a <= 1) element.value = 1;
+    else element.value = a;
+  }
+
+  function plus(element){
+    var currentQty = Number(element.value);
+    if (currentQty < maxQty) {
+      element.value = currentQty + 1;
+    } else {
+      alert("Chỉ còn " + maxQty + " sản phẩm trong kho.");
+    }
+  }
+
+  var right_content = document.getElementsByClassName("right-content")[0];
+  var minusBtn = right_content.getElementsByClassName("minus-qty-btn")[0];
+  var plusBtn = right_content.getElementsByClassName("plus-qty-btn")[0];
+  var qty = right_content.getElementsByTagName("input")[0];
+
+  if(minusBtn) minusBtn.onclick = function(){minus(qty);};
+  if(plusBtn) plusBtn.onclick = function(){plus(qty);};
+</script>
+
     <script src="./Views/Item/item.js"></script>
   </body>
 </html>

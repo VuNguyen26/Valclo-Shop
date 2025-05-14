@@ -1,11 +1,22 @@
 <?php
-include 'connect.php';     
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include 'connect.php';
+
+// Kiểm tra đăng nhập
+if (!isset($_SESSION['username'])) {
+    $username = "Khách";
+} else {
+    $username = ucfirst($_SESSION['username']);
+}
 ?>
+
 
 <nav class="sidebar bg-dark text-white d-flex flex-column p-3">
     <div class="d-flex align-items-center mb-4">
         <img src="./assets/img/np.png" alt="Logo" class="me-2" style="width: 40px; height: 40px;">
-        <span class="fs-5"><?php echo ucfirst($_SESSION['username']); ?></span>
+        <span class="fs-5"><?php echo $username; ?></span>
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
@@ -23,7 +34,6 @@ include 'connect.php';
         <li class="nav-item">
             <a href="qldonhang.php" class="nav-link text-white">Quản lý đơn hàng</a>
         </li>
-
         <li class="nav-item">
             <a href="gopy.php" class="nav-link text-white">Xem góp ý</a>
         </li>

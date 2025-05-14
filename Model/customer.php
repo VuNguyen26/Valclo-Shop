@@ -67,6 +67,7 @@ class customer extends DB {
             `p`.`price` AS 'price',
             `p`.`IMG_URL` AS 'img',
             `p`.`TOP_PRODUCT` as 'top_seller',
+            `p`.`number` AS 'number',
             `c`.`name_category`
             FROM `product` `p`
             JOIN `category` `c` ON `p`.`CATEGORY` = `c`.`ID`

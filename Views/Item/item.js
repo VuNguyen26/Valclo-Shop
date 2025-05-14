@@ -29,29 +29,6 @@ $(document).ready(function(){
   })
 });
 
-function minus(element){
-  var a = Number(element.value) - 1;
-  if(a <= 1) element.value = 1;
-  else  element.value = a;
-}
-function plus(element){
-  var a = Number(element.value) + 1;
-  element.value = a;
-}
-function display_total(element1, element2, element3){
-  var a = element1.innerText[0] * element2.innerText;
-  console.log(element1.innerText);
-  if(a <= 0) element3.innerText = 0;
-  else element3.innerText = a + element1.innerText.slice(1, element1.innerText.length);
-}
-
-var right_content = document.getElementsByClassName("right-content")[0];
-var minusBtn = right_content.getElementsByClassName("minus-qty-btn")[0];
-var plusBtn = right_content.getElementsByClassName("plus-qty-btn")[0];
-var qty = right_content.getElementsByTagName("input")[0];
-
-if(minusBtn) minusBtn.onclick = function(){minus(qty);};
-if(plusBtn) plusBtn.onclick = function(){plus(qty)};
 
 
 function filterComment(c) {
@@ -172,40 +149,47 @@ document.getElementsByClassName("container-fluid")[0].getElementsByTagName("span
 
 
 function add_Product(element) {
-  if(user == "customer"){
-    window.location.href = "?url=Home/Login/"; 
+  if (user == "customer") {
+    window.location.href = "?url=Home/Login/";
   } else {
     var pid = element.value;
-    var quantity = element.parentNode.parentNode.getElementsByTagName("input")[0].value;
+    var quantityInput = element.parentNode.parentNode.getElementsByTagName("input")[0];
+    var quantity = Number(quantityInput.value);
 
-    var day_str = new Date();
+    if (quantity > maxQty) {
+      alert("Bạn chỉ có thể mua tối đa " + maxQty + " sản phẩm.");
+      return; // Dừng không gửi request
+    }
+
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function(){
-      if (this.readyState == 4 && this.status == 200){
+    xmlhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
         var response = JSON.parse(this.responseText);
 
-        var alert = document.createElement("div");
-        alert.classList.add("alert");
-        if(response.status === "success"){
-          alert.classList.add("alert-success");
-          alert.innerText = response.message;
+        var alertBox = document.createElement("div");
+        alertBox.classList.add("alert");
+        if (response.status === "success") {
+          alertBox.classList.add("alert-success");
+          alertBox.innerText = response.message;
         } else {
-          alert.classList.add("alert-danger");
-          alert.innerText = "Có lỗi xảy ra: " + response.message;
+          alertBox.classList.add("alert-danger");
+          alertBox.innerText = "Có lỗi xảy ra: " + response.message;
         }
 
-        document.body.appendChild(alert);
-        alert.style.display = 'block';
-        setTimeout(function() {
-          alert.remove();
+        document.body.appendChild(alertBox);
+        alertBox.style.display = 'block';
+        setTimeout(function () {
+          alertBox.remove();
         }, 3000);
       }
     };
+
     xmlhttp.open("POST", "?url=Home/create_cart", true);
     xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlhttp.send("product_id=" + pid + "&quantity=" + quantity);
   }
 }
+
 
 if(document.getElementById("edit-itemBtn")){
   var ival = document.getElementById("get_name_val").innerText;

@@ -35,7 +35,7 @@ if (isset($_SESSION["id"])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Cart page">
-    <meta name="author" content="Phạm Khánh Huy">
+    <meta name="author" content="Nguyễn Minh Vũ">
 
     <title>Valcloshop - Giỏ Hàng</title>
     <link

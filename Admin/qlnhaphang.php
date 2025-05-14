@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_import'])) {
     if (empty($supplier_id) || empty($import_date)) {
         $messages[] = ['text' => 'Vui lòng điền đầy đủ nhà cung cấp và ngày nhập!', 'type' => 'danger'];
     } elseif ($import_date_obj < $current_date) {
-        $messages[] = ['text' => 'Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại (' . $current_date->format('Y-m-d') . ')!', 'type' => 'danger'];
+        $messages[] = ['text' => 'Ngày nhập phải lớn hơn ngày hiện tại (' . $current_date->format('Y-m-d') . ')!', 'type' => 'danger'];
     } else {
         $sql = "INSERT INTO import (SUPPLIER_ID, ADMIN_USERNAME, IMPORT_DATE, NOTE) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
@@ -665,7 +665,7 @@ if (isset($_GET['delete_import'])) {
                 showToast('Vui lòng điền đầy đủ nhà cung cấp và ngày nhập!', 'danger');
             } else if (date < currentDate) {
                 e.preventDefault();
-                showToast('Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại (' + currentDate + ')!', 'danger');
+                showToast('Ngày nhập phải lớn hơn ngày hiện tại (' + currentDate + ')!', 'danger');
             }
         });
 
@@ -674,7 +674,7 @@ if (isset($_GET['delete_import'])) {
             let date = e.target.value;
             let currentDate = '<?php echo date('Y-m-d'); ?>';
             if (date < currentDate) {
-                showToast('Ngày nhập phải lớn hơn hoặc bằng ngày hiện tại (' + currentDate + ')!', 'danger');
+                showToast('Ngày nhập phải lớn hơn ngày hiện tại (' + currentDate + ')!', 'danger');
                 e.target.value = currentDate; // Đặt lại ngày về ngày hiện tại
             }
         });

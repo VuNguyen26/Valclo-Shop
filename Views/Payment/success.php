@@ -3,52 +3,19 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once("./Function/DB.php");
-require_once("./Model/member.php");
-
-$displayMessage = "Thanh toán thất bại hoặc bị hủy.";
 $success = false;
+$displayMessage = "Thanh toán thất bại hoặc bị hủy.";
 $oid = null;
-$result = $_GET['resultCode'] ?? null;
 
-if ($result === "0" && !empty($_SESSION["id"])) {
-    $uid = (int)$_SESSION["id"];
-    $db = new DB();
-    $conn = $db->connect;
-    $mem = new Member();
+if (isset($_SESSION['payment_result'])) {
+    $success = $_SESSION['payment_result']['success'] ?? false;
+    $displayMessage = $_SESSION['payment_result']['message'] ?? $displayMessage;
+    $oid = $_SESSION['payment_result']['oid'] ?? null;
 
-    $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
-    $res = mysqli_query($conn, $query);
-    if ($res && mysqli_num_rows($res) > 0) {
-        $total = 0;
-        while ($row = mysqli_fetch_assoc($res)) {
-            $total += $row["PRICE"] * $row["QUANTITY"];
-        }
-
-        if ($total > 0) {
-            $today = date("Y-m-d");
-            $status = "Chờ xác nhận";
-            $method = "Momo";
-
-            $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("issds", $uid, $today, $status, $total, $method);
-            $stmt->execute();
-            $oid = $conn->insert_id;
-            $mem->insert_order_detail($oid, $uid);
-
-            $mem->clear_cart($uid);
-            unset($_SESSION["cart"]);
-
-            $success = true;
-            $displayMessage = "Bạn đã thanh toán MoMo thành công!";
-        } else {
-            $displayMessage = "Không thể tính tổng giá trị đơn hàng.";
-        }
-    } else {
-        $displayMessage = "Giỏ hàng trống hoặc đã được xử lý trước đó.";
-    }
+    unset($_SESSION['payment_result']);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

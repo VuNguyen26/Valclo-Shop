@@ -164,9 +164,12 @@ class member extends customer{
         return mysqli_query($this->connect, $query);
     }
     public function clear_cart($uid) {
-        $query = "DELETE FROM cart WHERE UID = " . intval($uid);
-        $result = mysqli_query($this->connect, $query);
-    }
+    $conn = $this->connect;
+    $stmt = $conn->prepare("DELETE FROM cart WHERE UID = ?");
+    $stmt->bind_param("i", $uid);
+    $stmt->execute();
+}
+
     public function get_order_by_id($id) {
         $query = "SELECT `STATUS` AS `state`, `TIME` AS `time`,`UID` AS `uid`,`TOTAL_PRICE` AS `total`, `METHOD` AS `method`
                 FROM `order` WHERE `ID` = $id";
@@ -224,59 +227,73 @@ class member extends customer{
     }
     
     public function create_order_from_cart(int $uid, string $method = 'COD') {
-        $conn = (new DB())->connect;
-        $sql    = "
-            SELECT c.PID AS PID,
-                   c.SIZE AS SIZE,
-                   c.QUANTITY AS QUANTITY,
-                   p.PRICE AS PRICE
-            FROM cart c
-            JOIN product p ON p.ID = c.PID
-            WHERE c.UID = " . intval($uid);
-        $res    = mysqli_query($conn, $sql);
-        $items  = [];
-        $total  = 0.0;
-        while ($row = mysqli_fetch_assoc($res)) {
-            $row['PID']      = (int)   $row['PID'];
-            $row['SIZE']     =       $row['SIZE'];
-            $row['QUANTITY'] = (int)   $row['QUANTITY'];
-            $row['PRICE']    = (float) $row['PRICE'];
-            $items[] = $row;
-            $total  += $row['PRICE'] * $row['QUANTITY'];
+    $conn = (new DB())->connect;
+
+    // Lấy thông tin giỏ hàng
+    $sql = "
+        SELECT c.PID AS PID,
+               c.SIZE AS SIZE,
+               c.QUANTITY AS QUANTITY,
+               p.PRICE AS PRICE,
+               p.number AS STOCK
+        FROM cart c
+        JOIN product p ON p.ID = c.PID
+        WHERE c.UID = " . intval($uid);
+    $res = mysqli_query($conn, $sql);
+    $items = [];
+    $total = 0.0;
+
+    while ($row = mysqli_fetch_assoc($res)) {
+        $row['PID']      = (int) $row['PID'];
+        $row['SIZE']     = $row['SIZE'];
+        $row['QUANTITY'] = (int) $row['QUANTITY'];
+        $row['PRICE']    = (float) $row['PRICE'];
+        $row['STOCK']    = (int) $row['STOCK'];
+
+        // Kiểm tra tồn kho
+        if ($row['QUANTITY'] > $row['STOCK']) {
+            return false; // Có thể throw exception để xử lý chi tiết hơn
         }
 
-        if (empty($items)) {
-            return false;
-        }
-
-        $time   = date('Y-m-d H:i:s');
-        $status = 'Chờ xác nhận';
-        $stmt   = $conn->prepare(
-            "INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, ?)"
-        );
-        $stmt->bind_param("issds", $uid, $time, $status, $total, $method);
-        $stmt->execute();
-        $oid = $conn->insert_id;
-        if (!$oid) {
-            throw new Exception('Không tạo được order_id');
-        }
-
-        $stmt2 = $conn->prepare(
-            "INSERT INTO `order_detail` (order_id, PID, SIZE, QUANTITY) VALUES (?, ?, ?, ?)"
-        );
-        foreach ($items as $item) {
-            $stmt2->bind_param(
-                "iisd",
-                $oid,
-                $item['PID'],
-                $item['SIZE'],
-                $item['QUANTITY']
-            );
-            $stmt2->execute();
-        }
-        mysqli_query($conn, "DELETE FROM cart WHERE UID = " . intval($uid));
-        return $oid;
+        $items[] = $row;
+        $total += $row['PRICE'] * $row['QUANTITY'];
     }
+
+    if (empty($items)) {
+        return false;
+    }
+
+    // Tạo đơn hàng
+    $time = date('Y-m-d H:i:s');
+    $status = 'Chờ xác nhận';
+
+    $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("issds", $uid, $time, $status, $total, $method);
+    $stmt->execute();
+    $oid = $conn->insert_id;
+
+    if (!$oid) {
+        throw new Exception('Không tạo được order_id');
+    }
+
+    // Thêm chi tiết đơn hàng và cập nhật tồn kho
+    $stmt2 = $conn->prepare("INSERT INTO `order_detail` (order_id, PID, SIZE, QUANTITY) VALUES (?, ?, ?, ?)");
+    foreach ($items as $item) {
+        $stmt2->bind_param("iisi", $oid, $item['PID'], $item['SIZE'], $item['QUANTITY']);
+        $stmt2->execute();
+
+        // Trừ tồn kho
+        $update_stmt = $conn->prepare("UPDATE product SET number = number - ? WHERE ID = ?");
+        $update_stmt->bind_param("ii", $item['QUANTITY'], $item['PID']);
+        $update_stmt->execute();
+    }
+
+    // Xóa giỏ hàng
+    mysqli_query($conn, "DELETE FROM cart WHERE UID = " . intval($uid));
+
+    return $oid;
+}
+
        
     public function reorder($old_order_id, $uid) {
         $conn = $this->connect;
@@ -319,19 +336,28 @@ class member extends customer{
         return $new_order_id;
     }
     public function insert_order_detail($order_id, $uid) {
-        $conn = $this->connect;
-        $sql = "INSERT INTO order_detail (ORDER_ID, PID, SIZE, QUANTITY)
-                SELECT $order_id, c.PID, c.SIZE, c.QUANTITY
-                FROM cart c
-                WHERE c.UID = ?";
-        
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            die("Lỗi prepare insert_order_detail: " . $conn->error);
-        }
-        $stmt->bind_param("i", $uid);
-        return $stmt->execute();
+    $conn = $this->connect;
+
+    $sql = "INSERT INTO order_detail (ORDER_ID, PID, SIZE, QUANTITY)
+            SELECT ?, c.PID, c.SIZE, c.QUANTITY
+            FROM cart c
+            WHERE c.UID = ?";
+
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        die("Lỗi prepare insert_order_detail: " . $conn->error);
     }
+
+    $stmt->bind_param("ii", $order_id, $uid);
+
+    if (!$stmt->execute()) {
+        die("Lỗi execute insert_order_detail: " . $stmt->error);
+    }
+
+    $stmt->close();
+}
+
+
     public function login($username, $password) {
         $conn = $this->connect;
     

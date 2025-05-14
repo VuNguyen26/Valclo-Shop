@@ -2,41 +2,84 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 require_once("./Function/DB.php");
 require_once("./Model/member.php");
 
 $uid = $_SESSION["id"] ?? null;
 $result = $_GET['result'] ?? '0';
-$oids = $_GET['oids'] ?? '';
 $success = false;
 $displayMessage = "Thanh toán thất bại hoặc bị hủy.";
+$order_id = null;
 
 if ($result === "1" && !empty($uid)) {
     $db = new DB();
     $conn = $db->connect;
     $mem = new Member();
-    $query = "SELECT p.PRICE, c.QUANTITY FROM cart c JOIN product p ON c.PID = p.ID WHERE c.UID = $uid";
-    $result = mysqli_query($conn, $query);
-    $total = 0;
-    while ($row = mysqli_fetch_assoc($result)) {
-        $total += $row["PRICE"] * $row["QUANTITY"];
-    }
 
     $today = date("Y-m-d");
+    $now = date("Y-m-d H:i:s");
     $status = "Chờ xác nhận";
     $method = "Paypal";
-    $stmt = $conn->prepare("INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("issds", $uid, $today, $status, $total, $method);
+
+    $stmt = $conn->prepare("
+        SELECT ID 
+        FROM `order` 
+        WHERE UID = ? AND DATE(TIME) = ? AND METHOD = ?
+        ORDER BY ID DESC 
+        LIMIT 1
+    ");
+    $stmt->bind_param("iss", $uid, $today, $method);
     $stmt->execute();
-    $order_id = $conn->insert_id;
-    $mem->insert_order_detail($order_id, $uid);
-    $mem->clear_cart($uid);
-    unset($_SESSION["cart"]);
-    $success = true;
-    $displayMessage = "Bạn đã thanh toán PayPal thành công!";
+    $check = $stmt->get_result();
+
+    if ($check->num_rows > 0) {
+        // Đơn hàng đã có
+        $row = $check->fetch_assoc();
+        $order_id = $row['ID'];
+        $success = true;
+        $displayMessage = "Bạn đã thanh toán PayPal thành công!";
+    } else {
+        $stmt = $conn->prepare("
+            SELECT p.PRICE, c.QUANTITY 
+            FROM cart c 
+            JOIN product p ON c.PID = p.ID 
+            WHERE c.UID = ?
+        ");
+        $stmt->bind_param("i", $uid);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        if ($res->num_rows === 0) {
+            $displayMessage = "Giỏ hàng trống – không thể tạo đơn hàng.";
+        } else {
+            $total = 0;
+            while ($row = $res->fetch_assoc()) {
+                $total += $row["PRICE"] * $row["QUANTITY"];
+            }
+
+            $stmt = $conn->prepare("
+                INSERT INTO `order` (UID, TIME, STATUS, TOTAL_PRICE, METHOD)
+                VALUES (?, ?, ?, ?, ?)
+            ");
+            $stmt->bind_param("issds", $uid, $now, $status, $total, $method);
+
+            if ($stmt->execute()) {
+                $order_id = $conn->insert_id;
+
+                $mem->insert_order_detail($order_id, $uid);
+                $mem->clear_cart($uid);
+                unset($_SESSION["cart"]);
+
+                $success = true;
+                $displayMessage = "Bạn đã thanh toán PayPal thành công!";
+            } else {
+                $displayMessage = "Tạo đơn hàng thất bại.";
+            }
+        }
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -95,8 +138,10 @@ if ($result === "1" && !empty($uid)) {
         Vui lòng thử lại hoặc chọn phương thức khác.
       <?php endif; ?>
     </p>
+
+    <?php if ($success && $order_id): ?>
     <a href="?url=Home/order_detail&oids=<?= $order_id ?>" class="btn btn-primary mt-3">📦 Xem chi tiết đơn hàng</a>
-    </a>
+    <?php endif; ?>
   </div>
 
   <?php if ($success): ?>

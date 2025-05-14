@@ -112,29 +112,41 @@ HTML;
                   if(empty($data["product"]["list"])) echo "empty product";
                   else{
                     foreach($data["product"]["list"] as $row){
-                      $id = $row['id'];
-                      $img = $row['img'];
-                      $name = $row['name'];
-                      $price = number_format($row['price'],0,',','.');
-                      echo <<<HTML
-                      <div class="col-6 col-md-4 col-lg-3 mb-5">
-                      <div class="border border-1 rounded rounded-5 bg-light p-1 shadow">
-                        <a href="?url=Home/Item/{$id}/">
-                        <img src="{$img}" class="product-img d-block w-100" alt="card-grid-image" />
-                        </a>
-                        <div class="card-body px-3">
-                          <h5 class="card-title text-center">{$name}</h5>
-                          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                            <span class="card-text fw-bold fs-5">{$price} <sup>vnđ</sup></span>
-                            <a href="?url=Home/Item/{$id}" class="btn btn-warning">
-                              Mua ngay <i class="fas fa-angle-right"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      </div>
-                      HTML;
-                    }
+    $id = $row['id'];
+    $img = $row['img'];
+    $name = $row['name'];
+    $price = number_format($row['price'],0,',','.');
+    $number = isset($row['number']) ? (int)$row['number'] : 0;
+
+    $status = $number <= 0 
+        ? '<span class="badge bg-danger d-block text-center mb-2">Hết hàng</span>' 
+        : '';
+
+    $pointer = $number <= 0 ? 'none' : 'auto';
+    $opacity = $number <= 0 ? '0.6' : '1';
+
+    echo <<<HTML
+    <div class="col-6 col-md-4 col-lg-3 mb-5">
+      <div class="border border-1 rounded rounded-5 bg-light p-1 shadow">
+        <a href="?url=Home/Item/{$id}/">
+          <img src="{$img}" class="product-img d-block w-100" alt="card-grid-image" />
+        </a>
+        <div class="card-body px-3">
+          <h5 class="card-title text-center">{$name}</h5>
+          {$status}
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <span class="card-text fw-bold fs-5">{$price} <sup>vnđ</sup></span>
+            <a href="?url=Home/Item/{$id}" class="btn btn-warning"
+              style="pointer-events: {$pointer}; opacity: {$opacity};">
+              Mua ngay <i class="fas fa-angle-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    HTML;
+}
+
                   }
               ?>
           </div>
